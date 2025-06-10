@@ -1,0 +1,14 @@
+spacy
+spacy-transformers
+transformers
+torch
+vaderSentiment
+textblob
+pyabsa
+setfit
+scikit-learn
+pandas
+numpy
+psycopg2-binary
+python-dotenv
+tqdm

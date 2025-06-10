@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+*.log
+*.pkl
+*.pt
+*.jsonl
+models/fusion_latest.pkl
+data/*.csv

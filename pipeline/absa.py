@@ -1,13 +1,12 @@
 # pipeline/absa.py
 # Author: Bill Lu
-# Description: Aspect-Based Sentiment Analysis (ABSA) using a Hugging Face DeBERTa ABSA model and database-driven aspect list.
+# Description: Aspect-Based Sentiment Analysis using yangheng/deberta-v3-base-absa-v1.1 model
 
 import os
 import json
-from typing import List, Dict, Optional
+from typing import List, Dict
 from transformers import pipeline
 from pipeline.logger import get_logger
-from pipeline.db_utils import fetch_absa_categories
 
 # Initialize logger
 logger = get_logger(__name__)
@@ -21,85 +20,104 @@ except Exception as e:
     logger.error(f"Failed to load config.json: {e}")
     raise
 
-# Model identifier for ABSA
-ABSA_MODEL = _config['models']['absa']
-
-# Initialize Hugging Face ABSA pipeline
+# Initialize ABSA model from config
 try:
-    absa_pipe = pipeline(
-        "aspect-based-sentiment-analysis",
-        model=ABSA_MODEL,
-        tokenizer=ABSA_MODEL
+    absa_model = _config['models']['absa']  # "yangheng/deberta-v3-base-absa-v1.1"
+    absa_classifier = pipeline(
+        "text-classification",
+        model=absa_model,
+        top_k=None  # Get all possible labels
     )
-    logger.info(f"Loaded ABSA model '{ABSA_MODEL}'")
+    logger.info(f"Loaded ABSA model: {absa_model}")
 except Exception as e:
-    logger.error(f"Failed to initialize ABSA pipeline with model '{ABSA_MODEL}': {e}")
-    raise
+    logger.error(f"Failed to load ABSA model: {e}")
+    absa_classifier = None
 
+# Common restaurant/service aspects to look for
+COMMON_ASPECTS = [
+    "food", "service", "staff", "atmosphere", "ambiance", "price", "value", 
+    "location", "wait", "portion", "quality", "cleanliness", "menu", "dessert",
+    "drink", "wine", "coffee", "parking", "reservation", "noise", "seating"
+]
 
-def analyze_absa(
-    text: str,
-    industry_id: Optional[int] = None
-) -> List[Dict]:
-    """
-    Perform aspect-based sentiment analysis on input text.
+def extract_aspects(text: str) -> List[str]:
+    """Simple keyword-based aspect extraction"""
+    text_lower = text.lower()
+    found_aspects = []
+    
+    for aspect in COMMON_ASPECTS:
+        if aspect in text_lower:
+            found_aspects.append(aspect)
+    
+    # If no specific aspects found, assume general experience
+    if not found_aspects:
+        found_aspects = ["overall"]
+    
+    return found_aspects
 
-    Args:
-        text: The review text.
-        industry_id: Optional industry filter for which aspects to consider.
-
-    Returns:
-        A list of dicts, each containing:
-            - category: str, the broader category (e.g., 'Service')
-            - aspect: str, the specific aspect term (e.g., 'wait time')
-            - sentiment_label: str, 'positive'|'negative'|'neutral'
-            - sentiment_score: float, model confidence for this aspect
-    """
-    # Fetch allowed categories and aspects from DB
+def analyze_aspect_sentiment(text: str, aspect: str) -> Dict:
     try:
-        rows = fetch_absa_categories(industry_id)
-    except Exception:
-        logger.error("Error fetching ABSA categories; returning empty list.")
-        return []
-
-    # Build mapping from aspect term to category
-    aspect_to_category = {row['aspect'].lower(): row['category'] for row in rows}
-    allowed_aspects = set(aspect_to_category.keys())
-    logger.debug(f"Allowed aspects loaded: {allowed_aspects}")
-
-    # Run the ABSA pipeline
-    logger.debug("Running ABSA pipeline")
-    try:
-        raw_results = absa_pipe(text)
+        # give the ABSA model both text and aspect
+        aspect_input = f"{text} [SEP] {aspect}"
+        results = absa_classifier(aspect_input)
+        logger.info(f"Raw ABSA output for '{aspect}': {results}")
+        # unwrap nested lists if necessary
+        if isinstance(results, list) and results and isinstance(results[0], list):
+            results = results[0]
+        if not results:
+            raise ValueError("empty ABSA output")
+        # pick highest‐score label
+        best = max(results, key=lambda x: x.get('score', 0))
+        label_raw = best.get('label', '')
+        score = float(best.get('score', 0))
+        # normalize “LABEL_n”
+        if label_raw.upper().startswith('LABEL_'):
+            idx = int(label_raw.split('_')[1])
+            label = {0: 'negative', 1: 'neutral', 2: 'positive'}.get(idx, 'neutral')
+        else:
+            label = label_raw.lower()
+        # convert to signed score
+        if label == 'positive':
+            sentiment_score = score
+        elif label == 'negative':
+            sentiment_score = -score
+        else:
+            sentiment_score = 0.0
+        logger.debug(f"ABSA {aspect}: {label_raw}→{label} ({sentiment_score:.3f})")
+        return {'aspect': aspect, 'sentiment_label': label, 'sentiment_score': sentiment_score}
     except Exception as e:
-        logger.error(f"ABSA pipeline error: {e}")
+        logger.error(f"Error analyzing aspect sentiment for '{aspect}': {e}")
+        return {'aspect': aspect, 'sentiment_label': 'neutral', 'sentiment_score': 0.0}
+
+def analyze_absa(text: str) -> List[Dict]:
+    """
+    Perform Aspect-Based Sentiment Analysis on input text.
+    
+    Args:
+        text (str): Input review text
+        
+    Returns:
+        List[Dict]: List of aspect-sentiment pairs
+    """
+    if not text or not isinstance(text, str) or not text.strip():
+        logger.warning("Empty or invalid text provided to ABSA analysis")
         return []
+    
+    # Extract aspects mentioned in the text
+    aspects = extract_aspects(text)
+    
+    # Analyze sentiment for each aspect using the dedicated ABSA model
+    results = []
+    for aspect in aspects:
+        aspect_result = analyze_aspect_sentiment(text, aspect)
+        results.append(aspect_result)
+        logger.debug(f"ABSA: {aspect} -> {aspect_result['sentiment_label']} ({aspect_result['sentiment_score']:.3f})")
+    
+    logger.info(f"ABSA analysis found {len(results)} aspects")
+    return results
 
-    processed: List[Dict] = []
-    for entry in raw_results:
-        # Extract aspect term
-        aspect_term = entry.get('aspect') or entry.get('entity') or entry.get('word')
-        if not aspect_term:
-            continue
-        aspect_norm = aspect_term.strip().lower()
-
-        # Filter to allowed aspects
-        if aspect_norm not in allowed_aspects:
-            logger.debug(f"Skipping unrecognized aspect '{aspect_term}'")
-            continue
-
-        category = aspect_to_category[aspect_norm]
-        label = entry.get('label', '').lower()
-        score = float(entry.get('score', 0.0))
-
-        processed.append({
-            'category': category,
-            'aspect': aspect_norm,
-            'sentiment_label': label,
-            'sentiment_score': score
-        })
-        logger.debug(f"ABSA detected {category}/{aspect_norm}: {label} ({score})")
-
-    return processed
-
-# Note: No standalone execution. Import and call analyze_absa() in your orchestrator.
+# For testing
+if __name__ == "__main__":
+    test_text = "The food was amazing but the service was terrible and slow."
+    result = analyze_absa(test_text)
+    print(f"ABSA Result: {result}")

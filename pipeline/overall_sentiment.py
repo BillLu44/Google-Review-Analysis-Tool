@@ -1,10 +1,10 @@
 # pipeline/overall_sentiment.py
 # Author: Bill Lu
-# Description: Transformer-based overall sentiment analysis using DeBERTa.
+# Description: Transformer-based sentiment analysis using DeBERTa model
 
 import os
 import json
-from transformers import pipeline, AutoConfig, AutoTokenizer, AutoModelForSequenceClassification
+from transformers import pipeline
 from pipeline.logger import get_logger
 
 # Initialize logger
@@ -19,53 +19,95 @@ except Exception as e:
     logger.error(f"Failed to load config.json: {e}")
     raise
 
-# Fetch model identifier from config
-SENTIMENT_MODEL = _config['models']['sentiment']
-
-# Initialize sentiment pipeline
+# Initialize sentiment model from config
 try:
+    sentiment_model = _config['models']['sentiment']  # "Elron/deberta-v3-large-sentiment"
     sentiment_pipe = pipeline(
-        'sentiment-analysis',
-        model=SENTIMENT_MODEL,
-        tokenizer=SENTIMENT_MODEL
+        "sentiment-analysis",
+        model=sentiment_model,
+        top_k=1  # Only return top prediction, fixes the warning
     )
-    logger.info(f"Loaded sentiment model '{SENTIMENT_MODEL}'")
+    logger.info(f"Loaded sentiment model: {sentiment_model}")
 except Exception as e:
-    logger.error(f"Error initializing sentiment pipeline with model '{SENTIMENT_MODEL}': {e}")
-    raise
+    logger.error(f"Failed to load sentiment model: {e}")
+    sentiment_pipe = None
 
-
-def analyze_sentiment(text: str) -> dict:
+def analyze_sentiment(text) -> dict:
     """
-    Analyze overall sentiment via transformer.
-
+    Analyze sentiment using DeBERTa transformer model from config.
+    
     Args:
-        text: Input review text.
-
+        text: Input text (should be string)
+        
     Returns:
-        A dict with:
-          - label (str): 'positive', 'negative', or 'neutral'
-          - score (float): confidence of the prediction
+        dict with sentiment_label and sentiment_score
     """
-    logger.debug("Starting transformer-based sentiment analysis")
-    try:
-        results = sentiment_pipe(text)
-        # results is a list of dicts (one per input) if batched, otherwise returns list
-        if isinstance(results, list) and len(results) > 0:
-            res = results[0]
-        else:
-            res = results
-        label = res.get('label', '').lower()
-        score = float(res.get('score', 0.0))
-        logger.debug(f"Sentiment result -> label: {label}, score: {score}")
-        return {
-            'sentiment_label': label,
-            'sentiment_score': score
-        }
-    except Exception as e:
-        logger.error(f"Sentiment analysis failed: {e}")
-        # On failure, return neutral fallback
+    if sentiment_pipe is None:
+        logger.warning("No sentiment model available")
         return {
             'sentiment_label': 'neutral',
             'sentiment_score': 0.0
         }
+    
+    # Handle edge cases and convert to string
+    if text is None:
+        logger.warning("None text provided to sentiment analysis")
+        return {
+            'sentiment_label': 'neutral', 
+            'sentiment_score': 0.0
+        }
+    
+    # Convert to string regardless of input type
+    if not isinstance(text, str):
+        text = str(text)
+        logger.debug(f"Converted non-string input to string: {text}")
+    
+    # Check if text is meaningful after conversion
+    if not text.strip():
+        logger.warning("Text is empty after stripping")
+        return {
+            'sentiment_label': 'neutral',
+            'sentiment_score': 0.0
+        }
+    
+    try:
+        result = sentiment_pipe(text)
+        
+        # Handle single result vs list
+        if isinstance(result, list) and len(result) > 0:
+            result = result[0]
+        
+        # Handle the label - could be string or int
+        label_raw = result['label']
+        score = float(result['score'])
+        # normalize any “LABEL_n” into 0/1/2
+        if isinstance(label_raw, str) and label_raw.upper().startswith('LABEL_'):
+            idx = int(label_raw.split('_')[1])
+            label = {0: 'negative', 1: 'neutral', 2: 'positive'}.get(idx, 'neutral')
+        else:
+            label = str(label_raw).lower()
+        # now map to [-1,1]
+        if label == 'positive':
+            sentiment_score = score
+        elif label == 'negative':
+            sentiment_score = -score
+        else:
+            sentiment_score = 0.0
+        logger.debug(f"Sentiment: {label} ({sentiment_score:.3f})")
+        return {
+            'sentiment_label': label,
+            'sentiment_score': sentiment_score
+        }
+        
+    except Exception as e:
+        logger.error(f"Sentiment analysis failed: {e}")
+        return {
+            'sentiment_label': 'neutral',
+            'sentiment_score': 0.0
+        }
+
+# For testing
+if __name__ == "__main__":
+    test_text = "I love this restaurant!"
+    result = analyze_sentiment(test_text)
+    print(f"Sentiment Result: {result}")

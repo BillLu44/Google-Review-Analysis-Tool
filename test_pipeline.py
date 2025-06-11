@@ -13,6 +13,7 @@ from pipeline.absa import analyze_absa
 from pipeline.emotion import detect_emotion
 from pipeline.sarcasm import detect_sarcasm
 from pipeline.fusion import fuse_signals
+from utils.output_formatter import save_results_to_file
 
 # Initialize logger
 logger = get_logger(__name__)
@@ -47,6 +48,7 @@ def run_tests():
     Processes each sample review through all pipeline stages and logs results and timings.
     """
     total_start = time.time()
+    all_results = []
 
     for sample in SAMPLE_REVIEWS:
         rid = sample['review_id']
@@ -90,7 +92,7 @@ def run_tests():
             'num_pos_aspects': num_pos_aspects,
             'num_neg_aspects': num_neg_aspects,
             'avg_aspect_score': avg_aspect_score,
-            'emotion_score': max(emotion_scores.values()),
+            'emotion_score': max(emotion_scores.values()) if emotion_scores else 0.0,
             'sarcasm_score': sarcasm.get('sarcasm_score', 0.0)
         }
         fused = fuse_signals(signals)
@@ -99,6 +101,7 @@ def run_tests():
         # Compile results
         result = {
             'review_id': rid,
+            'text': text,  # Include original text for output formatting
             'preprocessing_time': round(t1 - t0, 3),
             'rule_based_time': round(t2 - t1, 3),
             'transformer_sentiment_time': round(t3 - t2, 3),
@@ -115,11 +118,18 @@ def run_tests():
             'sentiment': sentiment
         }
 
-        # Log structured result
+        all_results.append(result)
+
+        # Log structured result (for debugging)
         logger.info(json.dumps(result, indent=2))
 
     total_time = time.time() - total_start
     logger.info(f"\nProcessed {len(SAMPLE_REVIEWS)} reviews in {total_time:.2f}s")
+    
+    # Save human-readable results to output file
+    output_file = save_results_to_file(all_results)
+    logger.info(f"📄 Human-readable results saved to: {output_file}")
+    print(f"\n✅ Pipeline completed! Results saved to: {output_file}")
 
 
 if __name__ == '__main__':

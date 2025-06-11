@@ -1,6 +1,6 @@
 # pipeline/sarcasm.py
-# Author: Your Name
-# Description: Sarcasm detection using a Hugging Face DeBERTa model for classifying customer review sarcasm.
+# Author: Bill Lu
+# Description: Sarcasm detection using dnzblgn/Sarcasm-Detection-Customer-Reviews model
 
 import os
 import json
@@ -27,9 +27,10 @@ if not SARCASM_MODEL:
     raise ValueError("Missing sarcasm model in config.json")
 
 # Initialize sarcasm pipeline
+# initialize with return_all_scores to get every label
 try:
     sarcasm_pipe = pipeline(
-        "text-classification",  # the model returns labels like 'SARCASM' or 'NOT_SARCASM'
+        "text-classification",
         model=SARCASM_MODEL,
         tokenizer=SARCASM_MODEL,
         return_all_scores=True
@@ -55,35 +56,20 @@ def detect_sarcasm(text: str) -> Dict[str, float]:
     logger.debug("Running sarcasm detection")
     try:
         results = sarcasm_pipe(text)
-        # results: list of list if return_all_scores, take first batch
-        scores_list = results[0] if isinstance(results, list) else results
-
-        # Find the SARCASM label
-        sarcasm_label = None
-        sarcasm_score = 0.0
-        for entry in scores_list:
-            label = entry.get('label', '').lower()
-            score = float(entry.get('score', 0.0))
-            if 'sarcasm' in label:
-                sarcasm_label = label
-                sarcasm_score = score
-                break
-
-        if sarcasm_label is None and len(scores_list) > 0:
-            # Fallback: use highest scoring label
-            best = max(scores_list, key=lambda x: x.get('score', 0))
-            sarcasm_label = best['label'].lower()
-            sarcasm_score = float(best['score'])
-
-        logger.debug(f"Sarcasm detection -> label: {sarcasm_label}, score: {sarcasm_score}")
-        return {
-            'sarcasm_label': sarcasm_label,
-            'sarcasm_score': sarcasm_score
-        }
-
+        # sometimes nested: results[0] is list of dicts
+        scores = results[0] if isinstance(results, list) and isinstance(results[0], list) else results
+        # pick the highest‐confidence label
+        best = max(scores, key=lambda x: x.get('score', 0))
+        label_raw = best.get('label', '').lower()
+        score = float(best.get('score', 0.0))
+        if 'sarcastic' in label_raw and 'not' not in label_raw:
+            sarcasm_label = 'sarcastic'
+            sarcasm_score = score
+        else:
+            sarcasm_label = 'not_sarcastic'
+            sarcasm_score = 1.0 - score
+        logger.debug(f"Sarcasm: {label_raw}→{sarcasm_label} ({sarcasm_score:.3f})")
+        return {'sarcasm_label': sarcasm_label, 'sarcasm_score': sarcasm_score}
     except Exception as e:
         logger.error(f"Sarcasm detection failed: {e}")
-        return {
-            'sarcasm_label': 'none',
-            'sarcasm_score': 0.0
-        }
+        return {'sarcasm_label': 'not_sarcastic', 'sarcasm_score': 0.0}

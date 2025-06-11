@@ -32,7 +32,7 @@ try:
         "text-classification",
         model=EMOTION_MODEL,
         tokenizer=EMOTION_MODEL,
-        return_all_scores=True
+        top_k=None  # ✅ Use this instead of return_all_scores=True
     )
     logger.info(f"Loaded emotion model '{EMOTION_MODEL}'")
 except Exception as e:
@@ -54,7 +54,7 @@ def detect_emotion(text: str) -> Dict[str, float]:
     logger.debug("Running emotion detection")
     try:
         results = emotion_pipe(text)
-        # Hugging Face returns list of lists for return_all_scores
+        # Hugging Face returns list of lists for top_k=None
         scores_list = results[0] if isinstance(results, list) else results
         emotion_scores: Dict[str, float] = {}
         for entry in scores_list:

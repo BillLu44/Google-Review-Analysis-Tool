@@ -3,6 +3,7 @@
 # Description: Train the fusion meta-classifier using structured feature CSV and save a versioned model.
 
 import os
+import sys
 import json
 import argparse
 import pandas as pd
@@ -11,10 +12,36 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, confusion_matrix
 import numpy as np
+
+# Add project root to Python path
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, project_root)
+
 from training.training_utils import load_config, ensure_model_dir, write_model_symlink
 from pipeline.logger import get_logger
 
 logger = get_logger(__name__)
+
+
+def clean_numeric_columns(df: pd.DataFrame, numeric_cols: list) -> pd.DataFrame:
+    """Clean and convert numeric columns, handling Unicode minus signs"""
+    df_clean = df.copy()
+    
+    for col in numeric_cols:
+        if col in df_clean.columns:
+            # Convert to string first, replace Unicode minus with ASCII minus
+            df_clean[col] = df_clean[col].astype(str).str.replace('−', '-', regex=False)
+            # Convert to numeric, handling any remaining issues
+            df_clean[col] = pd.to_numeric(df_clean[col], errors='coerce')
+            
+            # Check for any NaN values created by conversion
+            nan_count = df_clean[col].isna().sum()
+            if nan_count > 0:
+                logger.warning(f"Column '{col}' has {nan_count} values that couldn't be converted to numeric")
+                # Fill NaN with 0
+                df_clean[col] = df_clean[col].fillna(0.0)
+    
+    return df_clean
 
 
 def train_fusion(
@@ -25,7 +52,9 @@ def train_fusion(
     random_state: int = 42
 ):
     # Load data
+    logger.info(f"Loading training data from {input_csv}")
     df = pd.read_csv(input_csv)
+    
     if 'label' not in df.columns:
         raise ValueError("Input CSV must contain 'label' column as target.")
     
@@ -45,11 +74,20 @@ def train_fusion(
     if missing_cols:
         raise ValueError(f"Missing required columns: {missing_cols}")
     
+    # Clean numeric columns (handle Unicode minus signs)
+    numeric_cols = ['rule_score', 'sentiment_score', 'avg_aspect_score', 'emotion_score', 'sarcasm_score']
+    df = clean_numeric_columns(df, numeric_cols)
+    
     X = df[feature_cols]
     y = df['label']
 
     logger.info(f"Training data shape: {X.shape}")
     logger.info(f"Label distribution:\n{y.value_counts()}")
+    
+    # Check for any remaining NaN values
+    if X.isna().any().any():
+        logger.warning("Found NaN values in features, filling with 0")
+        X = X.fillna(0.0)
 
     # Split
     X_train, X_test, y_train, y_test = train_test_split(
@@ -108,112 +146,6 @@ def main():
         model_dir=model_dir,
         version=args.version,
         test_size=args.test_size
-    )
-
-if __name__ == '__main__':
-    main()
-
-
-# /training/train_sentiment.py
-# Author: Your Name
-# Description: Fine-tune a Hugging Face sentiment model on labeled review data.
-
-import os
-import json
-import argparse
-from datasets import load_dataset, load_metric
-from transformers import (
-    AutoConfig, AutoTokenizer, AutoModelForSequenceClassification,
-    TrainingArguments, Trainer
-)
-from training.training_utils import load_config, ensure_model_dir, write_model_symlink
-from pipeline.logger import get_logger
-
-logger = get_logger(__name__)
-
-
-def preprocess_function(examples, tokenizer):
-    return tokenizer(examples['text'], truncation=True, padding='max_length')
-
-
-def train_sentiment(
-    input_csv: str,
-    base_model: str,
-    version: str,
-    output_dir: str,
-    num_epochs: int = 3,
-    per_device_batch_size: int = 8
-):
-    # Load data
-    dataset = load_dataset('csv', data_files={'train': input_csv, 'validation': input_csv}, split=['train', 'validation'])
-    train_ds, val_ds = dataset
-
-    # Load tokenizer + model
-    tokenizer = AutoTokenizer.from_pretrained(base_model)
-    config = AutoConfig.from_pretrained(base_model, num_labels=len(set(train_ds['label'])))
-    model = AutoModelForSequenceClassification.from_pretrained(base_model, config=config)
-
-    # Tokenize
-    train_ds = train_ds.map(lambda ex: preprocess_function(ex, tokenizer), batched=True)
-    val_ds = val_ds.map(lambda ex: preprocess_function(ex, tokenizer), batched=True)
-    train_ds.set_format(type='torch', columns=['input_ids', 'attention_mask', 'label'])
-    val_ds.set_format(type='torch', columns=['input_ids', 'attention_mask', 'label'])
-
-    # Metrics
-    metric = load_metric('accuracy')
-    def compute_metrics(eval_pred):
-        logits, labels = eval_pred
-        preds = logits.argmax(-1)
-        return metric.compute(predictions=preds, references=labels)
-
-    # Training args
-    training_args = TrainingArguments(
-        output_dir=os.path.join(output_dir, f"sentiment_{version}"),
-        overwrite_output_dir=True,
-        num_train_epochs=num_epochs,
-        per_device_train_batch_size=per_device_batch_size,
-        evaluation_strategy='epoch',
-        save_strategy='epoch'
-    )
-
-    # Trainer
-    trainer = Trainer(
-        model=model,
-        args=training_args,
-        train_dataset=train_ds,
-        eval_dataset=val_ds,
-        tokenizer=tokenizer,
-        compute_metrics=compute_metrics
-    )
-
-    # Train
-    trainer.train()
-
-    # Save + symlink
-    versioned_dir = training_args.output_dir
-    write_model_symlink(output_dir, versioned_dir, 'sentiment_latest')
-    logger.info(f"Saved fine-tuned sentiment model at {versioned_dir}")
-
-
-def main():
-    parser = argparse.ArgumentParser(description="Fine-tune sentiment transformer model.")
-    parser.add_argument('--input', required=True, help='Path to sentiment training CSV')
-    parser.add_argument('--version', required=True, help='Version tag, e.g. v1')
-    parser.add_argument('--epochs', type=int, default=3)
-    parser.add_argument('--batch-size', type=int, default=8)
-    args = parser.parse_args()
-
-    config = load_config()
-    base_model = config['models']['sentiment_base']
-    models_dir = config['models_dir']
-
-    train_sentiment(
-        input_csv=args.input,
-        base_model=base_model,
-        version=args.version,
-        output_dir=models_dir,
-        num_epochs=args.epochs,
-        per_device_batch_size=args.batch_size
     )
 
 if __name__ == '__main__':

@@ -26,38 +26,37 @@ if not FUSION_MODEL_PATH:
     logger.error("Fusion model path not set in config.json under 'models.fusion'.")
     raise ValueError("Missing fusion model in config.json")
 
-# Load the fusion model
+# Try to load fusion model, but don't crash if it doesn't exist yet
+fusion_model = None
 try:
-    fusion_model = joblib.load(FUSION_MODEL_PATH)
-    logger.info(f"Loaded fusion model from '{FUSION_MODEL_PATH}'")
+    if os.path.exists(FUSION_MODEL_PATH):
+        fusion_model = joblib.load(FUSION_MODEL_PATH)
+        logger.info(f"Loaded fusion model from '{FUSION_MODEL_PATH}'")
+    else:
+        logger.warning(f"Fusion model not found at '{FUSION_MODEL_PATH}'. You need to train it first!")
+        logger.info("Run: python scripts/train_fusion_pipeline.py --mode sample --version v1")
 except Exception as e:
     logger.error(f"Failed to load fusion model '{FUSION_MODEL_PATH}': {e}")
-    raise
+    fusion_model = None
 
 
 def fuse_signals(signals: dict) -> dict:
     """
     Combine signal dictionary into the fusion model to produce final sentiment.
-
-    Args:
-        signals: dict containing numeric features:
-            - vader_score
-            - sentiment_score
-            - num_pos_aspects
-            - num_neg_aspects
-            - avg_aspect_score
-            - emotion_score
-            - sarcasm_score
-            - rule_confidence (optional)
-
-    Returns:
-        dict with:
-            - fused_label (str)
-            - fused_confidence (float)
+    
+    If no trained model exists, returns a placeholder prediction with low confidence.
     """
+    
+    if fusion_model is None:
+        logger.warning("No fusion model available. Train one first with: python scripts/train_fusion_pipeline.py")
+        return {
+            'fused_label': 'neutral',
+            'fused_confidence': 0.1  # Very low confidence
+        }
+    
     # Define feature order expected by the model
     feature_names = [
-        'vader_score',
+        'rule_score',
         'sentiment_score',
         'num_pos_aspects',
         'num_neg_aspects',
@@ -94,7 +93,7 @@ def fuse_signals(signals: dict) -> dict:
     except Exception as e:
         logger.error(f"Fusion prediction failed: {e}")
         return {
-            'fused_label': signals.get('rule_label', 'neutral'),
+            'fused_label': 'neutral',
             'fused_confidence': 0.0
         }
 

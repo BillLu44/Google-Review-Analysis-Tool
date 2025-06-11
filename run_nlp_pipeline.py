@@ -32,7 +32,7 @@ def fetch_reviews(conn, table: str, id_col: str, text_col: str, last_id: int = 0
     if last_id > 0:
         sql += f" WHERE {id_col} > %s"
         params.append(last_id)
-    sql += " ORDER BY {id_col} ASC"
+    sql += f" ORDER BY {id_col} ASC"
     if limit:
         sql += " LIMIT %s"
         params.append(limit)
@@ -49,7 +49,7 @@ def upsert_results(conn, review: Dict, result: Dict) -> None:
     review_id = review['review_id']
     text = review['text']
 
-    # Upsert main results\    
+    # Upsert main results
     upsert_sql = """
     INSERT INTO nlp_review_results
       (review_id, overall_sentiment, overall_score,
@@ -57,7 +57,7 @@ def upsert_results(conn, review: Dict, result: Dict) -> None:
        sarcasm_label, sarcasm_score,
        fusion_label, fusion_confidence,
        created_at, updated_at)
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, NOW(), NOW())
     ON CONFLICT (review_id) DO UPDATE SET
       overall_sentiment = EXCLUDED.overall_sentiment,
       overall_score = EXCLUDED.overall_score,
@@ -159,7 +159,7 @@ def main(args):
 
         # Collect signals for fusion
         signals = {
-            'vader_score': rule['vader_score'],
+            'rule_score': rule['rule_score'],
             'sentiment_score': sentiment['sentiment_score'],
             'num_pos_aspects': num_pos,
             'num_neg_aspects': num_neg,
@@ -190,7 +190,9 @@ def main(args):
 
         # Log feedback if low confidence
         if args.log_feedback and fused['fused_confidence'] < args.conf_threshold:
-            log_feedback(rid, text, result)
+            # Combine signals and result for feedback logging
+            feedback_signals = {**signals, **result}
+            log_feedback(rid, text, feedback_signals)
 
     global_logger.info("Pipeline run complete.")
     conn.close()

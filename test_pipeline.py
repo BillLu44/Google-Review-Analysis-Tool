@@ -85,7 +85,7 @@ def run_tests():
 
         # 7. Fusion
         signals = {
-            'vader_score': rule['vader_score'],
+            'rule_score': rule['rule_score'],
             'sentiment_score': sentiment['sentiment_score'],
             'num_pos_aspects': num_pos_aspects,
             'num_neg_aspects': num_neg_aspects,

@@ -9,7 +9,8 @@ import pandas as pd
 import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, confusion_matrix
+import numpy as np
 from training.training_utils import load_config, ensure_model_dir, write_model_symlink
 from pipeline.logger import get_logger
 
@@ -27,8 +28,28 @@ def train_fusion(
     df = pd.read_csv(input_csv)
     if 'label' not in df.columns:
         raise ValueError("Input CSV must contain 'label' column as target.")
-    X = df.drop(columns=['label', 'review_id'])
+    
+    # Define feature columns expected by fusion model
+    feature_cols = [
+        'rule_score',
+        'sentiment_score', 
+        'num_pos_aspects',
+        'num_neg_aspects',
+        'avg_aspect_score',
+        'emotion_score',
+        'sarcasm_score'
+    ]
+    
+    # Check required columns exist
+    missing_cols = [col for col in feature_cols if col not in df.columns]
+    if missing_cols:
+        raise ValueError(f"Missing required columns: {missing_cols}")
+    
+    X = df[feature_cols]
     y = df['label']
+
+    logger.info(f"Training data shape: {X.shape}")
+    logger.info(f"Label distribution:\n{y.value_counts()}")
 
     # Split
     X_train, X_test, y_train, y_test = train_test_split(
@@ -37,19 +58,39 @@ def train_fusion(
     logger.info(f"Training fusion model on {len(X_train)} samples, testing on {len(X_test)} samples.")
 
     # Initialize and train
-    clf = RandomForestClassifier(n_estimators=100, random_state=random_state)
+    clf = RandomForestClassifier(
+        n_estimators=100, 
+        max_depth=10,
+        min_samples_split=5,
+        random_state=random_state,
+        class_weight='balanced'
+    )
     clf.fit(X_train, y_train)
 
     # Evaluate
-    preds = clf.predict(X_test)
-    report = classification_report(y_test, preds)
-    logger.info(f"Fusion model evaluation:\n{report}")
+    train_preds = clf.predict(X_train)
+    test_preds = clf.predict(X_test)
+    
+    logger.info("Training set performance:")
+    logger.info(classification_report(y_train, train_preds))
+    
+    logger.info("Test set performance:")
+    logger.info(classification_report(y_test, test_preds))
+    
+    # Feature importance
+    importances = clf.feature_importances_
+    feature_importance = dict(zip(feature_cols, importances))
+    logger.info("Feature importances:")
+    for feat, imp in sorted(feature_importance.items(), key=lambda x: x[1], reverse=True):
+        logger.info(f"  {feat}: {imp:.4f}")
 
     # Save model
     versioned_path = ensure_model_dir(model_dir, f"fusion_{version}.pkl")
     joblib.dump(clf, versioned_path)
     write_model_symlink(model_dir, versioned_path, 'fusion_latest.pkl')
     logger.info(f"Saved fusion model version '{version}' to {versioned_path}")
+    
+    return clf
 
 
 def main():

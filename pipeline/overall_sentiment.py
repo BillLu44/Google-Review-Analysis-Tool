@@ -43,21 +43,21 @@ def analyze_sentiment(text) -> dict:
         text: Input text (should be string)
         
     Returns:
-        dict with sentiment_label and sentiment_score
+        dict with 'sentiment' (int: -1, 0, 1) and 'confidence_score' (float: 0-1)
     """
     if sentiment_pipe is None:
         logger.warning("No sentiment model available")
         return {
-            'sentiment_label': 'neutral',
-            'sentiment_score': 0.0
+            'sentiment': 0,  # neutral
+            'confidence_score': 0.0
         }
     
     # Handle edge cases and convert to string
     if text is None:
         logger.warning("None text provided to sentiment analysis")
         return {
-            'sentiment_label': 'neutral', 
-            'sentiment_score': 0.0
+            'sentiment': 0,  # neutral
+            'confidence_score': 0.0
         }
     
     # Convert to string regardless of input type
@@ -69,8 +69,8 @@ def analyze_sentiment(text) -> dict:
     if not text.strip():
         logger.warning("Text is empty after stripping")
         return {
-            'sentiment_label': 'neutral',
-            'sentiment_score': 0.0
+            'sentiment': 0,  # neutral
+            'confidence_score': 0.0
         }
     
     try:
@@ -80,33 +80,35 @@ def analyze_sentiment(text) -> dict:
         if isinstance(result, list) and len(result) > 0:
             result = result[0]
         
-        # Handle the label - could be string or int
         label_raw = result['label']
-        score = float(result['score'])
-        # normalize any “LABEL_n” into 0/1/2
+        raw_confidence = float(result['score']) # This is the model's confidence in label_raw
+
+        # normalize any “LABEL_n” into a text label first
+        text_label = 'neutral' # default
         if isinstance(label_raw, str) and label_raw.upper().startswith('LABEL_'):
             idx = int(label_raw.split('_')[1])
-            label = {0: 'negative', 1: 'neutral', 2: 'positive'}.get(idx, 'neutral')
+            text_label = {0: 'negative', 1: 'neutral', 2: 'positive'}.get(idx, 'neutral')
         else:
-            label = str(label_raw).lower()
-        # now map to [-1,1]
-        if label == 'positive':
-            sentiment_score = score
-        elif label == 'negative':
-            sentiment_score = -score
-        else:
-            sentiment_score = 0.0
-        logger.debug(f"Sentiment: {label} ({sentiment_score:.3f})")
+            text_label = str(label_raw).lower()
+        
+        # Convert text label to integer sentiment
+        sentiment_int = 0 # neutral
+        if text_label == 'positive':
+            sentiment_int = 1
+        elif text_label == 'negative':
+            sentiment_int = -1
+        
+        logger.debug(f"Sentiment: {text_label} (int: {sentiment_int}), Confidence: {raw_confidence:.3f}")
         return {
-            'sentiment_label': label,
-            'sentiment_score': sentiment_score
+            'sentiment': sentiment_int,
+            'confidence_score': raw_confidence
         }
         
     except Exception as e:
         logger.error(f"Sentiment analysis failed: {e}")
         return {
-            'sentiment_label': 'neutral',
-            'sentiment_score': 0.0
+            'sentiment': 0,  # neutral
+            'confidence_score': 0.0
         }
 
 # For testing

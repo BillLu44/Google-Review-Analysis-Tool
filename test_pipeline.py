@@ -20,26 +20,34 @@ logger = get_logger(__name__)
 
 # Sample reviews for testing
 SAMPLE_REVIEWS = [
+    # {
+    #     'review_id': 1,
+    #     'text': 'The food was delicious, but the service was painfully slow.'
+    # },
+    # {
+    #     'review_id': 2,
+    #     'text': 'I absolutely loved how quick and friendly the staff were!'
+    # },
+    # {
+    #     'review_id': 3,
+    #     'text': 'The ambiance was nice, but the burger arrived cold and soggy.'
+    # },
+    # {
+    #     'review_id': 4,
+    #     'text': 'Terrible experience: rude staff and a burnt steak ruined our night.'
+    # },
+    # {
+    #     'review_id': 5,
+    #     'text': 'Great selection of beers—will definitely come back for more!'
+    # }
     {
-        'review_id': 1,
-        'text': 'The food was delicious, but the service was painfully slow.'
+        'review_id': 6,
+        'text': "Amazing food, but food is awful"
     },
     {
-        'review_id': 2,
-        'text': 'I absolutely loved how quick and friendly the staff were!'
+        'review_id': 6,
+        'text': "Amazing food, but burger is awful"
     },
-    {
-        'review_id': 3,
-        'text': 'The ambiance was nice, but the burger arrived cold and soggy.'
-    },
-    {
-        'review_id': 4,
-        'text': 'Terrible experience: rude staff and a burnt steak ruined our night.'
-    },
-    {
-        'review_id': 5,
-        'text': 'Great selection of beers—will definitely come back for more!'
-    }
 ]
 
 
@@ -61,39 +69,48 @@ def run_tests():
         t1 = time.time()
 
         # 2. Rule-based
-        rule = rule_based_sentiment(text)
+        rule_output = rule_based_sentiment(text)
         t2 = time.time()
 
         # 3. Transformer sentiment
-        sentiment = analyze_sentiment(text)
+        sentiment_output = analyze_sentiment(text) # analyze_sentiment now returns {'sentiment': int, 'confidence_score': float}
         t3 = time.time()
 
         # 4. Aspect-based sentiment
-        aspects = analyze_absa(text)
+        absa_output = analyze_absa(text) # analyze_absa now returns a dict
         t4 = time.time()
 
         # 5. Emotion detection
-        emotion_scores = detect_emotion(text)
+        emotion_output = detect_emotion(text) # detect_emotion now returns a dict with multiple scores
         t5 = time.time()
 
         # 6. Sarcasm detection
-        sarcasm = detect_sarcasm(text)
+        sarcasm_output = detect_sarcasm(text)
         t6 = time.time()
 
-        # Compute aspect summary for fusion input
-        num_pos_aspects = sum(1 for a in aspects if a['sentiment_label'] == 'positive')
-        num_neg_aspects = sum(1 for a in aspects if a['sentiment_label'] == 'negative')
-        avg_aspect_score = (sum(a['sentiment_score'] for a in aspects) / len(aspects)) if aspects else 0.0
+        # Adapt sentiment_output for fusion model's expected sentiment_score (-1 to 1 float)
+        transformer_sentiment_score_for_fusion = 0.0
+        if sentiment_output['sentiment'] == 1: # positive
+            transformer_sentiment_score_for_fusion = sentiment_output['confidence_score']
+        elif sentiment_output['sentiment'] == -1: # negative
+            transformer_sentiment_score_for_fusion = -sentiment_output['confidence_score']
+        # if sentiment_output['sentiment'] == 0 (neutral), it remains 0.0
 
         # 7. Fusion
         signals = {
-            'rule_score': rule['rule_score'],
-            'sentiment_score': sentiment['sentiment_score'],
-            'num_pos_aspects': num_pos_aspects,
-            'num_neg_aspects': num_neg_aspects,
-            'avg_aspect_score': avg_aspect_score,
-            'emotion_score': max(emotion_scores.values()) if emotion_scores else 0.0,
-            'sarcasm_score': sarcasm.get('sarcasm_score', 0.0)
+            'rule_score': rule_output['rule_score'],
+            'rule_polarity': rule_output['rule_polarity'],
+            'sentiment_score': transformer_sentiment_score_for_fusion,
+            'sentiment_confidence': sentiment_output['confidence_score'],
+            'num_pos_aspects': absa_output['num_pos_aspects'],
+            'num_neg_aspects': absa_output['num_neg_aspects'],
+            'avg_aspect_score': absa_output['avg_aspect_score'],
+            'avg_aspect_confidence': absa_output['avg_aspect_confidence'],
+            'emotion_score': emotion_output['emotion_score'],
+            'emotion_confidence': emotion_output['emotion_confidence'],
+            'emotion_distribution': emotion_output['emotion_distribution'],
+            'sarcasm_score': sarcasm_output['sarcasm_score'],
+            'sarcasm_confidence': sarcasm_output['sarcasm_confidence']
         }
         fused = fuse_signals(signals)
         t7 = time.time()
@@ -109,13 +126,13 @@ def run_tests():
             'emotion_time': round(t5 - t4, 3),
             'sarcasm_time': round(t6 - t5, 3),
             'fusion_time': round(t7 - t6, 3),
-            'signals': signals,
+            'signals': signals, # This now contains all 13 features for fusion
             'fused': fused,
-            'aspects': aspects,
-            'emotion_scores': emotion_scores,
-            'sarcasm': sarcasm,
-            'rule': rule,
-            'sentiment': sentiment
+            'aspects': absa_output['aspect_details'], # Use 'aspect_details' from absa_output
+            'emotion_scores': emotion_output, # Pass the whole dict
+            'sarcasm': sarcasm_output,
+            'rule': rule_output,
+            'sentiment': sentiment_output
         }
 
         all_results.append(result)

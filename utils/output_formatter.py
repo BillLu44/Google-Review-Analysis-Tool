@@ -133,12 +133,13 @@ def format_aspect_table(aspects: List[Dict]) -> str:
     lines.append("└─────────────────┴───────────┴───────────┘")
     return "\n".join(lines)
 
-def format_emotion_scores(emotions: Dict[str, float]) -> str:
+def format_emotion_scores(emotion_output: Dict[str, Any]) -> str: # Expects the full emotion_output dict
     """Format emotion scores with bars, normalized to total 100%."""
+    emotions = emotion_output.get('all_emotion_scores')
     if not emotions:
         return "No emotions detected"
 
-    # 1) Normalize so sum = 1.0
+    # 1) Normalize so sum = 1.0 (if desired, or show raw scores)
     total = sum(emotions.values())
     if total > 0:
         normalized = {emo: score / total for emo, score in emotions.items()}
@@ -154,6 +155,10 @@ def format_emotion_scores(emotions: Dict[str, float]) -> str:
     for emotion, frac in sorted_emotions:
         bar = format_confidence_bar(frac, width=15)
         lines.append(f"  {emotion.capitalize():10} {bar}")
+    
+    lines.append(f"  Emotion Score (Total Weight): {emotion_output.get('emotion_score', 0.0):.3f}")
+    lines.append(f"  Emotion Confidence (Avg): {emotion_output.get('emotion_confidence', 0.0):.3f}")
+    lines.append(f"  Emotion Distribution (Entropy): {emotion_output.get('emotion_distribution', 0.0):.3f}")
     return "\n".join(lines)
 
 def format_pipeline_timing(result: Dict) -> str:
@@ -182,22 +187,29 @@ def format_pipeline_timing(result: Dict) -> str:
 def format_signals_summary(signals: Dict) -> str:
     """Format the fusion signals"""
     lines = []
-    lines.append("Signal Analysis:")
+    lines.append("Signal Analysis (Features fed to Fusion Model):")
     
+    # Matches the order in fusion.py feature_names for consistency
     signal_info = [
-        ('rule_score', 'Rule-based Score', lambda x: f"{x:+6.2f}"),
-        ('sentiment_score', 'Transformer Score', lambda x: f"{x:+6.2f}"),
-        ('num_pos_aspects', 'Positive Aspects', lambda x: f"{x:3.0f}"),
-        ('num_neg_aspects', 'Negative Aspects', lambda x: f"{x:3.0f}"),
-        ('avg_aspect_score', 'Avg Aspect Score', lambda x: f"{x:+6.2f}"),
-        ('emotion_score', 'Emotion Score', lambda x: f"{x:6.2f}"),
-        ('sarcasm_score', 'Sarcasm Score', lambda x: f"{x:6.2f}")
+        ('rule_score', 'Rule Score (int)', lambda x: f"{x:3.0f}"),
+        ('rule_polarity', 'Rule Polarity', lambda x: f"{x:+6.3f}"),
+        ('sentiment_score', 'Overall Sent. Score', lambda x: f"{x:+6.3f}"),
+        ('sentiment_confidence', 'Overall Sent. Conf.', lambda x: f"{x:6.3f}"),
+        ('num_pos_aspects', 'Num Positive Aspects', lambda x: f"{x:3.0f}"),
+        ('num_neg_aspects', 'Num Negative Aspects', lambda x: f"{x:3.0f}"),
+        ('avg_aspect_score', 'Avg Aspect Score', lambda x: f"{x:+6.3f}"),
+        ('avg_aspect_confidence', 'Avg Aspect Conf.', lambda x: f"{x:6.3f}"),
+        ('emotion_score', 'Emotion Score (Weight)', lambda x: f"{x:6.3f}"),
+        ('emotion_confidence', 'Emotion Confidence (Avg)', lambda x: f"{x:6.3f}"),
+        ('emotion_distribution', 'Emotion Distribution', lambda x: f"{x:6.3f}"),
+        ('sarcasm_score', 'Sarcasm Score (binary)', lambda x: f"{x:3.0f}"),
+        ('sarcasm_confidence', 'Sarcasm Confidence', lambda x: f"{x:6.3f}")
     ]
     
     for key, label, formatter in signal_info:
-        value = signals.get(key, 0.0)
+        value = signals.get(key, 0.0) # Default to 0.0 if a signal is somehow missing
         formatted_value = formatter(value)
-        lines.append(f"  {label:18} {formatted_value}")
+        lines.append(f"  {label:28} {formatted_value}")
     
     return "\n".join(lines)
 
@@ -248,14 +260,14 @@ def format_single_result(result: Dict) -> str:
     lines.append("")
     
     # Aspects
-    aspects = result.get('aspects', [])
+    aspects = result.get('aspects', []) # This should be aspect_details list
     lines.append("🔍 Aspect-Based Analysis:")
     lines.append(format_aspect_table(aspects))
     lines.append("")
     
     # Emotions
-    emotions = result.get('emotion_scores', {})
-    lines.append(format_emotion_scores(emotions))
+    emotion_data = result.get('emotion_scores', {}) # This is the full emotion_output dict
+    lines.append(format_emotion_scores(emotion_data))
     lines.append("")
     
     # Sarcasm

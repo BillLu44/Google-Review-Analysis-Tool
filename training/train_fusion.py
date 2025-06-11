@@ -61,12 +61,18 @@ def train_fusion(
     # Define feature columns expected by fusion model
     feature_cols = [
         'rule_score',
-        'sentiment_score', 
+        'rule_polarity',
+        'sentiment_score',
+        'sentiment_confidence',
         'num_pos_aspects',
         'num_neg_aspects',
         'avg_aspect_score',
+        'avg_aspect_confidence',
         'emotion_score',
-        'sarcasm_score'
+        'emotion_confidence',
+        'emotion_distribution',
+        'sarcasm_score',
+        'sarcasm_confidence'
     ]
     
     # Check required columns exist
@@ -74,9 +80,11 @@ def train_fusion(
     if missing_cols:
         raise ValueError(f"Missing required columns: {missing_cols}")
     
-    # Clean numeric columns (handle Unicode minus signs)
-    numeric_cols = ['rule_score', 'sentiment_score', 'avg_aspect_score', 'emotion_score', 'sarcasm_score']
-    df = clean_numeric_columns(df, numeric_cols)
+    # Clean numeric columns (handle Unicode minus signs and ensure numeric type)
+    # All feature_cols are expected to be numeric.
+    # num_pos_aspects and num_neg_aspects should already be integers.
+    # rule_score and sarcasm_score are also typically integers/discrete.
+    df = clean_numeric_columns(df, feature_cols) # Apply to all expected numeric features
     
     X = df[feature_cols]
     y = df['label']

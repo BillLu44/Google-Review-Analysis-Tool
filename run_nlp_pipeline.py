@@ -42,18 +42,28 @@ def fetch_reviews(conn, table: str, id_col: str, text_col: str, last_id: int = 0
         return cur.fetchall()
 
 
-def upsert_results(conn, review: Dict, result: Dict) -> None:
+def upsert_results(conn, review: Dict, result: Dict, absa_details: List[Dict]) -> None:
     """
     Upsert overall NLP results into nlp_review_results and aspects into nlp_review_aspects.
     """
     review_id = review['review_id']
-    text = review['text']
+    # text = review['text'] # text is not directly used here, but good to have for context if needed
+
+    # Determine top emotion for DB logging (if still desired in this format)
+    # This assumes 'all_emotion_scores' is part of the result['emotion_output']
+    top_emotion_label = 'neutral'
+    top_emotion_score = 0.0
+    if result.get('emotion_output') and result['emotion_output'].get('all_emotion_scores'):
+        all_emotions = result['emotion_output']['all_emotion_scores']
+        if all_emotions:
+            top_emotion_label = max(all_emotions, key=all_emotions.get)
+            top_emotion_score = all_emotions[top_emotion_label]
 
     # Upsert main results
     upsert_sql = """
     INSERT INTO nlp_review_results
       (review_id, overall_sentiment, overall_score,
-       emotion_label, emotion_score,
+       emotion_label, emotion_score, -- These might represent the 'top' emotion
        sarcasm_label, sarcasm_score,
        fusion_label, fusion_confidence,
        created_at, updated_at)
@@ -71,14 +81,14 @@ def upsert_results(conn, review: Dict, result: Dict) -> None:
     """
     params = (
         review_id,
-        result['sentiment_label'],
-        result['sentiment_score'],
-        result['emotion_label'],
-        result['emotion_score'],
-        result['sarcasm_label'],
-        result['sarcasm_score'],
-        result['fused_label'],
-        result['fused_confidence']
+        result['sentiment_output']['sentiment_label'] if result.get('sentiment_output') else 'neutral', # Assuming sentiment_output has sentiment_label
+        result['sentiment_output']['sentiment'] if result.get('sentiment_output') else 0,             # This is the int score
+        top_emotion_label,
+        top_emotion_score,
+        result['sarcasm_output']['sarcasm_label'] if result.get('sarcasm_output') else 'not_sarcastic',
+        result['sarcasm_output']['sarcasm_score'] if result.get('sarcasm_output') else 0, # This is the binary score
+        result['fused']['fused_label'],
+        result['fused']['fused_confidence']
     )
     with conn.cursor() as cur:
         cur.execute(upsert_sql, params)
@@ -98,9 +108,9 @@ def upsert_results(conn, review: Dict, result: Dict) -> None:
     aspect_to_id = {row['aspect'].lower(): row['category_id'] for row in absa_rows}
 
     with conn.cursor() as cur:
-        for aspect in result['aspects']:
+        for aspect in absa_details: # Use absa_details
             aspect_norm = aspect['aspect']
-            category_id = aspect_to_id.get(aspect_norm)
+            category_id = aspect_to_id.get(aspect_norm.lower()) # Ensure lowercase for matching
             if category_id is None:
                 global_logger.warning(f"No category_id for aspect '{aspect_norm}', skipping DB insert.")
                 continue
@@ -142,57 +152,73 @@ def main(args):
         global_logger.info(f"Processing review_id={rid}")
 
         # Pipeline stages
-        preprocess = preprocess_text(text)
-        rule = rule_based_sentiment(text)
-        sentiment = analyze_sentiment(text)
-        aspects = analyze_absa(text)
-        emotion_scores = detect_emotion(text)
-        # pick top emotion
-        emotion_label = max(emotion_scores, key=emotion_scores.get)
-        emotion_score = emotion_scores[emotion_label]
-        sarcasm = detect_sarcasm(text)
+        # preprocess_result = preprocess_text(text) # 'preprocess_result' not used later, direct call is fine
+        rule_output = rule_based_sentiment(text)
+        sentiment_output = analyze_sentiment(text)
+        absa_output = analyze_absa(text) # Returns a dict
+        emotion_output = detect_emotion(text) # Returns a dict
+        sarcasm_output = detect_sarcasm(text)
         
-        # ABSA summary
-        num_pos = sum(1 for a in aspects if a['sentiment_label'] == 'positive')
-        num_neg = sum(1 for a in aspects if a['sentiment_label'] == 'negative')
-        avg_aspect = (sum(a['sentiment_score'] for a in aspects) / len(aspects)) if aspects else 0.0
+        # Adapt sentiment_output for fusion model's expected sentiment_score (-1 to 1 float)
+        transformer_sentiment_score_for_fusion = 0.0
+        if sentiment_output['sentiment'] == 1: # positive
+            transformer_sentiment_score_for_fusion = sentiment_output['confidence_score']
+        elif sentiment_output['sentiment'] == -1: # negative
+            transformer_sentiment_score_for_fusion = -sentiment_output['confidence_score']
 
         # Collect signals for fusion
-        signals = {
-            'rule_score': rule['rule_score'],
-            'sentiment_score': sentiment['sentiment_score'],
-            'num_pos_aspects': num_pos,
-            'num_neg_aspects': num_neg,
-            'avg_aspect_score': avg_aspect,
-            'emotion_score': emotion_score,
-            'sarcasm_score': sarcasm['sarcasm_score']
+        signals_for_fusion = {
+            'rule_score': rule_output['rule_score'],
+            'rule_polarity': rule_output['rule_polarity'],
+            'sentiment_score': transformer_sentiment_score_for_fusion,
+            'sentiment_confidence': sentiment_output['confidence_score'],
+            'num_pos_aspects': absa_output['num_pos_aspects'],
+            'num_neg_aspects': absa_output['num_neg_aspects'],
+            'avg_aspect_score': absa_output['avg_aspect_score'],
+            'avg_aspect_confidence': absa_output['avg_aspect_confidence'],
+            'emotion_score': emotion_output['emotion_score'],
+            'emotion_confidence': emotion_output['emotion_confidence'],
+            'emotion_distribution': emotion_output['emotion_distribution'],
+            'sarcasm_score': sarcasm_output['sarcasm_score'],
+            'sarcasm_confidence': sarcasm_output['sarcasm_confidence']
         }
-        fused = fuse_signals(signals)
+        fused_output = fuse_signals(signals_for_fusion)
 
-        # Compile result record
-        result = {
-            'sentiment_label': sentiment['sentiment_label'],
-            'sentiment_score': sentiment['sentiment_score'],
-            'emotion_label': emotion_label,
-            'emotion_score': emotion_score,
-            'sarcasm_label': sarcasm['sarcasm_label'],
-            'sarcasm_score': sarcasm['sarcasm_score'],
-            'aspects': aspects,
-            'fused_label': fused['fused_label'],
-            'fused_confidence': fused['fused_confidence']
+        # Compile result record for DB and feedback
+        # This 'result_for_db' can be a subset or a differently structured dict for DB needs
+        result_for_db_and_feedback = {
+            'sentiment_output': sentiment_output, # Contains original int score and label
+            'emotion_output': emotion_output, # Contains all emotion scores for flexibility
+            'sarcasm_output': sarcasm_output,
+            # 'aspects': absa_output['aspect_details'], # Passed separately to upsert_results
+            'fused': fused_output,
+            # Include other raw outputs if needed for DB or feedback
+            'rule_output': rule_output,
+            'absa_output': absa_output
         }
 
         # Upsert into DB
         try:
-            upsert_results(conn, review, result)
+            # Pass absa_output['aspect_details'] explicitly
+            upsert_results(conn, review, result_for_db_and_feedback, absa_output['aspect_details'])
         except Exception as e:
             global_logger.error(f"Failed to upsert results for review_id={rid}: {e}")
 
         # Log feedback if low confidence
-        if args.log_feedback and fused['fused_confidence'] < args.conf_threshold:
-            # Combine signals and result for feedback logging
-            feedback_signals = {**signals, **result}
-            log_feedback(rid, text, feedback_signals)
+        if args.log_feedback and fused_output['fused_confidence'] < args.conf_threshold:
+            # For feedback, log the signals that went into fusion, and the fusion output itself.
+            # You might also want to log the more detailed raw outputs from each module.
+            feedback_payload = {
+                'signals_fed_to_fusion': signals_for_fusion,
+                'fused_output': fused_output,
+                # Optionally add more raw component outputs if useful for retraining/analysis
+                'rule_details': rule_output,
+                'sentiment_details': sentiment_output,
+                'absa_details': absa_output,
+                'emotion_details': emotion_output,
+                'sarcasm_details': sarcasm_output
+            }
+            log_feedback(rid, text, feedback_payload)
 
     global_logger.info("Pipeline run complete.")
     conn.close()

@@ -35,21 +35,34 @@ def process_feedback_logs(
         for line_num, line in enumerate(f, 1):
             try:
                 record = json.loads(line.strip())
-                signals = record.get('signals', {})
-                
-                # Extract features for fusion training
+                # The actual signals fed to the fusion model are now nested
+                fusion_input_signals = record.get('signals', {}).get('signals_fed_to_fusion', {})
+                fused_output = record.get('signals', {}).get('fused_output', {})
+
+
+                if not fusion_input_signals: # Check if the expected structure is present
+                    logger.warning(f"Skipping line {line_num}: 'signals_fed_to_fusion' not found in record.signals: {record.get('signals')}")
+                    continue
+
+                # Extract features for fusion training from 'signals_fed_to_fusion'
                 row = {
                     'review_id': record.get('review_id'),
                     'text': record.get('text', ''),
-                    'rule_score': signals.get('rule_score', 0.0),
-                    'sentiment_score': signals.get('sentiment_score', 0.0),
-                    'num_pos_aspects': signals.get('num_pos_aspects', 0),
-                    'num_neg_aspects': signals.get('num_neg_aspects', 0),
-                    'avg_aspect_score': signals.get('avg_aspect_score', 0.0),
-                    'emotion_score': signals.get('emotion_score', 0.0),
-                    'sarcasm_score': signals.get('sarcasm_score', 0.0),
-                    'fused_label': signals.get('fused_label', 'neutral'),
-                    'fused_confidence': signals.get('fused_confidence', 0.0),
+                    'rule_score': fusion_input_signals.get('rule_score', 0.0),
+                    'rule_polarity': fusion_input_signals.get('rule_polarity', 0.0),
+                    'sentiment_score': fusion_input_signals.get('sentiment_score', 0.0),
+                    'sentiment_confidence': fusion_input_signals.get('sentiment_confidence', 0.0),
+                    'num_pos_aspects': fusion_input_signals.get('num_pos_aspects', 0),
+                    'num_neg_aspects': fusion_input_signals.get('num_neg_aspects', 0),
+                    'avg_aspect_score': fusion_input_signals.get('avg_aspect_score', 0.0),
+                    'avg_aspect_confidence': fusion_input_signals.get('avg_aspect_confidence', 0.0),
+                    'emotion_score': fusion_input_signals.get('emotion_score', 0.0),
+                    'emotion_confidence': fusion_input_signals.get('emotion_confidence', 0.0),
+                    'emotion_distribution': fusion_input_signals.get('emotion_distribution', 0.0),
+                    'sarcasm_score': fusion_input_signals.get('sarcasm_score', 0.0),
+                    'sarcasm_confidence': fusion_input_signals.get('sarcasm_confidence', 0.0),
+                    'fused_label': fused_output.get('fused_label', 'neutral'), # from fused_output
+                    'fused_confidence': fused_output.get('fused_confidence', 0.0), # from fused_output
                     'label': ''  # To be filled manually
                 }
                 records.append(row)

@@ -47,27 +47,64 @@ def detect_sarcasm(text: str) -> Dict[str, float]:
 
     Returns:
         Dict with keys:
-          - sarcasm_score: float (positive=P(sarcastic), negative=P(not sarcastic))
-          - sarcasm_label: str (label predicted by the model)
+          - sarcasm_label: str ('sarcastic' or 'not_sarcastic')
+          - sarcasm_score: int (1 if sarcastic, 0 if not_sarcastic)
+          - sarcasm_confidence: float (model's confidence in the prediction, 0.0 to 1.0)
     """
-    logger.debug("Running sarcasm detection")
+    logger.debug(f"Running sarcasm detection for text: '{text}'")
     try:
+        if sarcasm_pipe is None:
+            logger.error("Sarcasm pipeline not initialized.")
+            return {'sarcasm_label': 'not_sarcastic', 'sarcasm_score': 0, 'sarcasm_confidence': 0.0}
+
         results = sarcasm_pipe(text)
-        scores = results[0] if isinstance(results, list) and isinstance(results[0], list) else results
-        best = max(scores, key=lambda x: x.get('score', 0))
-        label_raw = best.get('label', '').lower()
-        score = float(best.get('score', 0.0))
+        
+        # The model might return a list of lists for predictions
+        scores_list = results[0] if isinstance(results, list) and results and isinstance(results[0], list) else results
+        
+        if not scores_list:
+            logger.warning(f"No sarcasm scores returned for text: '{text}'")
+            return {'sarcasm_label': 'not_sarcastic', 'sarcasm_score': 0, 'sarcasm_confidence': 0.0}
 
-        if 'sarcastic' in label_raw and 'not' not in label_raw:
-            sarcasm_label = 'sarcastic'
-        else:
-            sarcasm_label = 'not_sarcastic'
+        # Find the prediction with the highest score
+        best_prediction = max(scores_list, key=lambda x: x.get('score', 0.0))
+        
+        label_raw = best_prediction.get('label', '').lower()
+        confidence = float(best_prediction.get('score', 0.0))
 
-        # signed confidence: +score if sarcastic, –score if not
-        sarcasm_score = score if sarcasm_label == 'sarcastic' else -score
+        sarcasm_label_str = 'not_sarcastic'
+        sarcasm_score_val = 0 # Default to not sarcastic
 
-        logger.debug(f"Sarcasm: {label_raw}→{sarcasm_label} ({sarcasm_score:.3f})")
-        return {'sarcasm_label': sarcasm_label, 'sarcasm_score': sarcasm_score}
+        # The dnzblgn/Sarcasm-Detection-Customer-Reviews model typically has 'Sarcastic' and 'Not Sarcastic' labels
+        if 'sarcastic' in label_raw and 'not' not in label_raw: # Check for 'sarcastic' and not 'not sarcastic'
+            sarcasm_label_str = 'sarcastic'
+            sarcasm_score_val = 1
+        
+        logger.debug(f"Sarcasm detection: Raw Label='{label_raw}', Confidence={confidence:.3f} -> Final Label='{sarcasm_label_str}', Score={sarcasm_score_val}")
+        
+        return {
+            'sarcasm_label': sarcasm_label_str,
+            'sarcasm_score': sarcasm_score_val,
+            'sarcasm_confidence': confidence
+        }
     except Exception as e:
-        logger.error(f"Sarcasm detection failed: {e}")
-        return {'sarcasm_label': 'not_sarcastic', 'sarcasm_score': 0.0}
+        logger.error(f"Sarcasm detection failed for text '{text}': {e}", exc_info=True)
+        return {'sarcasm_label': 'not_sarcastic', 'sarcasm_score': 0, 'sarcasm_confidence': 0.0}
+
+# For testing
+if __name__ == "__main__":
+    test_texts = [
+        "Oh, another meeting? How exciting.", # Sarcastic
+        "I love it when my code breaks right before a deadline.", # Sarcastic
+        "This is a genuinely good product, I'm very happy with it.", # Not sarcastic
+        "The weather is so lovely today, said no one ever during this blizzard.", # Sarcastic
+        "I'm really enjoying this book." # Not sarcastic
+    ]
+
+    if sarcasm_pipe is None:
+        print("Sarcasm pipeline not loaded. Cannot run tests.")
+    else:
+        for t_text in test_texts:
+            sarcasm_result = detect_sarcasm(t_text)
+            print(f"Text: \"{t_text}\"")
+            print(f"  Label: {sarcasm_result['sarcasm_label']}, Score: {sarcasm_result['sarcasm_score']}, Confidence: {sarcasm_result['sarcasm_confidence']:.4f}\n")

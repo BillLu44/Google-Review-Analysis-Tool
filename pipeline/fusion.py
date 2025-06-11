@@ -47,12 +47,18 @@ def fuse_signals(signals: dict) -> dict:
     Args:
         signals: dict containing numeric features:
             - rule_score
+            - rule_polarity
             - sentiment_score
+            - sentiment_confidence
             - num_pos_aspects
             - num_neg_aspects
             - avg_aspect_score
+            - avg_aspect_confidence
             - emotion_score
+            - emotion_confidence
+            - emotion_distribution
             - sarcasm_score
+            - sarcasm_confidence
 
     Returns:
         dict with:
@@ -70,13 +76,19 @@ def fuse_signals(signals: dict) -> dict:
     
     # Define feature order expected by the model
     feature_names = [
-        'rule_score',
-        'sentiment_score',
-        'num_pos_aspects',
-        'num_neg_aspects',
-        'avg_aspect_score',
-        'emotion_score',
-        'sarcasm_score'
+        'rule_score', # Integer score: -1 (Negative), 0 (Neutral), 1 (Positive)
+        'rule_polarity', # Continuous score: Average of VADER compound & TextBlob polarity, range -1 to 1
+        'sentiment_score', # Continuous score: Derived from overall sentiment model's confidence, signed, range -1 to 1
+        'sentiment_confidence', # Raw confidence from overall sentiment model [0, 1]
+        'num_pos_aspects', # Count of aspects with positive sentiment
+        'num_neg_aspects', # Count of aspects with negative sentiment
+        'avg_aspect_score', # Mean of signed sentiment_scores from individual aspects, range -1 to 1
+        'avg_aspect_confidence', # Average of confidence scores across all detected aspects [0, 1]
+        'emotion_score',         # Total emotional weight (sum of 6 emotion category scores) [0, 6]
+        'emotion_confidence',    # Average confidence across all 6 emotion categories [0, 1]
+        'emotion_distribution',  # Normalized entropy of emotion scores, indicating spread [0, 1]
+        'sarcasm_score', # Binary score: 0 (not sarcastic), 1 (sarcastic)
+        'sarcasm_confidence' # Confidence score from sarcasm model [0, 1]
     ]
 
     # Build feature vector, default missing to 0
@@ -115,13 +127,19 @@ def fuse_signals(signals: dict) -> dict:
 # For testing
 if __name__ == "__main__":
     test_signals = {
-        'rule_score': 0.5,
+        'rule_score': 1.0,             # Example: 1 for positive
+        'rule_polarity': 0.75,         # Example: continuous polarity score
         'sentiment_score': 0.8,
+        'sentiment_confidence': 0.95,
         'num_pos_aspects': 2,
         'num_neg_aspects': 0,
         'avg_aspect_score': 0.7,
-        'emotion_score': 0.9,
-        'sarcasm_score': 0.1
+        'avg_aspect_confidence': 0.85,
+        'emotion_score': 1.5,
+        'emotion_confidence': 0.25,
+        'emotion_distribution': 0.4,
+        'sarcasm_score': 0.1,          # Assuming 0 for not sarcastic, 1 for sarcastic
+        'sarcasm_confidence': 0.6
     }
     result = fuse_signals(test_signals)
     print(f"Fusion Result: {result}")

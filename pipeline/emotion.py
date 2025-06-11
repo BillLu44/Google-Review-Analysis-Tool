@@ -9,6 +9,7 @@ from transformers import pipeline, AutoTokenizer
 from pipeline.logger import get_logger
 from pipeline.preprocessing import preprocess_text
 import re # Added import
+import math # Added import
 
 # Initialize logger
 logger = get_logger(__name__)
@@ -29,6 +30,10 @@ if not EMOTION_MODEL:
     raise ValueError("Missing emotion model in config.json")
 
 # Initialize Hugging Face emotion pipeline
+emotion_pipe = None
+ALL_EMOTION_LABELS = []
+N_EMOTION_CATEGORIES = 0
+
 try:
     tokenizer = AutoTokenizer.from_pretrained(EMOTION_MODEL, use_fast=False)
     emotion_pipe = pipeline(
@@ -38,9 +43,35 @@ try:
         top_k=None
     )
     logger.info(f"Loaded emotion model '{EMOTION_MODEL}' with slow tokenizer")
+    if emotion_pipe and hasattr(emotion_pipe, 'model') and hasattr(emotion_pipe.model, 'config') and hasattr(emotion_pipe.model.config, 'label2id'):
+        ALL_EMOTION_LABELS = sorted(list(emotion_pipe.model.config.label2id.keys()))
+        N_EMOTION_CATEGORIES = len(ALL_EMOTION_LABELS)
+        logger.info(f"Emotion model has {N_EMOTION_CATEGORIES} labels: {ALL_EMOTION_LABELS}")
+    else:
+        logger.error("Could not retrieve emotion labels from the model configuration.")
+        # Fallback if labels can't be dynamically determined, ensure N_EMOTION_CATEGORIES is set if known (e.g. 6)
+        # For "AnkitAI/deberta-v3-small-base-emotions-classifier", it's 6.
+        ALL_EMOTION_LABELS = ['sadness', 'joy', 'love', 'anger', 'fear', 'surprise'] # Default known labels
+        N_EMOTION_CATEGORIES = 6
+        logger.warning(f"Using default {N_EMOTION_CATEGORIES} emotion labels: {ALL_EMOTION_LABELS}")
+
 except Exception as e:
     logger.error(f"Error initializing emotion pipeline with model '{EMOTION_MODEL}': {e}")
-    raise
+    # Set ALL_EMOTION_LABELS and N_EMOTION_CATEGORIES even if pipe fails, for default return structure
+    ALL_EMOTION_LABELS = ['sadness', 'joy', 'love', 'anger', 'fear', 'surprise'] # Default known labels
+    N_EMOTION_CATEGORIES = 6
+    logger.warning(f"Using default {N_EMOTION_CATEGORIES} emotion labels due to pipeline init error: {ALL_EMOTION_LABELS}")
+    # We don't raise here, detect_emotion will handle emotion_pipe being None
+
+def get_default_emotion_result() -> Dict:
+    """Returns a default structure for emotion analysis results."""
+    default_scores = {label: 0.0 for label in ALL_EMOTION_LABELS} if ALL_EMOTION_LABELS else {}
+    return {
+        'all_emotion_scores': default_scores,
+        'emotion_score': 0.0,          # Total emotional weight
+        'emotion_confidence': 0.0,     # Average confidence
+        'emotion_distribution': 0.0    # Normalized entropy
+    }
 
 
 def get_emotion_clauses(original_text: str) -> List[str]:
@@ -105,49 +136,83 @@ def detect_emotion(text: str) -> Dict[str, float]:
         text: The review or input text.
 
     Returns:
-        A dict mapping each emotion label to its confidence score.
-        Example: {"joy": 0.72, "sadness": 0.10, ...}
+        A dict with:
+        - 'all_emotion_scores': Dict[str, float] of each emotion to its max score
+        - 'emotion_score': float, sum of all emotion scores (total emotional weight)
+        - 'emotion_confidence': float, average of all emotion scores
+        - 'emotion_distribution': float, normalized entropy of emotion scores
     """
     logger.debug(f"Running emotion detection for text: '{text}'")
+
+    if emotion_pipe is None or N_EMOTION_CATEGORIES == 0:
+        logger.error("Emotion pipeline or labels not initialized. Returning default emotion result.")
+        return get_default_emotion_result()
+
     try:
         clauses_to_analyze = get_emotion_clauses(text)
-
         combined: Dict[str, float] = {}
+
         if not clauses_to_analyze:
             logger.warning(f"No clauses to analyze for text: '{text}'")
-            return {"neutral": 1.0} # Default if no clauses
+            # Fall through to calculate scores based on empty 'combined'
+        else:
+            for sent_idx, clause_text in enumerate(clauses_to_analyze):
+                if not clause_text.strip():
+                    logger.debug(f"Skipping empty clause at index {sent_idx}")
+                    continue
 
-        for sent_idx, clause_text in enumerate(clauses_to_analyze):
-            # Ensure clause_text is not empty or just whitespace
-            if not clause_text.strip():
-                logger.debug(f"Skipping empty clause at index {sent_idx}")
-                continue
+                logger.debug(f"Processing clause {sent_idx+1}/{len(clauses_to_analyze)} for emotion: '{clause_text}'")
+                results = emotion_pipe(clause_text)
+                
+                scores_list = results[0] if isinstance(results, list) and results and isinstance(results[0], list) else results
+                
+                if not scores_list:
+                    logger.warning(f"No emotion scores returned for clause: '{clause_text}'")
+                    continue
 
-            logger.debug(f"Processing clause {sent_idx+1}/{len(clauses_to_analyze)} for emotion: '{clause_text}'")
-            results = emotion_pipe(clause_text)
-            
-            scores_list = results[0] if isinstance(results, list) and results and isinstance(results[0], list) else results
-            
-            if not scores_list:
-                logger.warning(f"No emotion scores returned for clause: '{clause_text}'")
-                continue
+                current_clause_scores = {}
+                for entry in scores_list:
+                    label = entry['label'].lower()
+                    if label in ALL_EMOTION_LABELS: # Ensure we only consider known labels
+                        score = float(entry['score'])
+                        current_clause_scores[label] = score
+                        combined[label] = max(combined.get(label, 0.0), score)
+                logger.debug(f"Emotion scores for clause '{clause_text}': {current_clause_scores}")
 
-            current_clause_scores = {}
-            for entry in scores_list:
-                label = entry['label'].lower()
-                score = float(entry['score'])
-                current_clause_scores[label] = score
-                # keep the highest score seen for each label across ALL clauses
-                combined[label] = max(combined.get(label, 0.0), score)
-            logger.debug(f"Emotion scores for clause '{clause_text}': {current_clause_scores}")
+        # Initialize final scores with all known labels at 0.0
+        final_aggregated_scores = {label: 0.0 for label in ALL_EMOTION_LABELS}
+        final_aggregated_scores.update(combined) # Update with detected scores
 
-        if not combined: # If all clauses were empty or yielded no scores
-            logger.warning(f"No emotions combined for text: '{text}'. Defaulting to neutral.")
-            return {"neutral": 1.0}
+        # Calculate emotion_score (total emotional weight)
+        emotion_score_val = sum(final_aggregated_scores.values())
 
-        logger.debug(f"Aggregated (max) emotion scores before normalization: {combined}")
-        return combined
+        # Calculate emotion_confidence (average confidence across all N categories)
+        emotion_confidence_val = emotion_score_val / N_EMOTION_CATEGORIES if N_EMOTION_CATEGORIES > 0 else 0.0
+        
+        # Calculate emotion_distribution (normalized entropy)
+        emotion_distribution_val = 0.0
+        positive_scores = [s for s in final_aggregated_scores.values() if s > 0]
+
+        if len(positive_scores) > 1: # Entropy is 0 if 0 or 1 emotion
+            total_positive_score = sum(positive_scores)
+            if total_positive_score > 0:
+                probabilities = [s / total_positive_score for s in positive_scores]
+                # Filter probabilities again in case of floating point issues making some zero
+                entropy = -sum(p * math.log(p) for p in probabilities if p > 0)
+                max_entropy = math.log(N_EMOTION_CATEGORIES)
+                if max_entropy > 0:
+                    emotion_distribution_val = entropy / max_entropy
+        
+        logger.debug(f"Final aggregated emotion scores: {final_aggregated_scores}")
+        logger.info(f"Emotion analysis: score={emotion_score_val:.3f}, confidence={emotion_confidence_val:.3f}, distribution={emotion_distribution_val:.3f}")
+
+        return {
+            'all_emotion_scores': final_aggregated_scores,
+            'emotion_score': emotion_score_val,
+            'emotion_confidence': emotion_confidence_val,
+            'emotion_distribution': emotion_distribution_val
+        }
 
     except Exception as e:
         logger.error(f"Emotion detection failed for text '{text}': {e}", exc_info=True)
-        return {"neutral": 1.0}
+        return get_default_emotion_result()

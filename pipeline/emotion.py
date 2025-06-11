@@ -189,19 +189,29 @@ def detect_emotion(text: str) -> Dict[str, float]:
         # Calculate emotion_confidence (average confidence across all N categories)
         emotion_confidence_val = emotion_score_val / N_EMOTION_CATEGORIES if N_EMOTION_CATEGORIES > 0 else 0.0
         
-        # Calculate emotion_distribution (normalized entropy)
+        # Calculate emotion_distribution (normalized entropy) - CORRECTED
         emotion_distribution_val = 0.0
-        positive_scores = [s for s in final_aggregated_scores.values() if s > 0]
-
-        if len(positive_scores) > 1: # Entropy is 0 if 0 or 1 emotion
-            total_positive_score = sum(positive_scores)
-            if total_positive_score > 0:
-                probabilities = [s / total_positive_score for s in positive_scores]
-                # Filter probabilities again in case of floating point issues making some zero
-                entropy = -sum(p * math.log(p) for p in probabilities if p > 0) # Ensure math.log is used
-                max_entropy = math.log(N_EMOTION_CATEGORIES) if N_EMOTION_CATEGORIES > 0 else 0 # Ensure math.log and check N_EMOTION_CATEGORIES
+        
+        # Count emotions above a significance threshold (e.g., 0.1 = 10%)
+        significant_emotions = [s for s in final_aggregated_scores.values() if s > 0.1]
+        num_significant = len(significant_emotions)
+        
+        if num_significant > 1:  # Need at least 2 emotions for diversity
+            total_score = sum(significant_emotions)
+            if total_score > 0:
+                probabilities = [s / total_score for s in significant_emotions]
+                # Calculate entropy
+                entropy = -sum(p * math.log(p) for p in probabilities if p > 0)
+                # Normalize by theoretical maximum entropy (all 6 emotions equally distributed)
+                max_entropy = math.log(N_EMOTION_CATEGORIES)  # log(6) for 6 emotions
                 if max_entropy > 0:
                     emotion_distribution_val = entropy / max_entropy
+        elif num_significant == 1:
+            # Single dominant emotion = 0 distribution
+            emotion_distribution_val = 0.0
+        else:
+            # No significant emotions = 0 distribution
+            emotion_distribution_val = 0.0
         
         logger.debug(f"Final aggregated emotion scores: {final_aggregated_scores}")
         logger.info(f"Emotion analysis: score={emotion_score_val:.3f}, confidence={emotion_confidence_val:.3f}, distribution={emotion_distribution_val:.3f}")

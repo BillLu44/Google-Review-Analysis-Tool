@@ -135,29 +135,24 @@ def format_aspect_table(aspects: List[Dict]) -> str:
     lines.append("└─────────────────┴───────────┴───────────┘")
     return "\n".join(lines)
 
-def format_emotion_scores(emotion_output: Dict[str, Any]) -> str: # Expects the full emotion_output dict
-    """Format emotion scores with bars, normalized to total 100%."""
+def format_emotion_scores(emotion_output: Dict[str, Any]) -> str:
+    """Format emotion scores showing raw intensities, not normalized percentages."""
     emotions = emotion_output.get('all_emotion_scores')
     if not emotions:
         return "No emotions detected"
 
-    # 1) Normalize so sum = 1.0 (if desired, or show raw scores)
-    total = sum(emotions.values())
-    if total > 0:
-        normalized = {emo: score / total for emo, score in emotions.items()}
-    else:
-        normalized = {emo: 0.0 for emo in emotions}
+    # Sort by raw score (not normalized)
+    sorted_emotions = sorted(emotions.items(), key=lambda x: x[1], reverse=True)
 
-    # 2) Sort by normalized score desc
-    sorted_emotions = sorted(normalized.items(), key=lambda x: x[1], reverse=True)
-
-    # 3) Build bars & percentage
     lines = []
-    lines.append("Emotion Analysis (normalized):")
-    for emotion, frac in sorted_emotions:
-        bar = format_confidence_bar(frac, width=15)
-        lines.append(f"  {emotion.capitalize():10} {bar}")
+    lines.append("Emotion Analysis (raw intensities):")
     
+    for emotion, raw_score in sorted_emotions:
+        # Show raw score as percentage of maximum possible (1.0)
+        bar = format_confidence_bar(raw_score, width=15)  # raw_score is already 0-1
+        lines.append(f"  {emotion.capitalize():10} {bar} ({raw_score:.3f})")
+    
+    # Add summary stats
     lines.append(f"  Emotion Score (Total Weight): {emotion_output.get('emotion_score', 0.0):.3f}")
     lines.append(f"  Emotion Confidence (Avg): {emotion_output.get('emotion_confidence', 0.0):.3f}")
     lines.append(f"  Emotion Distribution (Entropy): {emotion_output.get('emotion_distribution', 0.0):.3f}")

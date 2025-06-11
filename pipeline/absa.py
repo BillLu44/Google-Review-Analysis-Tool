@@ -218,9 +218,15 @@ def analyze_absa(text: str) -> Dict:
     for aspect in aspects:
         aspect_mentions = analyze_aspect_sentiment_with_clauses(text, aspect)
         
-        # Aggregate multiple mentions of the same aspect
         if len(aspect_mentions) > 1:
-            # Average the scores for contradictory mentions
+            # Count EACH mention, not just the aggregated result
+            for mention in aspect_mentions:
+                if mention['sentiment_label'] == 'positive':
+                    num_pos_aspects += 1
+                elif mention['sentiment_label'] == 'negative':
+                    num_neg_aspects += 1
+            
+            # Still create aggregated result for display
             avg_score = sum(m['sentiment_score'] for m in aspect_mentions) / len(aspect_mentions)
             avg_confidence = sum(m['confidence'] for m in aspect_mentions) / len(aspect_mentions)
             
@@ -238,19 +244,16 @@ def analyze_absa(text: str) -> Dict:
                 'confidence': avg_confidence
             }
         else:
+            # Single mention
             aspect_result = aspect_mentions[0]
+            if aspect_result['sentiment_label'] == 'positive':
+                num_pos_aspects += 1
+            elif aspect_result['sentiment_label'] == 'negative':
+                num_neg_aspects += 1
         
         detailed_results.append(aspect_result)
-        
         all_sentiment_scores.append(aspect_result['sentiment_score'])
         all_confidences.append(aspect_result['confidence'])
-        
-        if aspect_result['sentiment_label'] == 'positive':
-            num_pos_aspects += 1
-        elif aspect_result['sentiment_label'] == 'negative':
-            num_neg_aspects += 1
-            
-        logger.debug(f"ABSA processed: {aspect} -> {aspect_result['sentiment_label']} (score:{aspect_result['sentiment_score']:.3f}, conf:{aspect_result['confidence']:.3f})")
     
     avg_aspect_score = sum(all_sentiment_scores) / len(all_sentiment_scores) if all_sentiment_scores else 0.0
     avg_aspect_confidence = sum(all_confidences) / len(all_confidences) if all_confidences else 0.0

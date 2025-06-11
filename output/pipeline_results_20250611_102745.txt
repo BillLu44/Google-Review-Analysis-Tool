@@ -1,5 +1,5 @@
 🤖 AI SENTIMENT ANALYSIS PIPELINE RESULTS
-Generated: 2025-06-11 10:13:04
+Generated: 2025-06-11 10:27:45
 
 📊 EXECUTIVE SUMMARY
 ==================================================
@@ -24,8 +24,8 @@ Generated: 2025-06-11 10:13:04
 
 🤖 MODEL INSIGHTS
    Top Emotions:
-     Joy: 3 (60.0%)
-     Anger: 2 (40.0%)
+     Joy: 4 (80.0%)
+     Anger: 1 (20.0%)
 
 ==================================================
 
@@ -56,13 +56,13 @@ REVIEW #1 ANALYSIS REPORT
 │ service         │ negative  │  -1.00 😞 │
 └─────────────────┴───────────┴───────────┘
 
-Emotion Analysis:
-  Joy        [██████████████░] 100.0%
+Emotion Analysis (normalized):
+  Joy        [███████░░░░░░░░] 50.0%
+  Anger      [███████░░░░░░░░] 48.4%
+  Sadness    [░░░░░░░░░░░░░░░] 1.6%
+  Fear       [░░░░░░░░░░░░░░░] 0.1%
   Surprise   [░░░░░░░░░░░░░░░] 0.0%
-  Sadness    [░░░░░░░░░░░░░░░] 0.0%
   Love       [░░░░░░░░░░░░░░░] 0.0%
-  Anger      [░░░░░░░░░░░░░░░] 0.0%
-  Fear       [░░░░░░░░░░░░░░░] 0.0%
 
 🎭 Sarcasm Analysis:
    Detection: not_sarcastic
@@ -81,14 +81,14 @@ Signal Analysis:
   Sarcasm Score       -0.97
 
 Performance Timing:
-  Preprocessing      8.0ms
-  Rule-based        17.0ms
-  Transformer      915.0ms
-  ABSA             190.0ms
-  Emotion           86.0ms
-  Sarcasm           31.0ms
-  Fusion             6.0ms
-  Total           1253.0ms
+  Preprocessing     13.0ms
+  Rule-based        18.0ms
+  Transformer      881.0ms
+  ABSA             209.0ms
+  Emotion          709.0ms
+  Sarcasm           74.0ms
+  Fusion             8.0ms
+  Total           1912.0ms
 
 
 
@@ -115,7 +115,7 @@ REVIEW #2 ANALYSIS REPORT
 │ staff           │ positive  │  +1.00 😊 │
 └─────────────────┴───────────┴───────────┘
 
-Emotion Analysis:
+Emotion Analysis (normalized):
   Joy        [██████████████░] 99.9%
   Love       [░░░░░░░░░░░░░░░] 0.1%
   Surprise   [░░░░░░░░░░░░░░░] 0.0%
@@ -142,12 +142,12 @@ Signal Analysis:
 Performance Timing:
   Preprocessing      5.0ms
   Rule-based         0.0ms
-  Transformer      238.0ms
-  ABSA             147.0ms
-  Emotion           73.0ms
-  Sarcasm           29.0ms
+  Transformer      174.0ms
+  ABSA             127.0ms
+  Emotion           70.0ms
+  Sarcasm           31.0ms
   Fusion             2.0ms
-  Total            494.0ms
+  Total            409.0ms
 
 
 
@@ -176,13 +176,13 @@ REVIEW #3 ANALYSIS REPORT
 │ burger          │ negative  │  -1.00 😞 │
 └─────────────────┴───────────┴───────────┘
 
-Emotion Analysis:
-  Anger      [██████████████░] 99.6%
-  Sadness    [░░░░░░░░░░░░░░░] 0.3%
-  Fear       [░░░░░░░░░░░░░░░] 0.1%
-  Surprise   [░░░░░░░░░░░░░░░] 0.0%
-  Joy        [░░░░░░░░░░░░░░░] 0.0%
+Emotion Analysis (normalized):
+  Joy        [███████░░░░░░░░] 50.0%
+  Anger      [███████░░░░░░░░] 49.6%
+  Fear       [░░░░░░░░░░░░░░░] 0.4%
+  Sadness    [░░░░░░░░░░░░░░░] 0.0%
   Love       [░░░░░░░░░░░░░░░] 0.0%
+  Surprise   [░░░░░░░░░░░░░░░] 0.0%
 
 🎭 Sarcasm Analysis:
    Detection: not_sarcastic
@@ -203,12 +203,12 @@ Signal Analysis:
 Performance Timing:
   Preprocessing      5.0ms
   Rule-based         0.0ms
-  Transformer      122.0ms
-  ABSA             162.0ms
-  Emotion           24.0ms
-  Sarcasm           27.0ms
+  Transformer      109.0ms
+  ABSA             163.0ms
+  Emotion          149.0ms
+  Sarcasm           32.0ms
   Fusion             2.0ms
-  Total            342.0ms
+  Total            460.0ms
 
 
 
@@ -232,11 +232,11 @@ REVIEW #4 ANALYSIS REPORT
 ┌─────────────────┬───────────┬───────────┐
 │     Aspect      │ Sentiment │   Score   │
 ├─────────────────┼───────────┼───────────┤
-│ steak           │ negative  │  -1.00 😞 │
 │ staff           │ negative  │  -1.00 😞 │
+│ steak           │ negative  │  -1.00 😞 │
 └─────────────────┴───────────┴───────────┘
 
-Emotion Analysis:
+Emotion Analysis (normalized):
   Anger      [██████████████░] 100.0%
   Fear       [░░░░░░░░░░░░░░░] 0.0%
   Sadness    [░░░░░░░░░░░░░░░] 0.0%
@@ -264,11 +264,11 @@ Performance Timing:
   Preprocessing      5.0ms
   Rule-based         0.0ms
   Transformer       60.0ms
-  ABSA              64.0ms
-  Emotion           17.0ms
-  Sarcasm           27.0ms
+  ABSA              57.0ms
+  Emotion           22.0ms
+  Sarcasm           26.0ms
   Fusion             2.0ms
-  Total            175.0ms
+  Total            172.0ms
 
 
 
@@ -295,7 +295,7 @@ REVIEW #5 ANALYSIS REPORT
 │ beers           │ positive  │  +0.99 😊 │
 └─────────────────┴───────────┴───────────┘
 
-Emotion Analysis:
+Emotion Analysis (normalized):
   Joy        [██████████████░] 98.3%
   Love       [░░░░░░░░░░░░░░░] 1.7%
   Surprise   [░░░░░░░░░░░░░░░] 0.0%
@@ -322,9 +322,9 @@ Signal Analysis:
 Performance Timing:
   Preprocessing      4.0ms
   Rule-based         0.0ms
-  Transformer       64.0ms
-  ABSA              34.0ms
-  Emotion           23.0ms
+  Transformer       69.0ms
+  ABSA              39.0ms
+  Emotion           28.0ms
   Sarcasm           27.0ms
   Fusion             2.0ms
-  Total            154.0ms
+  Total            169.0ms

@@ -134,19 +134,26 @@ def format_aspect_table(aspects: List[Dict]) -> str:
     return "\n".join(lines)
 
 def format_emotion_scores(emotions: Dict[str, float]) -> str:
-    """Format emotion scores with bars"""
+    """Format emotion scores with bars, normalized to total 100%."""
     if not emotions:
         return "No emotions detected"
-    
-    # Sort by score descending
-    sorted_emotions = sorted(emotions.items(), key=lambda x: x[1], reverse=True)
-    
+
+    # 1) Normalize so sum = 1.0
+    total = sum(emotions.values())
+    if total > 0:
+        normalized = {emo: score / total for emo, score in emotions.items()}
+    else:
+        normalized = {emo: 0.0 for emo in emotions}
+
+    # 2) Sort by normalized score desc
+    sorted_emotions = sorted(normalized.items(), key=lambda x: x[1], reverse=True)
+
+    # 3) Build bars & percentage
     lines = []
-    lines.append("Emotion Analysis:")
-    for emotion, score in sorted_emotions:
-        bar = format_confidence_bar(score, width=15)
+    lines.append("Emotion Analysis (normalized):")
+    for emotion, frac in sorted_emotions:
+        bar = format_confidence_bar(frac, width=15)
         lines.append(f"  {emotion.capitalize():10} {bar}")
-    
     return "\n".join(lines)
 
 def format_pipeline_timing(result: Dict) -> str:

@@ -5,7 +5,7 @@
 import os
 import json
 from typing import List, Dict
-from transformers import pipeline
+from transformers import pipeline, AutoTokenizer
 from pipeline.logger import get_logger
 
 # Initialize logger
@@ -23,37 +23,39 @@ except Exception as e:
 # Initialize ABSA model from config
 try:
     absa_model = _config['models']['absa']  # "yangheng/deberta-v3-base-absa-v1.1"
+    tokenizer = AutoTokenizer.from_pretrained(absa_model, use_fast=False)
     absa_classifier = pipeline(
         "text-classification",
         model=absa_model,
+        tokenizer=tokenizer,
         top_k=None  # Get all possible labels
     )
-    logger.info(f"Loaded ABSA model: {absa_model}")
+    logger.info(f"Loaded ABSA model '{absa_model}' with slow tokenizer")
 except Exception as e:
     logger.error(f"Failed to load ABSA model: {e}")
     absa_classifier = None
 
 # Common restaurant/service aspects to look for
 COMMON_ASPECTS = [
-    "food", "service", "staff", "atmosphere", "ambiance", "price", "value", 
+    "food", "service", "staff", "atmosphere", "ambiance", "price", "value",
     "location", "wait", "portion", "quality", "cleanliness", "menu", "dessert",
-    "drink", "wine", "coffee", "parking", "reservation", "noise", "seating"
+    "drink", "wine", "coffee", "parking", "reservation", "noise", "seating",
+    # additions so “burger,” “steak,” “fries,” “beer(s),” “sandwich,” etc. are found
+    "burger", "steak", "fries", "pizza", "sandwich", "beer", "beers"
 ]
 
 def extract_aspects(text: str) -> List[str]:
     """Simple keyword-based aspect extraction"""
     text_lower = text.lower()
-    found_aspects = []
-    
-    for aspect in COMMON_ASPECTS:
-        if aspect in text_lower:
-            found_aspects.append(aspect)
-    
-    # If no specific aspects found, assume general experience
+    found_aspects = [asp for asp in COMMON_ASPECTS if asp in text_lower]
     if not found_aspects:
-        found_aspects = ["overall"]
-    
-    return found_aspects
+        return ["overall"]
+    # remove singular when plural present
+    unique = set(found_aspects)
+    for asp in list(unique):
+        if asp.endswith("s") and asp[:-1] in unique:
+            unique.remove(asp[:-1])
+    return list(unique)
 
 def analyze_aspect_sentiment(text: str, aspect: str) -> Dict:
     try:

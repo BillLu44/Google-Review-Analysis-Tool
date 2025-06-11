@@ -86,9 +86,9 @@ def format_executive_summary(results: List[Dict]) -> str:
     
     # Model performance insights
     lines.append("🤖 MODEL INSIGHTS")
-    
-    # Sarcasm detection stats
-    sarcastic_count = sum(1 for r in results if r.get('sarcasm', {}).get('sarcasm_score', 0) > 0.7)
+
+    # Sarcasm detection stats — count only label=='sarcastic'
+    sarcastic_count = sum(1 for r in results if r.get('sarcasm', {}).get('sarcasm_label') == 'sarcastic')
     if sarcastic_count > 0:
         lines.append(f"   Sarcasm Detected: {sarcastic_count} reviews ({sarcastic_count/total_reviews*100:.1f}%)")
     
@@ -253,13 +253,14 @@ def format_single_result(result: Dict) -> str:
     
     # Sarcasm
     sarcasm = result.get('sarcasm', {})
-    sarcasm_score = sarcasm.get('sarcasm_score', 0.0)
     sarcasm_label = sarcasm.get('sarcasm_label', 'not_sarcastic')
-    lines.append(f"🎭 Sarcasm Analysis:")
+    sarcasm_score = sarcasm.get('sarcasm_score', 0.0)
+
+    lines.append("🎭 Sarcasm Analysis:")
     lines.append(f"   Detection: {sarcasm_label}")
     lines.append(f"   Confidence: {sarcasm_score:.1%}")
-    if sarcasm_score > 0.7:
-        lines.append("   ⚠️  High sarcasm detected - review context carefully")
+    if sarcasm_label == 'sarcastic':
+        lines.append("   ⚠️  Sarcasm detected - review context carefully")
     lines.append("")
     
     # Technical Details

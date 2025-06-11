@@ -5,7 +5,7 @@
 import os
 import json
 from typing import Dict, List
-from transformers import pipeline
+from transformers import pipeline, AutoTokenizer
 from pipeline.logger import get_logger
 
 # Initialize logger
@@ -28,13 +28,14 @@ if not EMOTION_MODEL:
 
 # Initialize Hugging Face emotion pipeline
 try:
+    tokenizer = AutoTokenizer.from_pretrained(EMOTION_MODEL, use_fast=False)
     emotion_pipe = pipeline(
         "text-classification",
         model=EMOTION_MODEL,
-        tokenizer=EMOTION_MODEL,
+        tokenizer=tokenizer,
         top_k=None  # ✅ Use this instead of return_all_scores=True
     )
-    logger.info(f"Loaded emotion model '{EMOTION_MODEL}'")
+    logger.info(f"Loaded emotion model '{EMOTION_MODEL}' with slow tokenizer")
 except Exception as e:
     logger.error(f"Error initializing emotion pipeline with model '{EMOTION_MODEL}': {e}")
     raise

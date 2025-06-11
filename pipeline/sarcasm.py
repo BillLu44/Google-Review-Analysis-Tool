@@ -5,7 +5,7 @@
 import os
 import json
 from typing import Dict
-from transformers import pipeline
+from transformers import pipeline, AutoTokenizer
 from pipeline.logger import get_logger
 
 # Initialize logger
@@ -27,18 +27,15 @@ if not SARCASM_MODEL:
     raise ValueError("Missing sarcasm model in config.json")
 
 # Initialize sarcasm pipeline
-# initialize with return_all_scores to get every label
-try:
-    sarcasm_pipe = pipeline(
-        "text-classification",
-        model=SARCASM_MODEL,
-        tokenizer=SARCASM_MODEL,
-        return_all_scores=True
-    )
-    logger.info(f"Loaded sarcasm model '{SARCASM_MODEL}'")
-except Exception as e:
-    logger.error(f"Error initializing sarcasm pipeline with model '{SARCASM_MODEL}': {e}")
-    raise
+# load slow (python) tokenizer to avoid auto‐conversion to fast
+tokenizer = AutoTokenizer.from_pretrained(SARCASM_MODEL, use_fast=False)
+sarcasm_pipe = pipeline(
+    "text-classification",
+    model=SARCASM_MODEL,
+    tokenizer=tokenizer,
+    top_k=None
+)
+logger.info(f"Loaded sarcasm model '{SARCASM_MODEL}' with slow tokenizer")
 
 
 def detect_sarcasm(text: str) -> Dict[str, float]:
@@ -50,24 +47,25 @@ def detect_sarcasm(text: str) -> Dict[str, float]:
 
     Returns:
         Dict with keys:
-          - sarcasm_score: float (confidence of sarcasm)
+          - sarcasm_score: float (positive=P(sarcastic), negative=P(not sarcastic))
           - sarcasm_label: str (label predicted by the model)
     """
     logger.debug("Running sarcasm detection")
     try:
         results = sarcasm_pipe(text)
-        # sometimes nested: results[0] is list of dicts
         scores = results[0] if isinstance(results, list) and isinstance(results[0], list) else results
-        # pick the highest‐confidence label
         best = max(scores, key=lambda x: x.get('score', 0))
         label_raw = best.get('label', '').lower()
         score = float(best.get('score', 0.0))
+
         if 'sarcastic' in label_raw and 'not' not in label_raw:
             sarcasm_label = 'sarcastic'
-            sarcasm_score = score
         else:
             sarcasm_label = 'not_sarcastic'
-            sarcasm_score = 1.0 - score
+
+        # signed confidence: +score if sarcastic, –score if not
+        sarcasm_score = score if sarcasm_label == 'sarcastic' else -score
+
         logger.debug(f"Sarcasm: {label_raw}→{sarcasm_label} ({sarcasm_score:.3f})")
         return {'sarcasm_label': sarcasm_label, 'sarcasm_score': sarcasm_score}
     except Exception as e:

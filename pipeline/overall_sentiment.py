@@ -4,7 +4,7 @@
 
 import os
 import json
-from transformers import pipeline
+from transformers import pipeline, AutoTokenizer
 from pipeline.logger import get_logger
 
 # Initialize logger
@@ -21,11 +21,14 @@ except Exception as e:
 
 # Initialize sentiment model from config
 try:
-    sentiment_model = _config['models']['sentiment']  # "Elron/deberta-v3-large-sentiment"
+    sentiment_model = _config['models']['sentiment']
+    # load slow tokenizer to avoid byte‐fallback warning
+    tokenizer = AutoTokenizer.from_pretrained(sentiment_model, use_fast=False)
     sentiment_pipe = pipeline(
         "sentiment-analysis",
         model=sentiment_model,
-        top_k=1  # Only return top prediction, fixes the warning
+        tokenizer=tokenizer,
+        top_k=1
     )
     logger.info(f"Loaded sentiment model: {sentiment_model}")
 except Exception as e:

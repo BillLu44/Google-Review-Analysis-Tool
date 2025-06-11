@@ -1,26 +1,26 @@
 🤖 AI SENTIMENT ANALYSIS PIPELINE RESULTS
-Generated: 2025-06-10 21:36:01
+Generated: 2025-06-11 10:13:04
 
 📊 EXECUTIVE SUMMARY
 ==================================================
 
 📈 OVERVIEW
    Total Reviews Analyzed: 5
-   Average Confidence: 65.9%
+   Average Confidence: 67.0%
    High Confidence (≥80%): 2 (40.0%)
    Low Confidence (<60%): 2 (40.0%)
 
 🎯 SENTIMENT DISTRIBUTION
    Negative     1 ( 20.0%) ████ 😞
-   Neutral      1 ( 20.0%) ████ 😐
-   Positive     3 ( 60.0%) ████████████ 😊
+   Neutral      2 ( 40.0%) ████████ 😐
+   Positive     2 ( 40.0%) ████████ 😊
 
 🔍 TOP ASPECTS MENTIONED
    Staff        ( 2x) - Pos: 50.0% | Neg: 50.0%
    Food         ( 1x) - Pos: 100.0% | Neg:  0.0%
    Service      ( 1x) - Pos:  0.0% | Neg: 100.0%
    Ambiance     ( 1x) - Pos: 100.0% | Neg:  0.0%
-   Overall      ( 1x) - Pos: 100.0% | Neg:  0.0%
+   Burger       ( 1x) - Pos:  0.0% | Neg: 100.0%
 
 🤖 MODEL INSIGHTS
    Top Emotions:
@@ -66,7 +66,7 @@ Emotion Analysis:
 
 🎭 Sarcasm Analysis:
    Detection: not_sarcastic
-   Confidence: 2.7%
+   Confidence: -97.3%
 
 ⚙️  TECHNICAL DETAILS
 ------------------------------
@@ -78,17 +78,17 @@ Signal Analysis:
   Negative Aspects     1
   Avg Aspect Score    +0.00
   Emotion Score        1.00
-  Sarcasm Score        0.03
+  Sarcasm Score       -0.97
 
 Performance Timing:
   Preprocessing      8.0ms
-  Rule-based        16.0ms
-  Transformer      624.0ms
-  ABSA             269.0ms
-  Emotion           71.0ms
-  Sarcasm           32.0ms
-  Fusion             4.0ms
-  Total           1024.0ms
+  Rule-based        17.0ms
+  Transformer      915.0ms
+  ABSA             190.0ms
+  Emotion           86.0ms
+  Sarcasm           31.0ms
+  Fusion             6.0ms
+  Total           1253.0ms
 
 
 
@@ -125,7 +125,7 @@ Emotion Analysis:
 
 🎭 Sarcasm Analysis:
    Detection: not_sarcastic
-   Confidence: 0.0%
+   Confidence: -100.0%
 
 ⚙️  TECHNICAL DETAILS
 ------------------------------
@@ -137,17 +137,17 @@ Signal Analysis:
   Negative Aspects     0
   Avg Aspect Score    +1.00
   Emotion Score        1.00
-  Sarcasm Score        0.00
+  Sarcasm Score       -1.00
 
 Performance Timing:
   Preprocessing      5.0ms
   Rule-based         0.0ms
-  Transformer      170.0ms
-  ABSA             158.0ms
-  Emotion           66.0ms
-  Sarcasm           28.0ms
+  Transformer      238.0ms
+  ABSA             147.0ms
+  Emotion           73.0ms
+  Sarcasm           29.0ms
   Fusion             2.0ms
-  Total            429.0ms
+  Total            494.0ms
 
 
 
@@ -161,8 +161,8 @@ REVIEW #3 ANALYSIS REPORT
 "The ambiance was nice, but the burger arrived cold and soggy."
 
 🎯 FINAL SENTIMENT PREDICTION
-   Result: POSITIVE 😊
-   Confidence: [██████████░░░░░░░░░░] 54.7%
+   Result: NEUTRAL 😐
+   Confidence: [███████████░░░░░░░░░] 59.4%
    ⚠️  LOW CONFIDENCE - Consider human review
 
 📊 DETAILED ANALYSIS
@@ -173,6 +173,7 @@ REVIEW #3 ANALYSIS REPORT
 │     Aspect      │ Sentiment │   Score   │
 ├─────────────────┼───────────┼───────────┤
 │ ambiance        │ positive  │  +1.00 😊 │
+│ burger          │ negative  │  -1.00 😞 │
 └─────────────────┴───────────┴───────────┘
 
 Emotion Analysis:
@@ -185,7 +186,7 @@ Emotion Analysis:
 
 🎭 Sarcasm Analysis:
    Detection: not_sarcastic
-   Confidence: 0.0%
+   Confidence: -100.0%
 
 ⚙️  TECHNICAL DETAILS
 ------------------------------
@@ -194,20 +195,20 @@ Signal Analysis:
   Rule-based Score    +0.11
   Transformer Score   +0.00
   Positive Aspects     1
-  Negative Aspects     0
-  Avg Aspect Score    +1.00
+  Negative Aspects     1
+  Avg Aspect Score    +0.00
   Emotion Score        1.00
-  Sarcasm Score        0.00
+  Sarcasm Score       -1.00
 
 Performance Timing:
   Preprocessing      5.0ms
   Rule-based         0.0ms
-  Transformer      119.0ms
-  ABSA             134.0ms
-  Emotion           22.0ms
-  Sarcasm           29.0ms
+  Transformer      122.0ms
+  ABSA             162.0ms
+  Emotion           24.0ms
+  Sarcasm           27.0ms
   Fusion             2.0ms
-  Total            311.0ms
+  Total            342.0ms
 
 
 
@@ -222,7 +223,7 @@ REVIEW #4 ANALYSIS REPORT
 
 🎯 FINAL SENTIMENT PREDICTION
    Result: NEGATIVE 😞
-   Confidence: [█████████████░░░░░░░] 65.8%
+   Confidence: [█████████████░░░░░░░] 66.8%
 
 📊 DETAILED ANALYSIS
 ------------------------------
@@ -231,6 +232,7 @@ REVIEW #4 ANALYSIS REPORT
 ┌─────────────────┬───────────┬───────────┐
 │     Aspect      │ Sentiment │   Score   │
 ├─────────────────┼───────────┼───────────┤
+│ steak           │ negative  │  -1.00 😞 │
 │ staff           │ negative  │  -1.00 😞 │
 └─────────────────┴───────────┴───────────┘
 
@@ -244,7 +246,7 @@ Emotion Analysis:
 
 🎭 Sarcasm Analysis:
    Detection: not_sarcastic
-   Confidence: 0.0%
+   Confidence: -100.0%
 
 ⚙️  TECHNICAL DETAILS
 ------------------------------
@@ -253,20 +255,20 @@ Signal Analysis:
   Rule-based Score    -0.75
   Transformer Score   +0.00
   Positive Aspects     0
-  Negative Aspects     1
+  Negative Aspects     2
   Avg Aspect Score    -1.00
   Emotion Score        1.00
-  Sarcasm Score        0.00
+  Sarcasm Score       -1.00
 
 Performance Timing:
   Preprocessing      5.0ms
   Rule-based         0.0ms
-  Transformer       61.0ms
-  ABSA              30.0ms
+  Transformer       60.0ms
+  ABSA              64.0ms
   Emotion           17.0ms
   Sarcasm           27.0ms
   Fusion             2.0ms
-  Total            142.0ms
+  Total            175.0ms
 
 
 
@@ -290,7 +292,7 @@ REVIEW #5 ANALYSIS REPORT
 ┌─────────────────┬───────────┬───────────┐
 │     Aspect      │ Sentiment │   Score   │
 ├─────────────────┼───────────┼───────────┤
-│ overall         │ positive  │  +0.78 😊 │
+│ beers           │ positive  │  +0.99 😊 │
 └─────────────────┴───────────┴───────────┘
 
 Emotion Analysis:
@@ -303,7 +305,7 @@ Emotion Analysis:
 
 🎭 Sarcasm Analysis:
    Detection: not_sarcastic
-   Confidence: 0.0%
+   Confidence: -100.0%
 
 ⚙️  TECHNICAL DETAILS
 ------------------------------
@@ -313,16 +315,16 @@ Signal Analysis:
   Transformer Score   +0.00
   Positive Aspects     1
   Negative Aspects     0
-  Avg Aspect Score    +0.78
+  Avg Aspect Score    +0.99
   Emotion Score        0.98
-  Sarcasm Score        0.00
+  Sarcasm Score       -1.00
 
 Performance Timing:
   Preprocessing      4.0ms
   Rule-based         0.0ms
   Transformer       64.0ms
-  ABSA              35.0ms
-  Emotion           25.0ms
-  Sarcasm           29.0ms
+  ABSA              34.0ms
+  Emotion           23.0ms
+  Sarcasm           27.0ms
   Fusion             2.0ms
-  Total            159.0ms
+  Total            154.0ms

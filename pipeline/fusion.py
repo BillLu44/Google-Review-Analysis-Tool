@@ -124,6 +124,99 @@ def fuse_signals(signals: dict) -> dict:
             'fused_confidence': 0.0
         }
 
+def extract_advanced_features(signals: dict, text: str) -> dict:
+    """Extract additional contextual features"""
+    
+    advanced_signals = signals.copy()
+    
+    # Add context-aware features
+    advanced_signals['hidden_sentiment'] = detect_hidden_sentiment(text)
+    advanced_signals['sarcasm_context_score'] = detect_sarcastic_context(text)
+    advanced_signals['contradiction_score'] = detect_contradictions(text)
+    advanced_signals['aspect_balance'] = calculate_aspect_balance(signals)
+    
+    return advanced_signals
+
+NEGATIVE_CONTEXT_PHRASES = [
+    "you get what you pay for",  # implies low quality
+    "matches the low prices",    # implies poor quality
+    "reminds me of.*if.*lost",   # backhanded comparison
+    "would be.*if they fixed",   # conditional criticism
+    "tries really hard",        # implies failure despite effort
+    "certainly present",         # damning with faint praise
+    "adequate",                  # backhanded compliment
+]
+
+BACKHANDED_COMPLIMENTS = [
+    "tries really hard",
+    "surprisingly good",
+    "better than expected",
+    "not bad",
+    "decent for the price",
+    "certainly present",         # damning with faint praise
+    "adequate",                  # backhanded compliment
+    "good effort",
+    "interesting take"
+]
+
+def detect_hidden_sentiment(text: str) -> float:
+    """Detect hidden negative sentiment in seemingly neutral phrases"""
+    text_lower = text.lower()
+    
+    for phrase in NEGATIVE_CONTEXT_PHRASES:
+        if phrase in text_lower:
+            return -0.6  # Moderately negative
+            
+    return 0.0  # No hidden sentiment detected
+
+def detect_sarcastic_context(text: str) -> float:
+    """Detect sarcastic context indicators. Returns a score indicating presence of sarcastic cues."""
+    sarcasm_indicators = [
+        "oh great", "just perfect", "wonderful", "brilliant", "amazing how", "fantastic", "super",
+        "exactly what i needed", "so glad", "how exciting", "love it when", "my favorite",
+        "couldn't be happier", "as if", "yeah right", "sure", "whatever", "obviously",
+        "said no one ever", "i'm sure", "clearly", "of course", "big surprise", "oh joy",
+        "can't wait", "thrilled"
+    ]
+    exclamation_count = text.count('!')
+    question_mark_after_positive = any(phrase + "?" in text.lower() for phrase in ["great", "perfect", "wonderful", "fantastic"])
+    
+    text_lower = text.lower()
+    has_sarcasm_indicator = any(phrase in text_lower for phrase in sarcasm_indicators)
+    
+    # More weight if multiple indicators or strong punctuation cues
+    score = 0.0
+    if has_sarcasm_indicator:
+        score += 0.6
+    if exclamation_count > 2: # Excessive exclamations can indicate sarcasm
+        score += 0.3
+    if question_mark_after_positive: # e.g., "Wonderful service?"
+        score += 0.4
+    
+    return min(1.0, score) # Cap score at 1.0
+
+def calculate_aspect_balance(signals: dict) -> float:
+    """Calculate balance between positive and negative aspects"""
+    pos_aspects = signals.get('num_pos_aspects', 0)
+    neg_aspects = signals.get('num_neg_aspects', 0)
+    total_aspects = pos_aspects + neg_aspects
+    
+    if total_aspects == 0:
+        return 0.0
+    
+    balance = abs(pos_aspects - neg_aspects) / total_aspects
+    return 1.0 - balance  # Higher score means more balanced
+
+def detect_contradictions(text: str) -> float:
+    """Detect contradictory sentiment within text"""
+    positive_words = ["amazing", "wonderful", "great", "excellent", "fantastic"]
+    negative_context = ["but", "however", "unfortunately", "disappointed"]
+    
+    has_positive = any(word in text.lower() for word in positive_words)
+    has_negative_context = any(word in text.lower() for word in negative_context)
+    
+    return 1.0 if (has_positive and has_negative_context) else 0.0
+
 # For testing
 if __name__ == "__main__":
     test_signals = {

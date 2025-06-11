@@ -21,34 +21,105 @@ logger = get_logger(__name__)
 
 # Sample reviews for testing
 SAMPLE_REVIEWS = [
-    # {
-    #     'review_id': str(uuid.uuid4()), # Example UUID string
-    #     'text': 'The food was delicious, but the service was painfully slow.'
-    # },
-    # {
-    #     'review_id': str(uuid.uuid4()), # Example UUID string
-    #     'text': 'I absolutely loved how quick and friendly the staff were!'
-    # },
-    # {
-    #     'review_id': str(uuid.uuid4()), # Example UUID string
-    #     'text': 'The ambiance was nice, but the burger arrived cold and soggy.'
-    # },
-    # {
-    #     'review_id': str(uuid.uuid4()), # Example UUID string
-    #     'text': 'Terrible experience: rude staff and a burnt steak ruined our night.'
-    # },
-    # {
-    #     'review_id': str(uuid.uuid4()), # Example UUID string
-    #     'text': 'Great selection of beers—will definitely come back for more!'
-    # }
+    # Sarcasm & Irony Tests
     {
-        'review_id': str(uuid.uuid4()), # Example UUID string
-        'text': "Amazing food, but food is awful"
+        'review_id': str(uuid.uuid4()),
+        'text': "Oh wonderful, another 45-minute wait for cold pasta. Exactly what I needed after a long day."
     },
     {
-        'review_id': str(uuid.uuid4()), # Example UUID string
-        'text': "Amazing food, but burger is awful"
+        'review_id': str(uuid.uuid4()),
+        'text': "The service was so fast I almost forgot I was dining and not running a marathon."
     },
+    
+    # Contradictory Aspects
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "The steak was absolutely divine, but the waiter was incredibly rude and the restaurant was filthy."
+    },
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "Terrible food, awful atmosphere, but the staff bent over backwards to help us - best service ever!"
+    },
+    
+    # Backhanded Compliments
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "The pizza was decent for a place that usually serves cardboard with cheese on top."
+    },
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "Finally found a restaurant where the food matches the low prices - you get what you pay for."
+    },
+    
+    # Emotional Manipulation
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "This place reminds me of my grandmother's cooking - if she had lost her sense of taste and forgot how to season food."
+    },
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "I'm heartbroken to say this because I really wanted to love this place, but everything was disappointing."
+    },
+    
+    # Positive Words, Negative Context
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "Amazing how they managed to overcook the fish, undercook the vegetables, and serve it all lukewarm."
+    },
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "Incredible service - they only forgot half our order and brought the wrong drinks twice!"
+    },
+    
+    # Negative Words, Positive Context
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "I was worried this place would be terrible based on reviews, but I was completely wrong - everything was fantastic!"
+    },
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "Don't let the awful exterior fool you - this hidden gem serves the best food in town."
+    },
+    
+    # Mixed Temporal Sentiment
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "Started terribly with a 30-minute wait and cold appetizers, but the main course was perfection and the dessert was heavenly."
+    },
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "We had an amazing dinner and fantastic service, but then they charged us for items we never ordered."
+    },
+    
+    # Subtle Negativity
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "The restaurant tries really hard and the staff is very enthusiastic about the food they serve."
+    },
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "For what we paid, the portion sizes were... adequate, and the flavors were certainly present."
+    },
+    
+    # False Expectations
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "If you enjoy waiting 2 hours for mediocre food while listening to screaming children, this is your paradise!"
+    },
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "Perfect restaurant for people who love spending money on tiny portions and pretentious service."
+    },
+    
+    # Conditional Sentiment
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "This would be a 5-star restaurant if they fixed the service, improved the food, and cleaned the place."
+    },
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "Great potential, but until they replace the chef and retrain the staff, avoid at all costs."
+    }
 ]
 
 

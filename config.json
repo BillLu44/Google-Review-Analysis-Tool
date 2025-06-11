@@ -1,0 +1,19 @@
+{
+  "models": {
+    "fusion": "models/fusion_latest.pkl",
+    "sentiment": "Elron/deberta-v3-large-sentiment",
+    "absa": "yangheng/deberta-v3-base-absa-v1.1",
+    "emotion": "AnkitAI/deberta-v3-small-base-emotions-classifier",
+    "sarcasm": "dnzblgn/Sarcasm-Detection-Customer-Reviews"
+  },
+  "database": {
+    "url_env_var": "DATABASE_URL",
+    "absa_category_table": "absa_categories"
+  },
+  "fusion": {
+    "confidence_threshold": 0.6
+  },
+  "logging": {
+    "level": "DEBUG"
+  }
+}

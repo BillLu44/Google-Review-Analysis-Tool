@@ -12,3 +12,4 @@ numpy
 psycopg2-binary
 python-dotenv
 tqdm
+python-json-logger

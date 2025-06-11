@@ -76,13 +76,16 @@ def analyze_sentiment(text) -> dict:
     try:
         result = sentiment_pipe(text)
         
-        # Handle single result vs list
+        # Handle nested list structure from the model
         if isinstance(result, list) and len(result) > 0:
-            result = result[0]
+            if isinstance(result[0], list) and len(result[0]) > 0:
+                result = result[0][0]  # Get first result from nested list
+            else:
+                result = result[0]  # Get first result from simple list
         
         label_raw = result['label']
-        raw_confidence = float(result['score']) # This is the model's confidence in label_raw
-
+        raw_confidence = float(result['score'])
+        
         # normalize any “LABEL_n” into a text label first
         text_label = 'neutral' # default
         if isinstance(label_raw, str) and label_raw.upper().startswith('LABEL_'):

@@ -8,8 +8,8 @@ from typing import Dict, List
 from transformers import pipeline, AutoTokenizer
 from pipeline.logger import get_logger
 from pipeline.preprocessing import preprocess_text
-import re # Added import
-import math # Added import
+import re # Ensure re is imported if get_emotion_clauses uses it extensively
+import math # Ensure math is imported
 
 # Initialize logger
 logger = get_logger(__name__)
@@ -159,7 +159,7 @@ def detect_emotion(text: str) -> Dict[str, float]:
             for sent_idx, clause_text in enumerate(clauses_to_analyze):
                 if not clause_text.strip():
                     logger.debug(f"Skipping empty clause at index {sent_idx}")
-                    continue
+                    continue # ADDED continue
 
                 logger.debug(f"Processing clause {sent_idx+1}/{len(clauses_to_analyze)} for emotion: '{clause_text}'")
                 results = emotion_pipe(clause_text)
@@ -168,7 +168,7 @@ def detect_emotion(text: str) -> Dict[str, float]:
                 
                 if not scores_list:
                     logger.warning(f"No emotion scores returned for clause: '{clause_text}'")
-                    continue
+                    continue # ADDED continue
 
                 current_clause_scores = {}
                 for entry in scores_list:
@@ -198,8 +198,8 @@ def detect_emotion(text: str) -> Dict[str, float]:
             if total_positive_score > 0:
                 probabilities = [s / total_positive_score for s in positive_scores]
                 # Filter probabilities again in case of floating point issues making some zero
-                entropy = -sum(p * math.log(p) for p in probabilities if p > 0)
-                max_entropy = math.log(N_EMOTION_CATEGORIES)
+                entropy = -sum(p * math.log(p) for p in probabilities if p > 0) # Ensure math.log is used
+                max_entropy = math.log(N_EMOTION_CATEGORIES) if N_EMOTION_CATEGORIES > 0 else 0 # Ensure math.log and check N_EMOTION_CATEGORIES
                 if max_entropy > 0:
                     emotion_distribution_val = entropy / max_entropy
         

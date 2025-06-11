@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 import argparse
 from pathlib import Path
+import uuid # Add this import
 from pipeline.logger import get_logger
 
 logger = get_logger(__name__)
@@ -14,7 +15,7 @@ logger = get_logger(__name__)
 # Sample review data with ground truth labels
 SAMPLE_DATA = [
     {
-        'review_id': 1,
+        'review_id': str(uuid.uuid4()), # Change to UUID string
         'text': 'Amazing food and excellent service! Highly recommend.',
         'rule_score': 1.0,
         'rule_polarity': 0.8,
@@ -32,7 +33,7 @@ SAMPLE_DATA = [
         'label': 'positive'
     },
     {
-        'review_id': 2,
+        'review_id': str(uuid.uuid4()), # Change to UUID string
         'text': 'Terrible experience, cold food and rude staff.',
         'rule_score': -1.0,
         'rule_polarity': -0.7,
@@ -50,7 +51,7 @@ SAMPLE_DATA = [
         'label': 'negative'
     },
     {
-        'review_id': 3,
+        'review_id': str(uuid.uuid4()), # Change to UUID string
         'text': 'Food was okay, nothing special but not bad either.',
         'rule_score': 0.0,
         'rule_polarity': 0.1,
@@ -68,7 +69,7 @@ SAMPLE_DATA = [
         'label': 'neutral'
     },
     {
-        'review_id': 4,
+        'review_id': str(uuid.uuid4()), # Change to UUID string
         'text': 'Great atmosphere but the wait time was too long.',
         'rule_score': 0.0, # Example: positive + negative might average to neutral for score
         'rule_polarity': 0.3, # Polarity might still lean one way
@@ -86,7 +87,7 @@ SAMPLE_DATA = [
         'label': 'neutral' # Or 'mixed', depending on final labeling scheme
     },
     {
-        'review_id': 5,
+        'review_id': str(uuid.uuid4()), # Change to UUID string
         'text': 'Outstanding! Best restaurant in town.',
         'rule_score': 1.0,
         'rule_polarity': 0.9,
@@ -149,7 +150,7 @@ def generate_expanded_data(base_data, num_samples: int = 100):
         # For this example, we assume they are reasonably set in SAMPLE_DATA
 
         # Update ID
-        base['review_id'] = i + 1000 # Start from a higher ID to avoid collision with original SAMPLE_DATA
+        base['review_id'] = str(uuid.uuid4()) # Generate a new UUID string
         base['text'] = f"Generated sample review {base['review_id']}" # Keep text minimal for generated data
         
         expanded.append(base)

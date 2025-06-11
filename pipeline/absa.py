@@ -40,7 +40,6 @@ COMMON_ASPECTS = [
     "food", "service", "staff", "atmosphere", "ambiance", "price", "value",
     "location", "wait", "portion", "quality", "cleanliness", "menu", "dessert",
     "drink", "wine", "coffee", "parking", "reservation", "noise", "seating",
-    # additions so “burger,” “steak,” “fries,” “beer(s),” “sandwich,” etc. are found
     "burger", "steak", "fries", "pizza", "sandwich", "beer", "beers"
 ]
 
@@ -104,6 +103,74 @@ def analyze_aspect_sentiment(text: str, aspect: str) -> Dict:
         logger.error(f"Error analyzing aspect sentiment for '{aspect}': {e}")
         return {'aspect': aspect, 'sentiment_label': 'neutral', 'sentiment_score': 0.0, 'confidence': 0.0}
 
+def analyze_aspect_sentiment_with_clauses(text: str, aspect: str) -> List[Dict]:
+    """Analyze aspect sentiment by splitting contradictory clauses"""
+    try:
+        if absa_classifier is None:
+            return [{'aspect': aspect, 'sentiment_label': 'neutral', 'sentiment_score': 0.0, 'confidence': 0.0}]
+
+        # Split on common contradiction patterns
+        clauses = []
+        if ", but " in text.lower():
+            clauses = [clause.strip() for clause in text.split(", but ")]
+        elif " but " in text.lower():
+            clauses = [clause.strip() for clause in text.split(" but ")]
+        else:
+            clauses = [text]
+        
+        aspect_mentions = []
+        for clause in clauses:
+            # Only analyze clauses that mention the aspect
+            if aspect.lower() in clause.lower():
+                aspect_input = f"{clause} [SEP] {aspect}"
+                results = absa_classifier(aspect_input)
+                logger.info(f"Clause '{clause}' -> Raw ABSA output for '{aspect}': {results}")
+                
+                # Process as before
+                if isinstance(results, list) and results and isinstance(results[0], list):
+                    results = results[0]
+                if not results:
+                    continue
+                    
+                best = max(results, key=lambda x: x.get('score', 0))
+                label_raw = best.get('label', '')
+                confidence = float(best.get('score', 0))
+                
+                # Normalize label
+                if label_raw.upper().startswith('LABEL_'):
+                    idx = int(label_raw.split('_')[1])
+                    label = {0: 'negative', 1: 'neutral', 2: 'positive'}.get(idx, 'neutral')
+                else:
+                    label = label_raw.lower()
+                    if 'positive' in label:
+                        label = 'positive'
+                    elif 'negative' in label:
+                        label = 'negative'
+                    else:
+                        label = 'neutral'
+
+                # Convert to signed score
+                if label == 'positive':
+                    sentiment_score = confidence
+                elif label == 'negative':
+                    sentiment_score = -confidence
+                else:
+                    sentiment_score = 0.0
+                
+                aspect_mentions.append({
+                    'aspect': aspect,
+                    'sentiment_label': label,
+                    'sentiment_score': sentiment_score,
+                    'confidence': confidence,
+                    'clause': clause
+                })
+        
+        return aspect_mentions if aspect_mentions else [{'aspect': aspect, 'sentiment_label': 'neutral', 'sentiment_score': 0.0, 'confidence': 0.0}]
+        
+    except Exception as e:
+        logger.error(f"Error analyzing aspect sentiment for '{aspect}': {e}")
+        return [{'aspect': aspect, 'sentiment_label': 'neutral', 'sentiment_score': 0.0, 'confidence': 0.0}]
+
 def analyze_absa(text: str) -> Dict:
     """
     Perform Aspect-Based Sentiment Analysis on input text.
@@ -149,7 +216,30 @@ def analyze_absa(text: str) -> Dict:
     num_neg_aspects = 0
 
     for aspect in aspects:
-        aspect_result = analyze_aspect_sentiment(text, aspect)
+        aspect_mentions = analyze_aspect_sentiment_with_clauses(text, aspect)
+        
+        # Aggregate multiple mentions of the same aspect
+        if len(aspect_mentions) > 1:
+            # Average the scores for contradictory mentions
+            avg_score = sum(m['sentiment_score'] for m in aspect_mentions) / len(aspect_mentions)
+            avg_confidence = sum(m['confidence'] for m in aspect_mentions) / len(aspect_mentions)
+            
+            if avg_score >= 0.1:
+                final_label = 'positive'
+            elif avg_score <= -0.1:
+                final_label = 'negative'
+            else:
+                final_label = 'neutral'
+                
+            aspect_result = {
+                'aspect': aspect,
+                'sentiment_label': final_label,
+                'sentiment_score': avg_score,
+                'confidence': avg_confidence
+            }
+        else:
+            aspect_result = aspect_mentions[0]
+        
         detailed_results.append(aspect_result)
         
         all_sentiment_scores.append(aspect_result['sentiment_score'])

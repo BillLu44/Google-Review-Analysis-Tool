@@ -8,9 +8,9 @@ import json
 import argparse
 import pandas as pd
 import joblib
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import StratifiedKFold # MODIFIED: Import StratifiedKFold
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.metrics import classification_report, accuracy_score # MODIFIED: Added accuracy_score
 import numpy as np
 
 # Add project root to Python path
@@ -48,8 +48,9 @@ def train_fusion(
     input_csv: str,
     model_dir: str,
     version: str,
-    test_size: float = 0.2,
-    random_state: int = 42
+    # test_size: float = 0.2, # MODIFIED: test_size is not directly used for CV evaluation
+    random_state: int = 42,
+    n_splits: int = 5 # MODIFIED: Added n_splits for cross-validation
 ):
     # Load data
     logger.info(f"Loading training data from {input_csv}")
@@ -58,92 +59,108 @@ def train_fusion(
     if 'label' not in df.columns:
         raise ValueError("Input CSV must contain 'label' column as target.")
     
-    # Define feature columns expected by fusion model
     feature_cols = [
-        'rule_score',
-        'rule_polarity',
-        'sentiment_score',
-        'sentiment_confidence',
-        'num_pos_aspects',
-        'num_neg_aspects',
-        'avg_aspect_score',
-        'avg_aspect_confidence',
-        'emotion_score',
-        'emotion_confidence',
-        'emotion_distribution',
-        'sarcasm_score',
-        'sarcasm_confidence'
+        'rule_score', 'rule_polarity', 'sentiment_score', 'sentiment_confidence',
+        'num_pos_aspects', 'num_neg_aspects', 'avg_aspect_score', 'avg_aspect_confidence',
+        'emotion_score', 'emotion_confidence', 'emotion_distribution',
+        'sarcasm_score', 'sarcasm_confidence'
     ]
     
-    # Check required columns exist
     missing_cols = [col for col in feature_cols if col not in df.columns]
     if missing_cols:
         raise ValueError(f"Missing required columns: {missing_cols}")
     
-    # Clean numeric columns (handle Unicode minus signs and ensure numeric type)
-    # All feature_cols are expected to be numeric.
-    # num_pos_aspects and num_neg_aspects should already be integers.
-    # rule_score and sarcasm_score are also typically integers/discrete.
-    df = clean_numeric_columns(df, feature_cols) # Apply to all expected numeric features
+    df = clean_numeric_columns(df, feature_cols)
     
     X = df[feature_cols]
     y = df['label']
 
-    logger.info(f"Training data shape: {X.shape}")
-    logger.info(f"Label distribution:\n{y.value_counts()}")
+    logger.info(f"Full dataset shape for CV: {X.shape}")
+    logger.info(f"Label distribution in full dataset:\n{y.value_counts(normalize=True)}")
     
-    # Check for any remaining NaN values
     if X.isna().any().any():
-        logger.warning("Found NaN values in features, filling with 0")
+        logger.warning("Found NaN values in features before CV, filling with 0")
         X = X.fillna(0.0)
 
-    # Split
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=test_size, random_state=random_state, stratify=y
-    )
-    logger.info(f"Training fusion model on {len(X_train)} samples, testing on {len(X_test)} samples.")
+    # --- Stratified K-Fold Cross-Validation for Performance Estimation ---
+    skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=random_state)
+    fold_accuracies = []
+    fold_reports = []
 
-    # Initialize and train
-    clf = RandomForestClassifier(
+    logger.info(f"Starting {n_splits}-fold stratified cross-validation...")
+    for fold, (train_index, val_index) in enumerate(skf.split(X, y)):
+        logger.info(f"  Fold {fold+1}/{n_splits}")
+        X_train_fold, X_val_fold = X.iloc[train_index], X.iloc[val_index]
+        y_train_fold, y_val_fold = y.iloc[train_index], y.iloc[val_index] 
+        
+        # Initialize your model for this fold
+        cv_model = RandomForestClassifier(
+            n_estimators=100, 
+            max_depth=10,
+            min_samples_split=5,
+            random_state=random_state,
+            class_weight='balanced'
+        )
+        cv_model.fit(X_train_fold, y_train_fold)
+        
+        y_pred_fold = cv_model.predict(X_val_fold)
+        
+        fold_accuracy = accuracy_score(y_val_fold, y_pred_fold)
+        fold_accuracies.append(fold_accuracy)
+        report = classification_report(y_val_fold, y_pred_fold, output_dict=True)
+        fold_reports.append(report)
+        logger.info(f"  Fold {fold+1} Accuracy: {fold_accuracy:.4f}")
+        # logger.info(f"  Fold {fold+1} Classification Report:\n{classification_report(y_val_fold, y_pred_fold)}")
+
+    logger.info("--- Cross-Validation Summary ---")
+    logger.info(f"Fold Accuracies: {[round(acc, 4) for acc in fold_accuracies]}")
+    logger.info(f"Mean CV Accuracy: {np.mean(fold_accuracies):.4f} (+/- {np.std(fold_accuracies):.4f})")
+    
+    # You can also average precision/recall/F1 from fold_reports if needed
+    # For example, to get average F1-score for 'positive' class:
+    # avg_f1_positive = np.mean([fr['positive']['f1-score'] for fr in fold_reports if 'positive' in fr])
+    # logger.info(f"Mean CV F1-score (Positive): {avg_f1_positive:.4f}")
+
+
+    # --- Train Final Model on ALL Data ---
+    logger.info("Training final fusion model on all available data...")
+    final_model = RandomForestClassifier(
         n_estimators=100, 
         max_depth=10,
         min_samples_split=5,
         random_state=random_state,
         class_weight='balanced'
     )
-    clf.fit(X_train, y_train)
-
-    # Evaluate
-    train_preds = clf.predict(X_train)
-    test_preds = clf.predict(X_test)
+    final_model.fit(X, y) # Train on the entire dataset X, y
     
-    logger.info("Training set performance:")
-    logger.info(classification_report(y_train, train_preds))
-    
-    logger.info("Test set performance:")
-    logger.info(classification_report(y_test, test_preds))
-    
-    # Feature importance
-    importances = clf.feature_importances_
+    # Feature importance from the final model
+    importances = final_model.feature_importances_
     feature_importance = dict(zip(feature_cols, importances))
-    logger.info("Feature importances:")
+    logger.info("Feature importances (from final model):")
     for feat, imp in sorted(feature_importance.items(), key=lambda x: x[1], reverse=True):
         logger.info(f"  {feat}: {imp:.4f}")
 
-    # Save model
-    versioned_path = ensure_model_dir(model_dir, f"fusion_{version}.pkl")
-    joblib.dump(clf, versioned_path)
-    write_model_symlink(model_dir, versioned_path, 'fusion_latest.pkl')
-    logger.info(f"Saved fusion model version '{version}' to {versioned_path}")
+    # Save the final model
+    versioned_model_name = f"fusion_{version}.pkl" # Use the original versioned name
+    versioned_model_path = ensure_model_dir(model_dir, versioned_model_name) # ensure_model_dir now returns the full path
     
-    return clf
-
+    logger.info(f"Saving final model to {versioned_model_path}")
+    joblib.dump(final_model, versioned_model_path)
+    
+    # Update symlink to 'fusion_latest.pkl'
+    # write_model_symlink expects the directory and the target filename, not the full path to target
+    write_model_symlink(model_dir, versioned_model_name, 'fusion_latest.pkl') 
+    
+    logger.info(f"Fusion model training complete. Model version: {version}")
+    logger.info(f"Final model saved to: {versioned_model_path}")
+    logger.info(f"Mean Cross-Validation Accuracy: {np.mean(fold_accuracies):.4f}")
 
 def main():
     parser = argparse.ArgumentParser(description="Train fusion meta-classifier.")
     parser.add_argument('--input', required=True, help='Path to fusion training CSV')
     parser.add_argument('--version', required=True, help='Version tag, e.g. v1')
-    parser.add_argument('--test-size', type=float, default=0.2)
+    # parser.add_argument('--test-size', type=float, default=0.2) # Not used for CV evaluation
+    parser.add_argument('--n-splits', type=int, default=5, help='Number of folds for cross-validation')
     args = parser.parse_args()
 
     config = load_config()
@@ -153,7 +170,8 @@ def main():
         input_csv=args.input,
         model_dir=model_dir,
         version=args.version,
-        test_size=args.test_size
+        # test_size=args.test_size, # Not passed
+        n_splits=args.n_splits
     )
 
 if __name__ == '__main__':

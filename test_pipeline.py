@@ -5,6 +5,7 @@
 
 import time
 import json
+import uuid # Add this import
 from pipeline.logger import get_logger
 from pipeline.preprocessing import preprocess_text
 from pipeline.rule_based import rule_based_sentiment
@@ -21,31 +22,31 @@ logger = get_logger(__name__)
 # Sample reviews for testing
 SAMPLE_REVIEWS = [
     # {
-    #     'review_id': 1,
+    #     'review_id': str(uuid.uuid4()), # Example UUID string
     #     'text': 'The food was delicious, but the service was painfully slow.'
     # },
     # {
-    #     'review_id': 2,
+    #     'review_id': str(uuid.uuid4()), # Example UUID string
     #     'text': 'I absolutely loved how quick and friendly the staff were!'
     # },
     # {
-    #     'review_id': 3,
+    #     'review_id': str(uuid.uuid4()), # Example UUID string
     #     'text': 'The ambiance was nice, but the burger arrived cold and soggy.'
     # },
     # {
-    #     'review_id': 4,
+    #     'review_id': str(uuid.uuid4()), # Example UUID string
     #     'text': 'Terrible experience: rude staff and a burnt steak ruined our night.'
     # },
     # {
-    #     'review_id': 5,
+    #     'review_id': str(uuid.uuid4()), # Example UUID string
     #     'text': 'Great selection of beers—will definitely come back for more!'
     # }
     {
-        'review_id': 6,
+        'review_id': str(uuid.uuid4()), # Example UUID string
         'text': "Amazing food, but food is awful"
     },
     {
-        'review_id': 6,
+        'review_id': str(uuid.uuid4()), # Example UUID string
         'text': "Amazing food, but burger is awful"
     },
 ]

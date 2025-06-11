@@ -95,10 +95,12 @@ def format_executive_summary(results: List[Dict]) -> str:
     # Emotion distribution
     all_emotions = {}
     for result in results:
-        emotions = result.get('emotion_scores', {})
-        if emotions:
-            top_emotion = max(emotions.keys(), key=lambda k: emotions[k])
-            all_emotions[top_emotion] = all_emotions.get(top_emotion, 0) + 1
+        emotion_data = result.get('emotion_scores', {})
+        if emotion_data and isinstance(emotion_data, dict):
+            emotions = emotion_data.get('all_emotion_scores', {})
+            if emotions and isinstance(emotions, dict):
+                top_emotion = max(emotions.keys(), key=lambda k: emotions[k])
+                all_emotions[top_emotion] = all_emotions.get(top_emotion, 0) + 1
     
     if all_emotions:
         lines.append("   Top Emotions:")
@@ -273,11 +275,12 @@ def format_single_result(result: Dict) -> str:
     # Sarcasm
     sarcasm = result.get('sarcasm', {})
     sarcasm_label = sarcasm.get('sarcasm_label', 'not_sarcastic')
-    sarcasm_score = sarcasm.get('sarcasm_score', 0.0)
+    sarcasm_score = sarcasm.get('sarcasm_score', 0.0) # This is the binary 0/1 score
+    sarcasm_confidence_val = sarcasm.get('sarcasm_confidence', 0.0) # This is the actual confidence
 
     lines.append("🎭 Sarcasm Analysis:")
     lines.append(f"   Detection: {sarcasm_label}")
-    lines.append(f"   Confidence: {sarcasm_score:.1%}")
+    lines.append(f"   Confidence: {sarcasm_confidence_val:.1%}") # Use sarcasm_confidence_val
     if sarcasm_label == 'sarcastic':
         lines.append("   ⚠️  Sarcasm detected - review context carefully")
     lines.append("")

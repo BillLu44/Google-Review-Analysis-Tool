@@ -3,9 +3,16 @@
 # Author: Bill Lu
 # Description: Run a suite of sample reviews through the full NLP pipeline for validation and timing.
 
+import sys
+import os
 import time
 import json
-import uuid # Add this import
+import uuid
+
+# Add project root to Python path
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, project_root)
+
 from pipeline.logger import get_logger
 from pipeline.preprocessing import preprocess_text
 from pipeline.rule_based import rule_based_sentiment
@@ -19,106 +26,146 @@ from utils.output_formatter import save_results_to_file
 # Initialize logger
 logger = get_logger(__name__)
 
-# Sample reviews for testing
+# Diverse sample reviews for testing - realistic Google reviews from various businesses
 SAMPLE_REVIEWS = [
-    # Sarcasm & Irony Tests
+    # Furniture Store Reviews
     {
         'review_id': str(uuid.uuid4()),
-        'text': "Oh wonderful, another 45-minute wait for cold pasta. Exactly what I needed after a long day."
+        'text': "Bought a sectional here last month and it's already sagging. The sales guy promised it would last years but the cushions are completely flat. Quality is terrible for the price we paid."
     },
     {
         'review_id': str(uuid.uuid4()),
-        'text': "The service was so fast I almost forgot I was dining and not running a marathon."
-    },
-    
-    # Contradictory Aspects
-    {
-        'review_id': str(uuid.uuid4()),
-        'text': "The steak was absolutely divine, but the waiter was incredibly rude and the restaurant was filthy."
+        'text': "IKEA West Sacramento has everything you need for home furnishing! Staff was super helpful when I couldn't find the hex keys. Assembly instructions could be clearer but overall great value."
     },
     {
         'review_id': str(uuid.uuid4()),
-        'text': "Terrible food, awful atmosphere, but the staff bent over backwards to help us - best service ever!"
+        'text': "Delivery was supposed to be between 10-2pm. They showed up at 6pm without calling. Then they scratched my hardwood floors bringing in the dining table. Manager was apologetic but damage is done."
     },
     
-    # Backhanded Compliments
+    # Auto Service Reviews  
     {
         'review_id': str(uuid.uuid4()),
-        'text': "The pizza was decent for a place that usually serves cardboard with cheese on top."
+        'text': "Quick oil change turned into a 3-hour nightmare. They said I needed $800 in repairs but I got a second opinion - nothing was wrong. Avoid this place, they're trying to scam you."
     },
     {
         'review_id': str(uuid.uuid4()),
-        'text': "Finally found a restaurant where the food matches the low prices - you get what you pay for."
-    },
-    
-    # Emotional Manipulation
-    {
-        'review_id': str(uuid.uuid4()),
-        'text': "This place reminds me of my grandmother's cooking - if she had lost her sense of taste and forgot how to season food."
+        'text': "Honest mechanics are hard to find but Tony's Auto is the real deal. Fixed my transmission for half what the dealer quoted. Been going here for 5 years, never had an issue."
     },
     {
         'review_id': str(uuid.uuid4()),
-        'text': "I'm heartbroken to say this because I really wanted to love this place, but everything was disappointing."
+        'text': "Great service, terrible location. Parking is impossible and they're always backed up. Make an appointment or you'll wait forever. Work quality is good though."
     },
     
-    # Positive Words, Negative Context
+    # Hair Salon Reviews
     {
         'review_id': str(uuid.uuid4()),
-        'text': "Amazing how they managed to overcook the fish, undercook the vegetables, and serve it all lukewarm."
+        'text': "Asked for subtle highlights and walked out looking like a zebra. Stylist didn't listen to what I wanted and now I have to pay someone else to fix this disaster. So disappointed."
     },
     {
         'review_id': str(uuid.uuid4()),
-        'text': "Incredible service - they only forgot half our order and brought the wrong drinks twice!"
-    },
-    
-    # Negative Words, Positive Context
-    {
-        'review_id': str(uuid.uuid4()),
-        'text': "I was worried this place would be terrible based on reviews, but I was completely wrong - everything was fantastic!"
+        'text': "Maria is an absolute artist! She transformed my damaged hair into something gorgeous. The salon is clean, staff is friendly, and prices are reasonable. Will definitely be back!"
     },
     {
         'review_id': str(uuid.uuid4()),
-        'text': "Don't let the awful exterior fool you - this hidden gem serves the best food in town."
+        'text': "Booked online for 2pm, didn't get seen until 3:30pm. No apology, no explanation. The cut was fine but the disrespect for my time was unacceptable."
     },
     
-    # Mixed Temporal Sentiment
+    # Medical/Dental Reviews
     {
         'review_id': str(uuid.uuid4()),
-        'text': "Started terribly with a 30-minute wait and cold appetizers, but the main course was perfection and the dessert was heavenly."
+        'text': "Dr. Johnson's office is always running late but he's thorough and really cares about his patients. The hygienist was gentle during my cleaning. Billing department needs work though."
     },
     {
         'review_id': str(uuid.uuid4()),
-        'text': "We had an amazing dinner and fantastic service, but then they charged us for items we never ordered."
-    },
-    
-    # Subtle Negativity
-    {
-        'review_id': str(uuid.uuid4()),
-        'text': "The restaurant tries really hard and the staff is very enthusiastic about the food they serve."
+        'text': "Worst dental experience of my life. Filling fell out after two days and they wanted to charge me again to fix their mistake. Rude receptionist, overpriced, and incompetent work."
     },
     {
         'review_id': str(uuid.uuid4()),
-        'text': "For what we paid, the portion sizes were... adequate, and the flavors were certainly present."
+        'text': "Emergency root canal on a Saturday - Dr. Kim saved the day! Pain relief was immediate and the follow-up care was excellent. Staff went above and beyond."
     },
     
-    # False Expectations
+    # Tech/Phone Store Reviews
     {
         'review_id': str(uuid.uuid4()),
-        'text': "If you enjoy waiting 2 hours for mediocre food while listening to screaming children, this is your paradise!"
+        'text': "Bought a 'new' phone that was clearly refurbished. Screen had scratches and battery life is awful. When I complained, they said all sales are final. Shady business practices."
     },
     {
         'review_id': str(uuid.uuid4()),
-        'text': "Perfect restaurant for people who love spending money on tiny portions and pretentious service."
+        'text': "Best Buy Geek Squad fixed my laptop faster than expected and for less than quoted. The technician explained everything clearly and even showed me how to prevent future issues."
+    },
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "Sales person was pushy and tried to sell me insurance I didn't need. Prices are higher than online but sometimes you need it today. Staff knowledge varies widely."
     },
     
-    # Conditional Sentiment
+    # Gym/Fitness Reviews
     {
         'review_id': str(uuid.uuid4()),
-        'text': "This would be a 5-star restaurant if they fixed the service, improved the food, and cleaned the place."
+        'text': "Signed up for a 'no commitment' membership and they've been charging me for 6 months after I canceled. Equipment is old and half of it doesn't work. Save your money."
     },
     {
         'review_id': str(uuid.uuid4()),
-        'text': "Great potential, but until they replace the chef and retrain the staff, avoid at all costs."
+        'text': "Planet Fitness gets a bad rap but this location is clean, well-maintained, and the staff is friendly. Not fancy but perfect for basic workouts. Can't beat the price."
+    },
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "Love the group fitness classes here! Instructors are motivating and the variety keeps things interesting. Locker rooms could use an update but overall great value."
+    },
+    
+    # Pet Store/Vet Reviews
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "Brought my sick cat here as an emergency. Dr. Martinez was compassionate and honest about treatment options. Expensive but they saved my buddy's life. Forever grateful."
+    },
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "Petco grooming butchered my dog's coat. Asked for a trim and they practically shaved him bald. Poor guy is embarrassed and cold. Manager offered discount but damage is done."
+    },
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "Staff really knows their stuff about aquarium setup. Helped me pick the right fish and equipment for a beginner. Fish are healthy and beautiful. Great customer service."
+    },
+    
+    # Home Services Reviews
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "Plumber showed up drunk, made a mess, and somehow made my leak worse. Had to call someone else to fix his 'repair'. Absolutely unprofessional. Avoid at all costs."
+    },
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "Same-day AC repair in 100-degree weather - these guys are lifesavers! Fair pricing, clean work, and they explained everything. Will use them for all HVAC needs."
+    },
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "Landscaping crew did beautiful work on our backyard transformation. Project took longer than expected due to weather but the results exceeded our expectations. Worth every penny."
+    },
+    
+    # Shopping/Retail Reviews
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "Target's grocery section is hit or miss. Produce looks tired and prices are higher than regular grocery stores. Convenient for one-stop shopping but quality suffers."
+    },
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "Nordstrom customer service is unmatched. Returned a dress I wore once (with tags) no questions asked. Sales associates are knowledgeable and not pushy. You pay more but get more."
+    },
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "Walmart self-checkout is a joke. Half the scanners don't work and you need assistance for everything. Employees act like helping customers is a burden. Shop elsewhere if you can."
+    },
+    
+    # Entertainment/Movie Theater Reviews
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "AMC theaters are overpriced for what you get. Sticky floors, broken seats, and $15 popcorn. The IMAX experience was good but not worth the premium. Netflix at home is better."
+    },
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "Local drive-in theater is a hidden gem! Nostalgic experience with current movies. Bring blankets and snacks. Sound quality through car radio is surprisingly good. Fun date night!"
+    },
+    {
+        'review_id': str(uuid.uuid4()),
+        'text': "Regal Cinemas remodel looks great but they somehow made the seats smaller. Concession lines are always understaffed. Movie selection is standard but facilities are clean."
     }
 ]
 
@@ -145,15 +192,15 @@ def run_tests():
         t2 = time.time()
 
         # 3. Transformer sentiment
-        sentiment_output = analyze_sentiment(text) # analyze_sentiment now returns {'sentiment': int, 'confidence_score': float}
+        sentiment_output = analyze_sentiment(text)
         t3 = time.time()
 
         # 4. Aspect-based sentiment
-        absa_output = analyze_absa(text) # analyze_absa now returns a dict
+        absa_output = analyze_absa(text)
         t4 = time.time()
 
         # 5. Emotion detection
-        emotion_output = detect_emotion(text) # detect_emotion now returns a dict with multiple scores
+        emotion_output = detect_emotion(text)
         t5 = time.time()
 
         # 6. Sarcasm detection
@@ -166,7 +213,6 @@ def run_tests():
             transformer_sentiment_score_for_fusion = sentiment_output['confidence_score']
         elif sentiment_output['sentiment'] == -1: # negative
             transformer_sentiment_score_for_fusion = -sentiment_output['confidence_score']
-        # if sentiment_output['sentiment'] == 0 (neutral), it remains 0.0
 
         # 7. Fusion
         signals = {
@@ -187,10 +233,8 @@ def run_tests():
         fused = fuse_signals(signals)
         t7 = time.time()
 
-        # Compile results
-        result = {
-            'review_id': rid,
-            'text': text,  # Include original text for output formatting
+        # Compile results with timing
+        timing_data = {
             'preprocessing_time': round(t1 - t0, 3),
             'rule_based_time': round(t2 - t1, 3),
             'transformer_sentiment_time': round(t3 - t2, 3),
@@ -198,10 +242,17 @@ def run_tests():
             'emotion_time': round(t5 - t4, 3),
             'sarcasm_time': round(t6 - t5, 3),
             'fusion_time': round(t7 - t6, 3),
-            'signals': signals, # This now contains all 13 features for fusion
+            'total_time': round(t7 - t0, 3)
+        }
+
+        result = {
+            'review_id': rid,
+            'text': text,
+            'timing': timing_data,  # Add timing data
+            'signals': signals,
             'fused': fused,
-            'aspects': absa_output['aspect_details'], # Use 'aspect_details' from absa_output
-            'emotion_scores': emotion_output, # Pass the whole dict
+            'aspects': absa_output['aspect_details'],
+            'emotion_scores': emotion_output,
             'sarcasm': sarcasm_output,
             'rule': rule_output,
             'sentiment': sentiment_output

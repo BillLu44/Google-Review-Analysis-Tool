@@ -1,0 +1,1918 @@
+🤖 AI SENTIMENT ANALYSIS PIPELINE RESULTS
+Generated: 2025-06-12 15:12:21
+
+📊 EXECUTIVE SUMMARY
+==================================================
+
+📈 OVERVIEW
+   Total Reviews Analyzed: 30
+   Average Confidence: 0.0%
+   High Confidence (≥80%): 0 (0.0%)
+   Low Confidence (<60%): 30 (100.0%)
+
+🎯 SENTIMENT DISTRIBUTION
+   Neutral     30 (100.0%) ████████████████████ 😐
+
+🔍 TOP ASPECTS MENTIONED
+   Staff        ( 6x) - Pos: 83.3% | Neg: 16.7%
+     └─ "West Sacramento has everything you need for home f"
+     └─ "hair into something gorgeous The salon is clean st"
+   Overall      ( 5x) - Pos: 60.0% | Neg: 20.0%
+     └─ "the hex keys Assembly instructions could be cleare"
+     └─ "things interesting Locker rooms could use an updat"
+   Quality      ( 4x) - Pos: 50.0% | Neg: 50.0%
+     └─ "would last years but the cushions are completely f"
+     └─ "Make an appointment or you 'll wait forever Work q"
+   Everything   ( 4x) - Pos: 75.0% | Neg: 25.0%
+     └─ "IKEA West Sacramento has everything you need for h"
+     └─ "expected and for less than quoted The technician e"
+   Service      ( 3x) - Pos: 100.0% | Neg:  0.0%
+     └─ "Great service terrible location Parking is impossi"
+     └─ "beginner Fish are healthy and beautiful Great cust"
+
+🤖 MODEL INSIGHTS
+   Sarcasm Detected: 13 reviews (43.3%)
+   Top Emotions:
+     Joy: 14 (46.7%)
+     Anger: 10 (33.3%)
+     Sadness: 5 (16.7%)
+
+==================================================
+
+📋 DETAILED INDIVIDUAL ANALYSIS
+======================================================================
+
+==========================================================================================
+REVIEW #7b1aa192-39f9-4939-87e9-5026b5b31eb9 ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Bought a sectional here last month and it's already sagging. The sales guy promised it would last years but the cushions are completely flat. Quality is terrible for the price we paid."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ price           │ negative  │  -0.88 😞 │ cushions are completely flat... │
+│ quality         │ negative  │  -1.00 😞 │ would last years but the cus... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. PRICE 😞
+      Sentiment: negative (score: -0.885, confidence: 0.885)
+      Context: "cushions are completely flat Quality is terrible for the price we paid"
+
+   2. QUALITY 😞
+      Sentiment: negative (score: -0.995, confidence: 0.995)
+      Context: "would last years but the cushions are completely flat Quality is terrible for the price we paid"
+
+
+😊 Emotion Analysis:
+   Sadness      [██████████████░] 98.4%
+   Anger        [██████████████░] 94.1%
+   Fear         [█░░░░░░░░░░░░░░] 8.4%
+   Joy          [░░░░░░░░░░░░░░░] 0.6%
+   Surprise     [░░░░░░░░░░░░░░░] 0.1%
+
+🎭 Sarcasm Analysis:
+   Detection: sarcastic
+   Confidence: 100.0%
+   ⚠️  Sarcasm detected - review context carefully
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 1.672s
+   preprocessing_time: 0.016s
+   rule_based_time: 0.026s
+   transformer_sentiment_time: 0.903s
+   absa_time: 0.266s
+   emotion_time: 0.381s
+   sarcasm_time: 0.079s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #7f989e1d-544b-4c53-83c3-5b551c5de32c ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"IKEA West Sacramento has everything you need for home furnishing! Staff was super helpful when I couldn't find the hex keys. Assembly instructions could be clearer but overall great value."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ everything      │ positive  │  +0.98 😊 │ IKEA West Sacramento has eve... │
+│ overall         │ positive  │  +0.91 😊 │ the hex keys Assembly instru... │
+│ staff           │ positive  │  +0.99 😊 │ West Sacramento has everythi... │
+│ value           │ positive  │  +0.99 😊 │ keys Assembly instructions c... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. EVERYTHING 😊
+      Sentiment: positive (score: +0.982, confidence: 0.982)
+      Context: "IKEA West Sacramento has everything you need for home furnishing Staff was super helpful"
+
+   2. OVERALL 😊
+      Sentiment: positive (score: +0.911, confidence: 0.911)
+      Context: "the hex keys Assembly instructions could be clearer but overall great value"
+
+   3. STAFF 😊
+      Sentiment: positive (score: +0.994, confidence: 0.994)
+      Context: "West Sacramento has everything you need for home furnishing Staff was super helpful when I could n't find the hex"
+
+   4. VALUE 😊
+      Sentiment: positive (score: +0.995, confidence: 0.995)
+      Context: "keys Assembly instructions could be clearer but overall great value"
+
+
+😊 Emotion Analysis:
+   Joy          [██████████████░] 100.0%
+   Sadness      [░░░░░░░░░░░░░░░] 0.1%
+   Anger        [░░░░░░░░░░░░░░░] 0.0%
+   Surprise     [░░░░░░░░░░░░░░░] 0.0%
+   Love         [░░░░░░░░░░░░░░░] 0.0%
+
+🎭 Sarcasm Analysis:
+   Detection: not_sarcastic
+   Confidence: 100.0%
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.757s
+   preprocessing_time: 0.010s
+   rule_based_time: 0.008s
+   transformer_sentiment_time: 0.156s
+   absa_time: 0.140s
+   emotion_time: 0.367s
+   sarcasm_time: 0.076s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #36e6520c-906e-4329-a87b-3075cfc42d8d ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Delivery was supposed to be between 10-2pm. They showed up at 6pm without calling. Then they scratched my hardwood floors bringing in the dining table. Manager was apologetic but damage is done."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ delivery        │ negative  │  -0.90 😞 │ Delivery was supposed to be ... │
+│ dining          │ neutral   │  +0.00 😐 │ Then they scratched my hardw... │
+│ manager         │ negative  │  -0.63 😞 │ scratched my hardwood floors... │
+│ table           │ neutral   │  +0.00 😐 │ Then they scratched my hardw... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. DELIVERY 😞
+      Sentiment: negative (score: -0.898, confidence: 0.898)
+      Context: "Delivery was supposed to be between 10 2pm They"
+
+   2. DINING 😐
+      Sentiment: neutral (score: +0.000, confidence: 0.997)
+      Context: "Then they scratched my hardwood floors bringing in the dining table Manager was apologetic but damage is done"
+
+   3. MANAGER 😞
+      Sentiment: negative (score: -0.627, confidence: 0.627)
+      Context: "scratched my hardwood floors bringing in the dining table Manager was apologetic but damage is done"
+
+   4. TABLE 😐
+      Sentiment: neutral (score: +0.000, confidence: 0.995)
+      Context: "Then they scratched my hardwood floors bringing in the dining table Manager was apologetic but damage is done"
+
+
+😊 Emotion Analysis:
+   Sadness      [██████████████░] 100.0%
+   Anger        [██████████████░] 99.9%
+   Fear         [██░░░░░░░░░░░░░] 15.9%
+   Joy          [█░░░░░░░░░░░░░░] 11.5%
+   Surprise     [░░░░░░░░░░░░░░░] 0.1%
+
+🎭 Sarcasm Analysis:
+   Detection: sarcastic
+   Confidence: 100.0%
+   ⚠️  Sarcasm detected - review context carefully
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.797s
+   preprocessing_time: 0.009s
+   rule_based_time: 0.008s
+   transformer_sentiment_time: 0.160s
+   absa_time: 0.246s
+   emotion_time: 0.299s
+   sarcasm_time: 0.075s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #cbaa2c95-5815-4fc5-a511-656949823218 ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Quick oil change turned into a 3-hour nightmare. They said I needed $800 in repairs but I got a second opinion - nothing was wrong. Avoid this place, they're trying to scam you."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ nothing         │ negative  │  -0.75 😞 │ 800 in repairs but I got a s... │
+│ place           │ negative  │  -1.00 😞 │ a second opinion nothing was... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. NOTHING 😞
+      Sentiment: negative (score: -0.748, confidence: 0.748)
+      Context: "800 in repairs but I got a second opinion nothing was wrong Avoid this place they 're trying"
+
+   2. PLACE 😞
+      Sentiment: negative (score: -0.995, confidence: 0.995)
+      Context: "a second opinion nothing was wrong Avoid this place they 're trying to scam you"
+
+
+😊 Emotion Analysis:
+   Anger        [██████████████░] 100.0%
+   Surprise     [██░░░░░░░░░░░░░] 19.4%
+   Joy          [█░░░░░░░░░░░░░░] 13.2%
+   Fear         [█░░░░░░░░░░░░░░] 8.3%
+   Sadness      [░░░░░░░░░░░░░░░] 5.9%
+
+🎭 Sarcasm Analysis:
+   Detection: sarcastic
+   Confidence: 100.0%
+   ⚠️  Sarcasm detected - review context carefully
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.538s
+   preprocessing_time: 0.010s
+   rule_based_time: 0.009s
+   transformer_sentiment_time: 0.110s
+   absa_time: 0.189s
+   emotion_time: 0.184s
+   sarcasm_time: 0.036s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #b77882a0-b5f6-40d1-8216-62a113bca0ca ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Honest mechanics are hard to find but Tony's Auto is the real deal. Fixed my transmission for half what the dealer quoted. Been going here for 5 years, never had an issue."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ deal            │ positive  │  +0.97 😊 │ hard to find but Tony 's Aut... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. DEAL 😊
+      Sentiment: positive (score: +0.972, confidence: 0.972)
+      Context: "hard to find but Tony 's Auto is the real deal Fixed my transmission for half what the dealer quoted real deal Fixed my transmission for half what the dealer quoted Been going here for 5 years never"
+
+
+😊 Emotion Analysis:
+   Joy          [██████████████░] 99.9%
+   Anger        [█████████████░░] 91.6%
+   Fear         [█░░░░░░░░░░░░░░] 8.3%
+   Sadness      [░░░░░░░░░░░░░░░] 2.3%
+   Love         [░░░░░░░░░░░░░░░] 0.3%
+
+🎭 Sarcasm Analysis:
+   Detection: not_sarcastic
+   Confidence: 100.0%
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.514s
+   preprocessing_time: 0.009s
+   rule_based_time: 0.008s
+   transformer_sentiment_time: 0.174s
+   absa_time: 0.051s
+   emotion_time: 0.193s
+   sarcasm_time: 0.080s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #ef608f42-d5a3-4d2c-a0aa-072195d345d1 ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Great service, terrible location. Parking is impossible and they're always backed up. Make an appointment or you'll wait forever. Work quality is good though."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ location        │ negative  │  -0.99 😞 │ Great service terrible locat... │
+│ quality         │ positive  │  +0.99 😊 │ Make an appointment or you '... │
+│ service         │ positive  │  +0.99 😊 │ Great service terrible locat... │
+│ wait            │ negative  │  -0.99 😞 │ always backed up Make an app... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. LOCATION 😞
+      Sentiment: negative (score: -0.991, confidence: 0.991)
+      Context: "Great service terrible location Parking is impossible and they 're always backed up"
+
+   2. QUALITY 😊
+      Sentiment: positive (score: +0.995, confidence: 0.995)
+      Context: "Make an appointment or you 'll wait forever Work quality is good though"
+
+   3. SERVICE 😊
+      Sentiment: positive (score: +0.991, confidence: 0.991)
+      Context: "Great service terrible location Parking is impossible and they 're"
+
+   4. WAIT 😞
+      Sentiment: negative (score: -0.990, confidence: 0.990)
+      Context: "always backed up Make an appointment or you 'll wait forever Work quality is good though"
+
+
+😊 Emotion Analysis:
+   Joy          [██████████████░] 100.0%
+   Fear         [██████████████░] 96.8%
+   Anger        [██████████░░░░░] 69.3%
+   Sadness      [░░░░░░░░░░░░░░░] 1.4%
+   Surprise     [░░░░░░░░░░░░░░░] 0.1%
+
+🎭 Sarcasm Analysis:
+   Detection: not_sarcastic
+   Confidence: 63.9%
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.639s
+   preprocessing_time: 0.007s
+   rule_based_time: 0.008s
+   transformer_sentiment_time: 0.169s
+   absa_time: 0.149s
+   emotion_time: 0.228s
+   sarcasm_time: 0.078s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #e270f309-f601-42ba-8469-7ecbb014e030 ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Asked for subtle highlights and walked out looking like a zebra. Stylist didn't listen to what I wanted and now I have to pay someone else to fix this disaster. So disappointed."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ overall         │ neutral   │  +0.00 😐 │                                 │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. OVERALL 😐
+      Sentiment: neutral (score: +0.000, confidence: 0.582)
+      Context: ""
+
+
+😊 Emotion Analysis:
+   Anger        [██████████████░] 100.0%
+   Sadness      [██████████████░] 99.1%
+   Fear         [░░░░░░░░░░░░░░░] 1.6%
+   Joy          [░░░░░░░░░░░░░░░] 1.2%
+   Surprise     [░░░░░░░░░░░░░░░] 0.1%
+
+🎭 Sarcasm Analysis:
+   Detection: sarcastic
+   Confidence: 100.0%
+   ⚠️  Sarcasm detected - review context carefully
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.477s
+   preprocessing_time: 0.008s
+   rule_based_time: 0.008s
+   transformer_sentiment_time: 0.066s
+   absa_time: 0.057s
+   emotion_time: 0.300s
+   sarcasm_time: 0.037s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #f460e884-d173-40f7-89b5-b1429bc9b083 ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Maria is an absolute artist! She transformed my damaged hair into something gorgeous. The salon is clean, staff is friendly, and prices are reasonable. Will definitely be back!"
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ prices          │ positive  │  +0.96 😊 │ The salon is clean staff is ... │
+│ staff           │ positive  │  +1.00 😊 │ hair into something gorgeous... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. PRICES 😊
+      Sentiment: positive (score: +0.962, confidence: 0.962)
+      Context: "The salon is clean staff is friendly and prices are reasonable Will definitely be back"
+
+   2. STAFF 😊
+      Sentiment: positive (score: +0.995, confidence: 0.995)
+      Context: "hair into something gorgeous The salon is clean staff is friendly and prices are reasonable Will definitely"
+
+
+😊 Emotion Analysis:
+   Joy          [██████████████░] 100.0%
+   Anger        [░░░░░░░░░░░░░░░] 1.6%
+   Love         [░░░░░░░░░░░░░░░] 1.1%
+   Surprise     [░░░░░░░░░░░░░░░] 0.8%
+   Sadness      [░░░░░░░░░░░░░░░] 0.1%
+
+🎭 Sarcasm Analysis:
+   Detection: not_sarcastic
+   Confidence: 100.0%
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.694s
+   preprocessing_time: 0.008s
+   rule_based_time: 0.008s
+   transformer_sentiment_time: 0.175s
+   absa_time: 0.195s
+   emotion_time: 0.228s
+   sarcasm_time: 0.081s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #255b81dd-737b-42ab-9fae-6de4a33a78cb ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Booked online for 2pm, didn't get seen until 3:30pm. No apology, no explanation. The cut was fine but the disrespect for my time was unacceptable."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ time            │ negative  │  -0.97 😞 │ The cut was fine but the dis... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. TIME 😞
+      Sentiment: negative (score: -0.973, confidence: 0.973)
+      Context: "The cut was fine but the disrespect for my time was unacceptable"
+
+
+😊 Emotion Analysis:
+   Sadness      [██████████████░] 98.2%
+   Anger        [████████████░░░] 86.5%
+   Joy          [█░░░░░░░░░░░░░░] 12.2%
+   Fear         [░░░░░░░░░░░░░░░] 0.4%
+   Surprise     [░░░░░░░░░░░░░░░] 0.3%
+
+🎭 Sarcasm Analysis:
+   Detection: sarcastic
+   Confidence: 100.0%
+   ⚠️  Sarcasm detected - review context carefully
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.362s
+   preprocessing_time: 0.007s
+   rule_based_time: 0.008s
+   transformer_sentiment_time: 0.061s
+   absa_time: 0.050s
+   emotion_time: 0.202s
+   sarcasm_time: 0.034s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #303c90d4-0d1f-4538-a02b-1ab939342366 ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Dr. Johnson's office is always running late but he's thorough and really cares about his patients. The hygienist was gentle during my cleaning. Billing department needs work though."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ overall         │ positive  │  +0.71 😊 │                                 │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. OVERALL 😊
+      Sentiment: positive (score: +0.711, confidence: 0.711)
+      Context: ""
+
+
+😊 Emotion Analysis:
+   Anger        [██████████████░] 100.0%
+   Love         [███████████░░░░] 74.6%
+   Fear         [█░░░░░░░░░░░░░░] 10.9%
+   Surprise     [█░░░░░░░░░░░░░░] 8.3%
+   Joy          [░░░░░░░░░░░░░░░] 1.0%
+
+🎭 Sarcasm Analysis:
+   Detection: not_sarcastic
+   Confidence: 100.0%
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.321s
+   preprocessing_time: 0.008s
+   rule_based_time: 0.008s
+   transformer_sentiment_time: 0.121s
+   absa_time: 0.053s
+   emotion_time: 0.095s
+   sarcasm_time: 0.035s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #2b2f4a39-ea4a-4ddf-9c68-2acab2c77344 ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Worst dental experience of my life. Filling fell out after two days and they wanted to charge me again to fix their mistake. Rude receptionist, overpriced, and incompetent work."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ charge          │ negative  │  -0.89 😞 │ Filling fell out after two d... │
+│ experience      │ negative  │  -1.00 😞 │ Worst dental experience of m... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. CHARGE 😞
+      Sentiment: negative (score: -0.891, confidence: 0.891)
+      Context: "Filling fell out after two days and they wanted to charge me again to fix their mistake Rude receptionist"
+
+   2. EXPERIENCE 😞
+      Sentiment: negative (score: -0.996, confidence: 0.996)
+      Context: "Worst dental experience of my life Filling fell out after two days"
+
+
+😊 Emotion Analysis:
+   Anger        [██████████████░] 100.0%
+   Fear         [░░░░░░░░░░░░░░░] 4.4%
+   Sadness      [░░░░░░░░░░░░░░░] 4.1%
+   Surprise     [░░░░░░░░░░░░░░░] 1.5%
+   Joy          [░░░░░░░░░░░░░░░] 0.9%
+
+🎭 Sarcasm Analysis:
+   Detection: sarcastic
+   Confidence: 100.0%
+   ⚠️  Sarcasm detected - review context carefully
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.393s
+   preprocessing_time: 0.008s
+   rule_based_time: 0.008s
+   transformer_sentiment_time: 0.069s
+   absa_time: 0.075s
+   emotion_time: 0.199s
+   sarcasm_time: 0.035s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #4b713e4c-e0e9-498d-9472-27aa7ce63d8b ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Emergency root canal on a Saturday - Dr. Kim saved the day! Pain relief was immediate and the follow-up care was excellent. Staff went above and beyond."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ staff           │ positive  │  +0.99 😊 │ immediate and the follow up ... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. STAFF 😊
+      Sentiment: positive (score: +0.988, confidence: 0.988)
+      Context: "immediate and the follow up care was excellent Staff went above and beyond"
+
+
+😊 Emotion Analysis:
+   Joy          [██████████████░] 100.0%
+   Anger        [█████░░░░░░░░░░] 39.9%
+   Fear         [░░░░░░░░░░░░░░░] 3.5%
+   Sadness      [░░░░░░░░░░░░░░░] 1.5%
+   Love         [░░░░░░░░░░░░░░░] 0.6%
+
+🎭 Sarcasm Analysis:
+   Detection: not_sarcastic
+   Confidence: 100.0%
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.257s
+   preprocessing_time: 0.007s
+   rule_based_time: 0.008s
+   transformer_sentiment_time: 0.068s
+   absa_time: 0.055s
+   emotion_time: 0.078s
+   sarcasm_time: 0.042s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #176588b6-202e-4ed5-9684-31604cf541e0 ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Bought a 'new' phone that was clearly refurbished. Screen had scratches and battery life is awful. When I complained, they said all sales are final. Shady business practices."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ overall         │ negative  │  -0.96 😞 │                                 │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. OVERALL 😞
+      Sentiment: negative (score: -0.961, confidence: 0.961)
+      Context: ""
+
+
+😊 Emotion Analysis:
+   Anger        [██████████████░] 100.0%
+   Joy          [██████████████░] 99.9%
+   Sadness      [██████████████░] 98.5%
+   Surprise     [███████████░░░░] 78.9%
+   Fear         [░░░░░░░░░░░░░░░] 0.6%
+
+🎭 Sarcasm Analysis:
+   Detection: sarcastic
+   Confidence: 100.0%
+   ⚠️  Sarcasm detected - review context carefully
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.389s
+   preprocessing_time: 0.009s
+   rule_based_time: 0.008s
+   transformer_sentiment_time: 0.065s
+   absa_time: 0.054s
+   emotion_time: 0.216s
+   sarcasm_time: 0.038s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #b2bc25c6-d5d5-43aa-b7da-0162dd41958e ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Best Buy Geek Squad fixed my laptop faster than expected and for less than quoted. The technician explained everything clearly and even showed me how to prevent future issues."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ everything      │ positive  │  +0.97 😊 │ expected and for less than q... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. EVERYTHING 😊
+      Sentiment: positive (score: +0.967, confidence: 0.967)
+      Context: "expected and for less than quoted The technician explained everything clearly and even showed me how to prevent future issues"
+
+
+😊 Emotion Analysis:
+   Joy          [██████████████░] 96.5%
+   Anger        [███████████░░░░] 76.1%
+   Sadness      [░░░░░░░░░░░░░░░] 4.8%
+   Fear         [░░░░░░░░░░░░░░░] 2.7%
+   Love         [░░░░░░░░░░░░░░░] 1.4%
+
+🎭 Sarcasm Analysis:
+   Detection: not_sarcastic
+   Confidence: 100.0%
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.404s
+   preprocessing_time: 0.008s
+   rule_based_time: 0.007s
+   transformer_sentiment_time: 0.185s
+   absa_time: 0.049s
+   emotion_time: 0.066s
+   sarcasm_time: 0.088s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #e795c8b3-42ba-463c-9cfb-c4c4fe4e87a0 ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Sales person was pushy and tried to sell me insurance I didn't need. Prices are higher than online but sometimes you need it today. Staff knowledge varies widely."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ prices          │ negative  │  -1.00 😞 │ tried to sell me insurance I... │
+│ staff           │ negative  │  -1.00 😞 │ higher than online but somet... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. PRICES 😞
+      Sentiment: negative (score: -0.997, confidence: 0.997)
+      Context: "tried to sell me insurance I did n't need Prices are higher than online but sometimes you need it today"
+
+   2. STAFF 😞
+      Sentiment: negative (score: -0.996, confidence: 0.996)
+      Context: "higher than online but sometimes you need it today Staff knowledge varies widely"
+
+
+😊 Emotion Analysis:
+   Anger        [██████████████░] 100.0%
+   Sadness      [██████░░░░░░░░░] 43.1%
+   Joy          [█░░░░░░░░░░░░░░] 8.3%
+   Love         [░░░░░░░░░░░░░░░] 0.7%
+   Fear         [░░░░░░░░░░░░░░░] 0.1%
+
+🎭 Sarcasm Analysis:
+   Detection: sarcastic
+   Confidence: 52.8%
+   ⚠️  Sarcasm detected - review context carefully
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.278s
+   preprocessing_time: 0.009s
+   rule_based_time: 0.007s
+   transformer_sentiment_time: 0.057s
+   absa_time: 0.081s
+   emotion_time: 0.088s
+   sarcasm_time: 0.036s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #90408fcc-a4f6-4d3a-8227-a0182df6f9ed ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Signed up for a 'no commitment' membership and they've been charging me for 6 months after I canceled. Equipment is old and half of it doesn't work. Save your money."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ money           │ negative  │  -0.96 😞 │ and half of it does n't work... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. MONEY 😞
+      Sentiment: negative (score: -0.962, confidence: 0.962)
+      Context: "and half of it does n't work Save your money"
+
+
+😊 Emotion Analysis:
+   Anger        [██████████████░] 98.9%
+   Joy          [██████████████░] 97.1%
+   Sadness      [██░░░░░░░░░░░░░] 14.5%
+   Fear         [░░░░░░░░░░░░░░░] 0.2%
+   Love         [░░░░░░░░░░░░░░░] 0.2%
+
+🎭 Sarcasm Analysis:
+   Detection: sarcastic
+   Confidence: 99.3%
+   ⚠️  Sarcasm detected - review context carefully
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.581s
+   preprocessing_time: 0.009s
+   rule_based_time: 0.009s
+   transformer_sentiment_time: 0.121s
+   absa_time: 0.185s
+   emotion_time: 0.220s
+   sarcasm_time: 0.038s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #27db614b-735a-4547-a78b-e971830410c5 ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Planet Fitness gets a bad rap but this location is clean, well-maintained, and the staff is friendly. Not fancy but perfect for basic workouts. Can't beat the price."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ location        │ positive  │  +1.00 😊 │ Planet Fitness gets a bad ra... │
+│ price           │ positive  │  +0.97 😊 │ but perfect for basic workou... │
+│ staff           │ positive  │  +1.00 😊 │ location is clean well maint... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. LOCATION 😊
+      Sentiment: positive (score: +0.996, confidence: 0.996)
+      Context: "Planet Fitness gets a bad rap but this location is clean well maintained and the staff"
+
+   2. PRICE 😊
+      Sentiment: positive (score: +0.971, confidence: 0.971)
+      Context: "but perfect for basic workouts Ca n't beat the price"
+
+   3. STAFF 😊
+      Sentiment: positive (score: +0.996, confidence: 0.996)
+      Context: "location is clean well maintained and the staff is friendly Not fancy but perfect for basic workouts"
+
+
+😊 Emotion Analysis:
+   Joy          [██████████████░] 100.0%
+   Love         [█████████████░░] 89.5%
+   Anger        [░░░░░░░░░░░░░░░] 0.4%
+   Sadness      [░░░░░░░░░░░░░░░] 0.2%
+   Surprise     [░░░░░░░░░░░░░░░] 0.1%
+
+🎭 Sarcasm Analysis:
+   Detection: not_sarcastic
+   Confidence: 100.0%
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.333s
+   preprocessing_time: 0.008s
+   rule_based_time: 0.008s
+   transformer_sentiment_time: 0.074s
+   absa_time: 0.109s
+   emotion_time: 0.098s
+   sarcasm_time: 0.036s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #bb4efccc-d53e-4d45-a34b-b37047fe1154 ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Love the group fitness classes here! Instructors are motivating and the variety keeps things interesting. Locker rooms could use an update but overall great value."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ overall         │ positive  │  +0.96 😊 │ things interesting Locker ro... │
+│ value           │ positive  │  +1.00 😊 │ Locker rooms could use an up... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. OVERALL 😊
+      Sentiment: positive (score: +0.962, confidence: 0.962)
+      Context: "things interesting Locker rooms could use an update but overall great value"
+
+   2. VALUE 😊
+      Sentiment: positive (score: +0.996, confidence: 0.996)
+      Context: "Locker rooms could use an update but overall great value"
+
+
+😊 Emotion Analysis:
+   Joy          [██████████████░] 100.0%
+   Anger        [░░░░░░░░░░░░░░░] 0.1%
+   Love         [░░░░░░░░░░░░░░░] 0.0%
+   Sadness      [░░░░░░░░░░░░░░░] 0.0%
+   Surprise     [░░░░░░░░░░░░░░░] 0.0%
+
+🎭 Sarcasm Analysis:
+   Detection: not_sarcastic
+   Confidence: 100.0%
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.613s
+   preprocessing_time: 0.008s
+   rule_based_time: 0.006s
+   transformer_sentiment_time: 0.196s
+   absa_time: 0.223s
+   emotion_time: 0.089s
+   sarcasm_time: 0.090s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #498671dd-68b7-47c0-ba06-d3c0279c1323 ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Brought my sick cat here as an emergency. Dr. Martinez was compassionate and honest about treatment options. Expensive but they saved my buddy's life. Forever grateful."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ expensive       │ negative  │  -0.98 😞 │ Dr. Martinez was compassiona... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. EXPENSIVE 😞
+      Sentiment: negative (score: -0.979, confidence: 0.979)
+      Context: "Dr. Martinez was compassionate and honest about treatment options Expensive but they saved my buddy 's life Forever grateful"
+
+
+😊 Emotion Analysis:
+   Love         [██████████████░] 100.0%
+   Joy          [██████████████░] 100.0%
+   Anger        [██████████████░] 99.1%
+   Fear         [███████░░░░░░░░] 50.5%
+   Sadness      [██░░░░░░░░░░░░░] 19.9%
+
+🎭 Sarcasm Analysis:
+   Detection: not_sarcastic
+   Confidence: 100.0%
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.456s
+   preprocessing_time: 0.007s
+   rule_based_time: 0.008s
+   transformer_sentiment_time: 0.069s
+   absa_time: 0.056s
+   emotion_time: 0.276s
+   sarcasm_time: 0.040s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #8c62ff5c-9352-4e63-861a-df50159668d4 ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Petco grooming butchered my dog's coat. Asked for a trim and they practically shaved him bald. Poor guy is embarrassed and cold. Manager offered discount but damage is done."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ cold            │ negative  │  -0.98 😞 │ practically shaved him bald ... │
+│ manager         │ negative  │  -0.91 😞 │ him bald Poor guy is embarra... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. COLD 😞
+      Sentiment: negative (score: -0.977, confidence: 0.977)
+      Context: "practically shaved him bald Poor guy is embarrassed and cold Manager offered discount but damage is done"
+
+   2. MANAGER 😞
+      Sentiment: negative (score: -0.909, confidence: 0.909)
+      Context: "him bald Poor guy is embarrassed and cold Manager offered discount but damage is done"
+
+
+😊 Emotion Analysis:
+   Sadness      [██████████████░] 100.0%
+   Anger        [██████████████░] 100.0%
+   Love         [░░░░░░░░░░░░░░░] 1.0%
+   Joy          [░░░░░░░░░░░░░░░] 0.3%
+   Surprise     [░░░░░░░░░░░░░░░] 0.2%
+
+🎭 Sarcasm Analysis:
+   Detection: sarcastic
+   Confidence: 100.0%
+   ⚠️  Sarcasm detected - review context carefully
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.303s
+   preprocessing_time: 0.008s
+   rule_based_time: 0.008s
+   transformer_sentiment_time: 0.060s
+   absa_time: 0.085s
+   emotion_time: 0.106s
+   sarcasm_time: 0.035s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #1ed7b1a8-42c8-4705-bef4-5a7e1a9bfdc9 ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Staff really knows their stuff about aquarium setup. Helped me pick the right fish and equipment for a beginner. Fish are healthy and beautiful. Great customer service."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ fish            │ positive  │  +0.99 😊 │ stuff about aquarium setup H... │
+│ service         │ positive  │  +1.00 😊 │ beginner Fish are healthy an... │
+│ staff           │ positive  │  +0.99 😊 │ Staff really knows their stu... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. FISH 😊
+      Sentiment: positive (score: +0.993, confidence: 0.993)
+      Context: "stuff about aquarium setup Helped me pick the right fish and equipment for a beginner Fish are healthy and pick the right fish and equipment for a beginner Fish are healthy and beautiful Great customer service"
+
+   2. SERVICE 😊
+      Sentiment: positive (score: +0.997, confidence: 0.997)
+      Context: "beginner Fish are healthy and beautiful Great customer service"
+
+   3. STAFF 😊
+      Sentiment: positive (score: +0.993, confidence: 0.993)
+      Context: "Staff really knows their stuff about aquarium setup Helped me"
+
+
+😊 Emotion Analysis:
+   Joy          [██████████████░] 100.0%
+   Anger        [█░░░░░░░░░░░░░░] 8.3%
+   Love         [░░░░░░░░░░░░░░░] 0.3%
+   Sadness      [░░░░░░░░░░░░░░░] 0.2%
+   Surprise     [░░░░░░░░░░░░░░░] 0.1%
+
+🎭 Sarcasm Analysis:
+   Detection: not_sarcastic
+   Confidence: 100.0%
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.372s
+   preprocessing_time: 0.007s
+   rule_based_time: 0.007s
+   transformer_sentiment_time: 0.070s
+   absa_time: 0.122s
+   emotion_time: 0.125s
+   sarcasm_time: 0.041s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #242589a6-34b9-462d-b734-6ffe958b6f84 ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Plumber showed up drunk, made a mess, and somehow made my leak worse. Had to call someone else to fix his 'repair'. Absolutely unprofessional. Avoid at all costs."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ costs           │ negative  │  -0.95 😞 │ repair Absolutely unprofessi... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. COSTS 😞
+      Sentiment: negative (score: -0.945, confidence: 0.945)
+      Context: "repair Absolutely unprofessional Avoid at all costs"
+
+
+😊 Emotion Analysis:
+   Anger        [██████████████░] 100.0%
+   Joy          [░░░░░░░░░░░░░░░] 0.8%
+   Sadness      [░░░░░░░░░░░░░░░] 0.6%
+   Love         [░░░░░░░░░░░░░░░] 0.1%
+   Surprise     [░░░░░░░░░░░░░░░] 0.1%
+
+🎭 Sarcasm Analysis:
+   Detection: sarcastic
+   Confidence: 100.0%
+   ⚠️  Sarcasm detected - review context carefully
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.307s
+   preprocessing_time: 0.008s
+   rule_based_time: 0.008s
+   transformer_sentiment_time: 0.073s
+   absa_time: 0.060s
+   emotion_time: 0.119s
+   sarcasm_time: 0.040s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #cecb42c6-d904-49d5-bc36-9591342be2ad ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Same-day AC repair in 100-degree weather - these guys are lifesavers! Fair pricing, clean work, and they explained everything. Will use them for all HVAC needs."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ everything      │ positive  │  +0.94 😊 │ Fair pricing clean work and ... │
+│ pricing         │ positive  │  +0.94 😊 │ degree weather these guys ar... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. EVERYTHING 😊
+      Sentiment: positive (score: +0.939, confidence: 0.939)
+      Context: "Fair pricing clean work and they explained everything Will use them for all HVAC needs"
+
+   2. PRICING 😊
+      Sentiment: positive (score: +0.940, confidence: 0.940)
+      Context: "degree weather these guys are lifesavers Fair pricing clean work and they explained everything Will"
+
+
+😊 Emotion Analysis:
+   Joy          [██████████████░] 100.0%
+   Fear         [██████████████░] 96.4%
+   Anger        [████████░░░░░░░] 53.5%
+   Sadness      [░░░░░░░░░░░░░░░] 3.3%
+   Surprise     [░░░░░░░░░░░░░░░] 1.8%
+
+🎭 Sarcasm Analysis:
+   Detection: not_sarcastic
+   Confidence: 100.0%
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.425s
+   preprocessing_time: 0.008s
+   rule_based_time: 0.008s
+   transformer_sentiment_time: 0.058s
+   absa_time: 0.081s
+   emotion_time: 0.232s
+   sarcasm_time: 0.038s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #70a41a63-5ced-4777-813a-11fec8de6987 ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Landscaping crew did beautiful work on our backyard transformation. Project took longer than expected due to weather but the results exceeded our expectations. Worth every penny."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ crew            │ positive  │  +0.99 😊 │ Landscaping crew did beautif... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. CREW 😊
+      Sentiment: positive (score: +0.989, confidence: 0.989)
+      Context: "Landscaping crew did beautiful work on our backyard transformation Project took"
+
+
+😊 Emotion Analysis:
+   Joy          [██████████████░] 100.0%
+   Surprise     [█░░░░░░░░░░░░░░] 7.5%
+   Love         [░░░░░░░░░░░░░░░] 5.0%
+   Fear         [░░░░░░░░░░░░░░░] 2.4%
+   Anger        [░░░░░░░░░░░░░░░] 2.1%
+
+🎭 Sarcasm Analysis:
+   Detection: not_sarcastic
+   Confidence: 100.0%
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.467s
+   preprocessing_time: 0.008s
+   rule_based_time: 0.007s
+   transformer_sentiment_time: 0.193s
+   absa_time: 0.052s
+   emotion_time: 0.094s
+   sarcasm_time: 0.112s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #cd3c5f8d-240e-4705-bbe0-b5f04e3f6c86 ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Target's grocery section is hit or miss. Produce looks tired and prices are higher than regular grocery stores. Convenient for one-stop shopping but quality suffers."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ prices          │ negative  │  -0.99 😞 │ section is hit or miss Produ... │
+│ quality         │ negative  │  -1.00 😞 │ grocery stores Convenient fo... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. PRICES 😞
+      Sentiment: negative (score: -0.992, confidence: 0.992)
+      Context: "section is hit or miss Produce looks tired and prices are higher than regular grocery stores Convenient for one"
+
+   2. QUALITY 😞
+      Sentiment: negative (score: -0.996, confidence: 0.996)
+      Context: "grocery stores Convenient for one stop shopping but quality suffers"
+
+
+😊 Emotion Analysis:
+   Sadness      [██████████████░] 100.0%
+   Joy          [██████████████░] 100.0%
+   Anger        [████████░░░░░░░] 58.4%
+   Fear         [██████░░░░░░░░░] 40.5%
+   Surprise     [░░░░░░░░░░░░░░░] 0.2%
+
+🎭 Sarcasm Analysis:
+   Detection: sarcastic
+   Confidence: 99.9%
+   ⚠️  Sarcasm detected - review context carefully
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.487s
+   preprocessing_time: 0.008s
+   rule_based_time: 0.007s
+   transformer_sentiment_time: 0.209s
+   absa_time: 0.089s
+   emotion_time: 0.079s
+   sarcasm_time: 0.094s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #900b4187-5324-42fd-b90c-5e7bd347ee21 ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Nordstrom customer service is unmatched. Returned a dress I wore once (with tags) no questions asked. Sales associates are knowledgeable and not pushy. You pay more but get more."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ service         │ positive  │  +0.99 😊 │ Nordstrom customer service i... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. SERVICE 😊
+      Sentiment: positive (score: +0.994, confidence: 0.994)
+      Context: "Nordstrom customer service is unmatched Returned a dress I wore once"
+
+
+😊 Emotion Analysis:
+   Anger        [██████████████░] 100.0%
+   Joy          [█████████████░░] 90.7%
+   Love         [█░░░░░░░░░░░░░░] 7.2%
+   Sadness      [░░░░░░░░░░░░░░░] 3.2%
+   Surprise     [░░░░░░░░░░░░░░░] 0.1%
+
+🎭 Sarcasm Analysis:
+   Detection: not_sarcastic
+   Confidence: 100.0%
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.304s
+   preprocessing_time: 0.009s
+   rule_based_time: 0.008s
+   transformer_sentiment_time: 0.067s
+   absa_time: 0.056s
+   emotion_time: 0.128s
+   sarcasm_time: 0.035s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #8b3b381f-36f0-4576-8989-ac472069d537 ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Walmart self-checkout is a joke. Half the scanners don't work and you need assistance for everything. Employees act like helping customers is a burden. Shop elsewhere if you can."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ employees       │ negative  │  -0.99 😞 │ do n't work and you need ass... │
+│ everything      │ negative  │  -0.79 😞 │ the scanners do n't work and... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. EMPLOYEES 😞
+      Sentiment: negative (score: -0.993, confidence: 0.993)
+      Context: "do n't work and you need assistance for everything Employees act like helping customers is a burden Shop elsewhere"
+
+   2. EVERYTHING 😞
+      Sentiment: negative (score: -0.792, confidence: 0.792)
+      Context: "the scanners do n't work and you need assistance for everything Employees act like helping customers is a burden"
+
+
+😊 Emotion Analysis:
+   Joy          [██████████████░] 99.8%
+   Anger        [██████████████░] 96.5%
+   Fear         [█████░░░░░░░░░░] 39.1%
+   Sadness      [█████░░░░░░░░░░] 35.2%
+   Love         [░░░░░░░░░░░░░░░] 1.3%
+
+🎭 Sarcasm Analysis:
+   Detection: sarcastic
+   Confidence: 100.0%
+   ⚠️  Sarcasm detected - review context carefully
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.305s
+   preprocessing_time: 0.008s
+   rule_based_time: 0.008s
+   transformer_sentiment_time: 0.064s
+   absa_time: 0.089s
+   emotion_time: 0.102s
+   sarcasm_time: 0.034s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #9f48eb61-db9d-41e0-acf5-ef5b990d2d46 ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"AMC theaters are overpriced for what you get. Sticky floors, broken seats, and $15 popcorn. The IMAX experience was good but not worth the premium. Netflix at home is better."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ experience      │ positive  │  +0.99 😊 │ broken seats and $ 15 popcor... │
+│ seats           │ negative  │  -1.00 😞 │ overpriced for what you get ... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. EXPERIENCE 😊
+      Sentiment: positive (score: +0.991, confidence: 0.991)
+      Context: "broken seats and $ 15 popcorn The IMAX experience was good but not worth the premium Netflix at"
+
+   2. SEATS 😞
+      Sentiment: negative (score: -0.996, confidence: 0.996)
+      Context: "overpriced for what you get Sticky floors broken seats and $ 15 popcorn The IMAX experience was"
+
+
+😊 Emotion Analysis:
+   Anger        [██████████████░] 100.0%
+   Joy          [██████████████░] 100.0%
+   Fear         [█░░░░░░░░░░░░░░] 6.9%
+   Sadness      [░░░░░░░░░░░░░░░] 0.9%
+   Surprise     [░░░░░░░░░░░░░░░] 0.1%
+
+🎭 Sarcasm Analysis:
+   Detection: not_sarcastic
+   Confidence: 96.1%
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.278s
+   preprocessing_time: 0.009s
+   rule_based_time: 0.008s
+   transformer_sentiment_time: 0.058s
+   absa_time: 0.081s
+   emotion_time: 0.090s
+   sarcasm_time: 0.032s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #c872be92-3503-40f3-90f4-d36ec1b0630d ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Local drive-in theater is a hidden gem! Nostalgic experience with current movies. Bring blankets and snacks. Sound quality through car radio is surprisingly good. Fun date night!"
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ experience      │ positive  │  +1.00 😊 │ drive in theater is a hidden... │
+│ quality         │ positive  │  +0.99 😊 │ with current movies Bring bl... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. EXPERIENCE 😊
+      Sentiment: positive (score: +0.995, confidence: 0.995)
+      Context: "drive in theater is a hidden gem Nostalgic experience with current movies Bring blankets and snacks Sound"
+
+   2. QUALITY 😊
+      Sentiment: positive (score: +0.989, confidence: 0.989)
+      Context: "with current movies Bring blankets and snacks Sound quality through car radio is surprisingly good Fun date night"
+
+
+😊 Emotion Analysis:
+   Joy          [██████████████░] 100.0%
+   Love         [████████░░░░░░░] 57.4%
+   Anger        [██░░░░░░░░░░░░░] 17.5%
+   Sadness      [█░░░░░░░░░░░░░░] 12.1%
+   Surprise     [░░░░░░░░░░░░░░░] 5.3%
+
+🎭 Sarcasm Analysis:
+   Detection: not_sarcastic
+   Confidence: 100.0%
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.360s
+   preprocessing_time: 0.009s
+   rule_based_time: 0.008s
+   transformer_sentiment_time: 0.070s
+   absa_time: 0.089s
+   emotion_time: 0.149s
+   sarcasm_time: 0.035s
+   fusion_time: 0.000s
+
+
+
+
+==========================================================================================
+REVIEW #579f6c5f-f931-45e3-bca4-e53b1ad1d04b ANALYSIS REPORT
+==========================================================================================
+
+📝 ORIGINAL REVIEW TEXT
+------------------------------
+"Regal Cinemas remodel looks great but they somehow made the seats smaller. Concession lines are always understaffed. Movie selection is standard but facilities are clean."
+
+🎯 FINAL SENTIMENT PREDICTION
+   Result: NEUTRAL 😐
+   Confidence: [░░░░░░░░░░░░░░░░░░░░] 0.0%
+   ⚠️  LOW CONFIDENCE - Consider human review
+
+📊 DETAILED ANALYSIS
+------------------------------
+
+🔍 Aspect-Based Analysis:
+┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
+│     Aspect      │ Sentiment │   Score   │           Context Phrase        │
+├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
+│ seats           │ negative  │  -0.99 😞 │ Regal Cinemas remodel looks ... │
+└─────────────────┴───────────┴───────────┴─────────────────────────────────┘
+
+📖 Detailed Aspect Context:
+   1. SEATS 😞
+      Sentiment: negative (score: -0.995, confidence: 0.995)
+      Context: "Regal Cinemas remodel looks great but they somehow made the seats smaller Concession lines are always understaffed Movie selection"
+
+
+😊 Emotion Analysis:
+   Joy          [██████████████░] 100.0%
+   Sadness      [███████░░░░░░░░] 49.7%
+   Anger        [██████░░░░░░░░░] 44.3%
+   Fear         [░░░░░░░░░░░░░░░] 5.9%
+   Love         [░░░░░░░░░░░░░░░] 0.0%
+
+🎭 Sarcasm Analysis:
+   Detection: not_sarcastic
+   Confidence: 99.9%
+
+⚙️  TECHNICAL DETAILS
+------------------------------
+
+Model Signal Analysis:
+
+⏱ Pipeline Timing:
+   Total processing time: 0.251s
+   preprocessing_time: 0.008s
+   rule_based_time: 0.007s
+   transformer_sentiment_time: 0.065s
+   absa_time: 0.053s
+   emotion_time: 0.082s
+   sarcasm_time: 0.036s
+   fusion_time: 0.000s

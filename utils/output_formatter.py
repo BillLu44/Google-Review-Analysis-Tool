@@ -23,6 +23,54 @@ def format_sentiment_emoji(label: str) -> str:
     }
     return emoji_map.get(label, '❓')
 
+def format_aspect_table(aspects: List[Dict]) -> str:
+    """Format aspects into a readable table with context phrases"""
+    if not aspects:
+        return "No aspects detected"
+    
+    lines = []
+    lines.append("┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐")
+    lines.append("│     Aspect      │ Sentiment │   Score   │           Context Phrase        │")
+    lines.append("├─────────────────┼───────────┼───────────┼─────────────────────────────────┤")
+    
+    for aspect in aspects:
+        name = aspect.get('aspect', 'unknown')[:15].ljust(15)
+        sentiment = aspect.get('sentiment_label', 'neutral')
+        score = aspect.get('sentiment_score', 0.0)
+        context = aspect.get('context_phrase', 'N/A')[:31]  # Truncate long phrases
+        emoji = format_sentiment_emoji(sentiment)
+        
+        # If context is too long, truncate with ellipsis
+        if len(aspect.get('context_phrase', '')) > 31:
+            context = context[:28] + "..."
+        context = context.ljust(31)
+        
+        lines.append(f"│ {name} │ {sentiment[:9].ljust(9)} │ {score:+6.2f} {emoji} │ {context} │")
+    
+    lines.append("└─────────────────┴───────────┴───────────┴─────────────────────────────────┘")
+    return "\n".join(lines)
+
+def format_emotion_scores(emotion_data: Dict) -> str:
+    """Format emotion scores into readable text"""
+    if not emotion_data or not isinstance(emotion_data, dict):
+        return "😶 Emotion Analysis:\n   No emotion data available"
+    
+    lines = []
+    lines.append("😊 Emotion Analysis:")
+    
+    emotions = emotion_data.get('all_emotion_scores', {})
+    if emotions and isinstance(emotions, dict):
+        # Sort emotions by score
+        sorted_emotions = sorted(emotions.items(), key=lambda x: x[1], reverse=True)
+        
+        for emotion, score in sorted_emotions[:5]:  # Show top 5 emotions
+            bar = format_confidence_bar(score, width=15)
+            lines.append(f"   {emotion.capitalize():12} {bar}")
+    else:
+        lines.append("   No emotion scores available")
+    
+    return "\n".join(lines)
+
 def format_executive_summary(results: List[Dict]) -> str:
     """Create executive summary with key statistics"""
     if not results:
@@ -64,15 +112,22 @@ def format_executive_summary(results: List[Dict]) -> str:
         lines.append(f"   {sentiment.capitalize():10} {count:3d} ({percentage:5.1f}%) {bar} {emoji}")
     lines.append("")
     
-    # Top aspects mentioned
+    # Top aspects mentioned with sample phrases
     all_aspects = {}
+    aspect_phrases = {}  # Store sample phrases for each aspect
     for result in results:
         for aspect in result.get('aspects', []):
             aspect_name = aspect.get('aspect', 'unknown')
             if aspect_name not in all_aspects:
                 all_aspects[aspect_name] = {'positive': 0, 'negative': 0, 'neutral': 0}
+                aspect_phrases[aspect_name] = []
             sentiment = aspect.get('sentiment_label', 'neutral')
             all_aspects[aspect_name][sentiment] += 1
+            
+            # Store sample context phrase
+            context = aspect.get('context_phrase', '')
+            if context and len(aspect_phrases[aspect_name]) < 2:  # Store max 2 examples
+                aspect_phrases[aspect_name].append(context[:50])  # Truncate long phrases
     
     if all_aspects:
         lines.append("🔍 TOP ASPECTS MENTIONED")
@@ -82,6 +137,12 @@ def format_executive_summary(results: List[Dict]) -> str:
             pos_pct = counts['positive'] / total * 100
             neg_pct = counts['negative'] / total * 100
             lines.append(f"   {aspect.title():12} ({total:2d}x) - Pos: {pos_pct:4.1f}% | Neg: {neg_pct:4.1f}%")
+            
+            # Add sample phrases
+            if aspect in aspect_phrases and aspect_phrases[aspect]:
+                sample_phrases = aspect_phrases[aspect][:2]  # Show up to 2 examples
+                for phrase in sample_phrases:
+                    lines.append(f"     └─ \"{phrase}\"")
         lines.append("")
     
     # Model performance insights
@@ -114,99 +175,20 @@ def format_executive_summary(results: List[Dict]) -> str:
     
     return "\n".join(lines)
 
-def format_aspect_table(aspects: List[Dict]) -> str:
-    """Format aspects into a readable table"""
-    if not aspects:
-        return "No aspects detected"
-    
-    lines = []
-    lines.append("┌─────────────────┬───────────┬───────────┐")
-    lines.append("│     Aspect      │ Sentiment │   Score   │")
-    lines.append("├─────────────────┼───────────┼───────────┤")
-    
-    for aspect in aspects:
-        name = aspect.get('aspect', 'unknown')[:15].ljust(15)
-        sentiment = aspect.get('sentiment_label', 'neutral')
-        score = aspect.get('sentiment_score', 0.0)
-        emoji = format_sentiment_emoji(sentiment)
-        
-        lines.append(f"│ {name} │ {sentiment[:9].ljust(9)} │ {score:+6.2f} {emoji} │")
-    
-    lines.append("└─────────────────┴───────────┴───────────┘")
-    return "\n".join(lines)
-
-def format_emotion_scores(emotion_output: Dict[str, Any]) -> str:
-    """Format emotion scores showing raw intensities, not normalized percentages."""
-    emotions = emotion_output.get('all_emotion_scores')
-    if not emotions:
-        return "No emotions detected"
-
-    # Sort by raw score (not normalized)
-    sorted_emotions = sorted(emotions.items(), key=lambda x: x[1], reverse=True)
-
-    lines = []
-    lines.append("Emotion Analysis (raw intensities):")
-    
-    for emotion, raw_score in sorted_emotions:
-        # Show raw score as percentage of maximum possible (1.0)
-        bar = format_confidence_bar(raw_score, width=15)  # raw_score is already 0-1
-        lines.append(f"  {emotion.capitalize():10} {bar} ({raw_score:.3f})")
-    
-    # Add summary stats
-    lines.append(f"  Emotion Score (Total Weight): {emotion_output.get('emotion_score', 0.0):.3f}")
-    lines.append(f"  Emotion Confidence (Avg): {emotion_output.get('emotion_confidence', 0.0):.3f}")
-    lines.append(f"  Emotion Distribution (Entropy): {emotion_output.get('emotion_distribution', 0.0):.3f}")
-    return "\n".join(lines)
-
-def format_pipeline_timing(result: Dict) -> str:
-    """Format timing information"""
-    timing_fields = [
-        ('preprocessing_time', 'Preprocessing'),
-        ('rule_based_time', 'Rule-based'),
-        ('transformer_sentiment_time', 'Transformer'),
-        ('absa_time', 'ABSA'),
-        ('emotion_time', 'Emotion'),
-        ('sarcasm_time', 'Sarcasm'),
-        ('fusion_time', 'Fusion')
-    ]
-    
-    lines = []
-    lines.append("Performance Timing:")
-    total_time = sum(result.get(field, 0) for field, _ in timing_fields)
-    
-    for field, label in timing_fields:
-        time_ms = result.get(field, 0) * 1000  # Convert to ms
-        lines.append(f"  {label:15} {time_ms:6.1f}ms")
-    
-    lines.append(f"  {'Total':15} {total_time * 1000:6.1f}ms")
-    return "\n".join(lines)
-
 def format_signals_summary(signals: Dict) -> str:
-    """Format the fusion signals"""
+    """Format model signals into readable text"""
+    if not signals or not isinstance(signals, dict):
+        return "No signal data available"
+    
     lines = []
-    lines.append("Signal Analysis (Features fed to Fusion Model):")
+    lines.append("Model Signal Analysis:")
     
-    # Matches the order in fusion.py feature_names for consistency
-    signal_info = [
-        ('rule_score', 'Rule Score (int)', lambda x: f"{x:3.0f}"),
-        ('rule_polarity', 'Rule Polarity', lambda x: f"{x:+6.3f}"),
-        ('sentiment_score', 'Overall Sent. Score', lambda x: f"{x:+6.3f}"),
-        ('sentiment_confidence', 'Overall Sent. Conf.', lambda x: f"{x:6.3f}"),
-        ('num_pos_aspects', 'Num Positive Aspects', lambda x: f"{x:3.0f}"),
-        ('num_neg_aspects', 'Num Negative Aspects', lambda x: f"{x:3.0f}"),
-        ('avg_aspect_score', 'Avg Aspect Score', lambda x: f"{x:+6.3f}"),
-        ('avg_aspect_confidence', 'Avg Aspect Conf.', lambda x: f"{x:6.3f}"),
-        ('emotion_score', 'Emotion Score (Weight)', lambda x: f"{x:6.3f}"),
-        ('emotion_confidence', 'Emotion Confidence (Avg)', lambda x: f"{x:6.3f}"),
-        ('emotion_distribution', 'Emotion Distribution', lambda x: f"{x:6.3f}"),
-        ('sarcasm_score', 'Sarcasm Score (binary)', lambda x: f"{x:3.0f}"),
-        ('sarcasm_confidence', 'Sarcasm Confidence', lambda x: f"{x:6.3f}")
-    ]
-    
-    for key, label, formatter in signal_info:
-        value = signals.get(key, 0.0) # Default to 0.0 if a signal is somehow missing
-        formatted_value = formatter(value)
-        lines.append(f"  {label:28} {formatted_value}")
+    # Process each signal
+    for model_name, signal in signals.items():
+        if isinstance(signal, dict):
+            label = signal.get('label', 'unknown')
+            confidence = signal.get('confidence', 0.0)
+            lines.append(f"   {model_name}: {label.capitalize()} (confidence: {confidence:.3f})")
     
     return "\n".join(lines)
 
@@ -220,9 +202,9 @@ def format_single_result(result: Dict) -> str:
     
     # Header
     lines = []
-    lines.append("=" * 70)
+    lines.append("=" * 90)  # Made wider to accommodate context phrases
     lines.append(f"REVIEW #{review_id} ANALYSIS REPORT")
-    lines.append("=" * 70)
+    lines.append("=" * 90)
     lines.append("")
     
     # Show original text first for easy reference
@@ -256,26 +238,44 @@ def format_single_result(result: Dict) -> str:
     lines.append("-" * 30)
     lines.append("")
     
-    # Aspects
-    aspects = result.get('aspects', []) # This should be aspect_details list
+    # Aspects with context
+    aspects = result.get('aspects', [])
     lines.append("🔍 Aspect-Based Analysis:")
     lines.append(format_aspect_table(aspects))
+    
+    # Add detailed aspect context if available
+    if aspects:
+        lines.append("")
+        lines.append("📖 Detailed Aspect Context:")
+        for i, aspect in enumerate(aspects, 1):
+            aspect_name = aspect.get('aspect', 'unknown')
+            sentiment = aspect.get('sentiment_label', 'neutral')
+            score = aspect.get('sentiment_score', 0.0)
+            context = aspect.get('context_phrase', 'No context available')
+            confidence = aspect.get('confidence', 0.0)
+            
+            emoji = format_sentiment_emoji(sentiment)
+            lines.append(f"   {i}. {aspect_name.upper()} {emoji}")
+            lines.append(f"      Sentiment: {sentiment} (score: {score:+.3f}, confidence: {confidence:.3f})")
+            lines.append(f"      Context: \"{context}\"")
+            lines.append("")
+    
     lines.append("")
     
     # Emotions
-    emotion_data = result.get('emotion_scores', {}) # This is the full emotion_output dict
+    emotion_data = result.get('emotion_scores', {})
     lines.append(format_emotion_scores(emotion_data))
     lines.append("")
     
     # Sarcasm
     sarcasm = result.get('sarcasm', {})
     sarcasm_label = sarcasm.get('sarcasm_label', 'not_sarcastic')
-    sarcasm_score = sarcasm.get('sarcasm_score', 0.0) # This is the binary 0/1 score
-    sarcasm_confidence_val = sarcasm.get('sarcasm_confidence', 0.0) # This is the actual confidence
+    sarcasm_score = sarcasm.get('sarcasm_score', 0.0)
+    sarcasm_confidence_val = sarcasm.get('sarcasm_confidence', 0.0)
 
     lines.append("🎭 Sarcasm Analysis:")
     lines.append(f"   Detection: {sarcasm_label}")
-    lines.append(f"   Confidence: {sarcasm_confidence_val:.1%}") # Use sarcasm_confidence_val
+    lines.append(f"   Confidence: {sarcasm_confidence_val:.1%}")
     if sarcasm_label == 'sarcastic':
         lines.append("   ⚠️  Sarcasm detected - review context carefully")
     lines.append("")
@@ -291,6 +291,26 @@ def format_single_result(result: Dict) -> str:
     
     lines.append(format_pipeline_timing(result))
     lines.append("")
+    
+    return "\n".join(lines)
+
+def format_pipeline_timing(result: Dict) -> str:
+    """Format pipeline timing information"""
+    timing = result.get('timing', {})
+    if not timing or not isinstance(timing, dict):
+        return "Pipeline Timing: No timing data available"
+    
+    lines = []
+    lines.append("⏱ Pipeline Timing:")
+    
+    # Process timing data
+    total_time = timing.get('total_time', 0)
+    lines.append(f"   Total processing time: {total_time:.3f}s")
+    
+    # Add individual component timings if available
+    for component, time in timing.items():
+        if component != 'total_time':
+            lines.append(f"   {component}: {time:.3f}s")
     
     return "\n".join(lines)
 

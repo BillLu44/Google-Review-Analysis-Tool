@@ -2,8 +2,8 @@
 # Author: Bill Lu
 # Description: Sets up a JSON-formatted logger with console and rotating file handlers.
 
-import logging
 import os
+import logging
 from logging.handlers import TimedRotatingFileHandler
 from pythonjsonlogger import jsonlogger
 from datetime import datetime

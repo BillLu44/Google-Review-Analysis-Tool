@@ -102,3 +102,43 @@ def rule_based_sentiment(text: str) -> dict:
         'rule_score': rule_score_int, # Integer score
         'rule_label': rule_label
     }
+
+if __name__ == "__main__":
+    logger.info("--- Running Rule-Based Sentiment Tests ---")
+    
+    failed_sarcasm_test_cases = [
+        "This 2 michelin star restaurant is so good, it's almost as good as the mcdonald's nearby!",
+        "Five stars for creativity: turning a salad into soup with dressing alone is impressive.",
+        "Came here for dinner, left with stories. Can’t say that about many places.",
+        "A truly intimate experience — we were close enough to share meals with the table next to us.",
+        "So efficient — they brought the check before we even ordered.",
+        "The 'gourmet' burger here is so refined, it's just a short step away from a fast-food patty.",
+        "The ambiance was so communal, we could hear every detail of the neighboring table's argument. Really felt like part of the family.",
+        "The music volume was perfect for those who enjoy a concert with their meal. Lip-reading skills definitely improved.",
+        "The service was 'excellent', if you consider being ignored a skill.", # Adding another common sarcastic structure
+        "Oh, I absolutely *love* waiting 30 minutes on hold for customer service." # Classic VADER test
+    ]
+
+    for i, text in enumerate(failed_sarcasm_test_cases):
+        print(f"\nTest Case #{i+1}: \"{text}\"")
+        results = rule_based_sentiment(text)
+        print(f"  VADER Score (Avg): {results['vader_score']:.4f}")
+        print(f"  TextBlob Polarity (Avg): {results['textblob_polarity']:.4f}")
+        print(f"  Combined Rule Polarity: {results['rule_polarity']:.4f}")
+        print(f"  Rule Label: {results['rule_label']}")
+        print(f"  Rule Score (Int): {results['rule_score']}")
+
+    print("\n--- Some non-sarcastic examples ---")
+    non_sarcastic_examples = [
+        "The food was delicious and the service was excellent.",
+        "I had a terrible time, the staff was rude.",
+        "It was an okay experience, nothing special."
+    ]
+    for i, text in enumerate(non_sarcastic_examples):
+        print(f"\nNon-Sarcastic Example #{i+1}: \"{text}\"")
+        results = rule_based_sentiment(text)
+        print(f"  VADER Score (Avg): {results['vader_score']:.4f}")
+        print(f"  TextBlob Polarity (Avg): {results['textblob_polarity']:.4f}")
+        print(f"  Combined Rule Polarity: {results['rule_polarity']:.4f}")
+        print(f"  Rule Label: {results['rule_label']}")
+        print(f"  Rule Score (Int): {results['rule_score']}")

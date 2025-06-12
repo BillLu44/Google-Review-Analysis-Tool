@@ -6,6 +6,7 @@ import os
 import json # Make sure json is imported if used (it is for config)
 from typing import List, Dict
 from transformers import pipeline, AutoTokenizer
+from unittest.mock import MagicMock
 from pipeline.logger import get_logger
 from pipeline.preprocessing import preprocess_text
 
@@ -402,7 +403,7 @@ def analyze_complex_aspects(text: str, aspect: str) -> Dict:
 
 
 if __name__ == "__main__":
-    test_text_main = "The food was amazing but the service was terrible and slow."
+    test_text_main =   "Could this coffee be any better?"
     result_dict_main = analyze_absa(test_text_main)
     
     print("\n--- ABSA Analysis Results ---")
@@ -410,18 +411,27 @@ if __name__ == "__main__":
     print("Detailed Aspect Sentiments:")
     if result_dict_main.get('aspect_details'):
         for detail in result_dict_main['aspect_details']:
-            # clause_text = detail.get('clause', 'N/A') # 'mentions' might have clauses
+            clause_info = ""
+            # If the aspect was found in a single clause, 'clause' will be directly in 'detail'
+            if 'clause' in detail and not detail.get('mentions'): # Check not detail.get('mentions') to avoid double printing if clause is also at top level for aggregated
+                clause_text = detail['clause']
+                clause_info = f"Clause: '{clause_text[:70]}{'...' if len(clause_text) > 70 else ''}'"
+            
             print(
                 f"  - Aspect: {detail.get('aspect', 'N/A'):<15} "
                 f"Label: {detail.get('sentiment_label', 'N/A'):<10} "
                 f"Score: {detail.get('sentiment_score', 0.0):>6.3f} "
                 f"Confidence: {detail.get('confidence', 0.0):>6.3f} "
+                f"{clause_info}" # Display the clause here
             )
+            
+            # If the aspect had multiple mentions (e.g., in different parts of a longer text or complex sentence)
             if 'mentions' in detail:
+                print(f"    Mentions for '{detail.get('aspect', 'N/A')}':")
                 for mention in detail['mentions']:
                     m_clause = mention.get('clause', 'N/A')
                     print(
-                        f"    - Mention Clause: '{m_clause[:30]}...' "
+                        f"      - Clause: '{m_clause[:60]}{'...' if len(m_clause) > 60 else ''}' "
                         f"Label: {mention.get('sentiment_label', 'N/A'):<10} "
                         f"Score: {mention.get('sentiment_score', 0.0):>6.3f} "
                     )
@@ -444,8 +454,8 @@ if __name__ == "__main__":
     #     print(f"Sentiment: {result_single_no_but['aspect_details'][0].get('sentiment_label')}")
     # print("----------------------------------\n")
 
-    # test_complex_flip_text = "Oh wonderful, the food was just terrible." # Sarcasm + negative
-    # aspect_food = "food"
+    # test_complex_flip_text = "Perfect place if you're into overpriced sadness and watered-down cocktails." # Sarcasm + negative
+    # aspect_food = "place"
     # print(f"\n--- Test: Complex Sentiment Flip ---")
     # print(f"Input: \"{test_complex_flip_text}\", Aspect: {aspect_food}")
     # # Direct call to analyze_complex_aspects for focused test

@@ -3,15 +3,22 @@
 # Description: Aspect-Based Sentiment Analysis using yangheng/deberta-v3-base-absa-v1.1 model
 
 import os
-import json # Make sure json is imported if used (it is for config)
+import json
 from typing import List, Dict
 from transformers import pipeline, AutoTokenizer
 from unittest.mock import MagicMock
 from pipeline.logger import get_logger
 from pipeline.preprocessing import preprocess_text
+import spacy
+from spacy.matcher import Matcher
 
 # Initialize logger
 logger = get_logger(__name__)
+
+# load spaCy model & build a simple NP matcher
+nlp = spacy.load("en_core_web_sm", disable=["ner","textcat"])
+matcher = Matcher(nlp.vocab)
+matcher.add("NP_PATTERN", [[{"POS": "ADJ", "OP": "*"}, {"POS": "NOUN", "OP": "+"}]])
 
 # Load configuration
 CONFIG_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config.json')
@@ -80,13 +87,17 @@ def extract_aspects(text: str) -> List[str]:
     if not text or not text.strip():
         return ["overall"]
 
-    processed = preprocess_text(text)
-    doc = processed['doc']
-    
-    # Use tokens directly for matching COMMON_ASPECTS as they are mostly concrete nouns
-    text_tokens_lower = {token.text.lower() for token in doc if token.is_alpha}
-    found_aspects = {asp for asp in COMMON_ASPECTS if asp in text_tokens_lower}
+    # extract noun-chunks & matcher spans
+    doc = nlp(text)
+    noun_chunks = {chunk.text.lower().strip() for chunk in doc.noun_chunks}
+    matched_spans = set()
+    for _mid, start, end in matcher(doc):
+        span = doc[start:end]
+        matched_spans.add(span.text.lower().strip())
 
+    # combine and filter by known aspects
+    candidates = noun_chunks | matched_spans
+    found_aspects = {asp for asp in COMMON_ASPECTS if asp in candidates}
     if not found_aspects:
         return ["overall"]
 

@@ -1,0 +1,41 @@
+SpaCy Tools: 
+
+eng_spacysentiment
+Concise Concepts
+Classy Classification
+Asent
+
+------------------------------------------------------------------------------------------------
+
+Sarcasm Classification Models
+
+dnzblgn/Sarcasm-Detection-Customer-Reviews
+helinivan/english-sarcasm-detector
+AventIQ-AI/Sarcasmdetection
+kokomoreno/reviews-sarcasm-detection-model
+
+------------------------------------------------------------------------------------------------
+
+Overall Sentiment Classification Models:
+
+siebert/sentiment-roberta-large-english
+RashidNLP/Amazon-Deberta-Base-Sentiment
+dnzblgn/Sentiment-Analysis-Customer-Reviews
+Elron/deberta-v3-large-sentiment
+Kaludi/Reviews-Sentiment-Analysis
+tabularisai/robust-sentiment-analysis
+tabularisai/multilingual-sentiment-analysis
+
+# Yelp-Trained Models (High Performance on Restaurant/Review Data)
+VictorSanh/roberta-base-finetuned-yelp-polarity
+textattack/bert-base-uncased-yelp-polarity
+AirrStorm/DistilBERT-SST2-Yelp
+karimbkh/BERT_fineTuned_Sentiment_Classification_Yelp
+pig4431/YELP_roBERTa_5E
+
+------------------------------------------------------------------------------------------------
+
+Emotion Classification Models:
+
+j-hartmann/emotion-english-distilroberta-base
+AnkitAI/deberta-v3-small-base-emotions-classifier

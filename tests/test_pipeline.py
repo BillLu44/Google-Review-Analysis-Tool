@@ -245,17 +245,41 @@ def run_tests():
             'total_time': round(t7 - t0, 3)
         }
 
+        # Prepare the 'signals' dictionary for format_signals_summary
+        overall_sentiment_display_label = "neutral"
+        if sentiment_output['sentiment'] == 1:
+            overall_sentiment_display_label = "positive"
+        elif sentiment_output['sentiment'] == -1:
+            overall_sentiment_display_label = "negative"
+
+        signals_for_file_display = {
+            'OverallSentiment (Transformer)': {
+                'label': overall_sentiment_display_label,
+                'confidence': sentiment_output['confidence_score']
+            },
+            'RuleBasedSentiment (VADER/TextBlob)': {
+                'label': rule_output['rule_label'],
+                'confidence': abs(rule_output['rule_polarity']) # Using absolute polarity as confidence proxy
+            }
+            # Sarcasm, Emotion, and Aspects are handled by their own dedicated formatters
+            # in format_single_result, so they are not strictly needed here for format_signals_summary.
+            # However, the full outputs are still passed for other formatting functions.
+        }
+
         result = {
             'review_id': rid,
             'text': text,
-            'timing': timing_data,  # Add timing data
-            'signals': signals,
+            'timing': timing_data,
+            'signals': signals_for_file_display, # Use the correctly formatted signals for display
             'fused': fused,
-            'aspects': absa_output['aspect_details'],
-            'emotion_scores': emotion_output,
-            'sarcasm': sarcasm_output,
-            'rule': rule_output,
-            'sentiment': sentiment_output
+            'aspects': absa_output.get('aspect_details', []), # Ensure aspects key matches format_single_result
+            'emotion_scores': emotion_output, # Ensure emotion_scores key matches format_single_result
+            'sarcasm': sarcasm_output, # Ensure sarcasm key matches format_single_result
+            # Keep raw outputs if needed for other parts of logging or detailed debugging,
+            # but 'signals' above is what format_signals_summary will use.
+            '_raw_signals_for_fusion': signals, # Optional: keep original signals if needed elsewhere
+            '_raw_rule_output': rule_output,
+            '_raw_sentiment_output': sentiment_output
         }
 
         all_results.append(result)

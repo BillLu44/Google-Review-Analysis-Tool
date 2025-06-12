@@ -1,5 +1,5 @@
 🤖 AI SENTIMENT ANALYSIS PIPELINE RESULTS
-Generated: 2025-06-12 15:12:21
+Generated: 2025-06-12 17:02:25
 
 📊 EXECUTIVE SUMMARY
 ==================================================
@@ -17,15 +17,13 @@ Generated: 2025-06-12 15:12:21
    Staff        ( 6x) - Pos: 83.3% | Neg: 16.7%
      └─ "West Sacramento has everything you need for home f"
      └─ "hair into something gorgeous The salon is clean st"
-   Overall      ( 5x) - Pos: 60.0% | Neg: 20.0%
-     └─ "the hex keys Assembly instructions could be cleare"
-     └─ "things interesting Locker rooms could use an updat"
    Quality      ( 4x) - Pos: 50.0% | Neg: 50.0%
      └─ "would last years but the cushions are completely f"
      └─ "Make an appointment or you 'll wait forever Work q"
    Everything   ( 4x) - Pos: 75.0% | Neg: 25.0%
      └─ "IKEA West Sacramento has everything you need for h"
      └─ "expected and for less than quoted The technician e"
+   Overall      ( 4x) - Pos: 50.0% | Neg: 25.0%
    Service      ( 3x) - Pos: 100.0% | Neg:  0.0%
      └─ "Great service terrible location Parking is impossi"
      └─ "beginner Fish are healthy and beautiful Great cust"
@@ -43,7 +41,7 @@ Generated: 2025-06-12 15:12:21
 ======================================================================
 
 ==========================================================================================
-REVIEW #7b1aa192-39f9-4939-87e9-5026b5b31eb9 ANALYSIS REPORT
+REVIEW #8fa6bf9f-95f7-499e-b6f3-510060d4790a ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -92,22 +90,24 @@ REVIEW #7b1aa192-39f9-4939-87e9-5026b5b31eb9 ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Negative (confidence: 0.999)
+   RuleBasedSentiment (VADER/TextBlob): Negative (confidence: 0.217)
 
 ⏱ Pipeline Timing:
-   Total processing time: 1.672s
-   preprocessing_time: 0.016s
-   rule_based_time: 0.026s
-   transformer_sentiment_time: 0.903s
-   absa_time: 0.266s
-   emotion_time: 0.381s
-   sarcasm_time: 0.079s
+   Total processing time: 0.870s
+   preprocessing_time: 0.013s
+   rule_based_time: 0.028s
+   transformer_sentiment_time: 0.278s
+   absa_time: 0.166s
+   emotion_time: 0.351s
+   sarcasm_time: 0.033s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #7f989e1d-544b-4c53-83c3-5b551c5de32c ANALYSIS REPORT
+REVIEW #6a65742b-f234-4c5e-ae75-cbcd1d727a39 ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -127,7 +127,6 @@ REVIEW #7f989e1d-544b-4c53-83c3-5b551c5de32c ANALYSIS REPORT
 │     Aspect      │ Sentiment │   Score   │           Context Phrase        │
 ├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
 │ everything      │ positive  │  +0.98 😊 │ IKEA West Sacramento has eve... │
-│ overall         │ positive  │  +0.91 😊 │ the hex keys Assembly instru... │
 │ staff           │ positive  │  +0.99 😊 │ West Sacramento has everythi... │
 │ value           │ positive  │  +0.99 😊 │ keys Assembly instructions c... │
 └─────────────────┴───────────┴───────────┴─────────────────────────────────┘
@@ -137,15 +136,11 @@ REVIEW #7f989e1d-544b-4c53-83c3-5b551c5de32c ANALYSIS REPORT
       Sentiment: positive (score: +0.982, confidence: 0.982)
       Context: "IKEA West Sacramento has everything you need for home furnishing Staff was super helpful"
 
-   2. OVERALL 😊
-      Sentiment: positive (score: +0.911, confidence: 0.911)
-      Context: "the hex keys Assembly instructions could be clearer but overall great value"
-
-   3. STAFF 😊
+   2. STAFF 😊
       Sentiment: positive (score: +0.994, confidence: 0.994)
       Context: "West Sacramento has everything you need for home furnishing Staff was super helpful when I could n't find the hex"
 
-   4. VALUE 😊
+   3. VALUE 😊
       Sentiment: positive (score: +0.995, confidence: 0.995)
       Context: "keys Assembly instructions could be clearer but overall great value"
 
@@ -165,22 +160,24 @@ REVIEW #7f989e1d-544b-4c53-83c3-5b551c5de32c ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Positive (confidence: 1.000)
+   RuleBasedSentiment (VADER/TextBlob): Positive (confidence: 0.395)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.757s
-   preprocessing_time: 0.010s
+   Total processing time: 0.662s
+   preprocessing_time: 0.009s
    rule_based_time: 0.008s
-   transformer_sentiment_time: 0.156s
-   absa_time: 0.140s
-   emotion_time: 0.367s
-   sarcasm_time: 0.076s
+   transformer_sentiment_time: 0.131s
+   absa_time: 0.114s
+   emotion_time: 0.370s
+   sarcasm_time: 0.029s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #36e6520c-906e-4329-a87b-3075cfc42d8d ANALYSIS REPORT
+REVIEW #f8bbe89a-a7f3-4338-b6b0-81d78a6ba23d ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -239,22 +236,24 @@ REVIEW #36e6520c-906e-4329-a87b-3075cfc42d8d ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Negative (confidence: 0.988)
+   RuleBasedSentiment (VADER/TextBlob): Negative (confidence: 0.081)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.797s
-   preprocessing_time: 0.009s
+   Total processing time: 0.753s
+   preprocessing_time: 0.010s
    rule_based_time: 0.008s
-   transformer_sentiment_time: 0.160s
-   absa_time: 0.246s
-   emotion_time: 0.299s
-   sarcasm_time: 0.075s
+   transformer_sentiment_time: 0.143s
+   absa_time: 0.259s
+   emotion_time: 0.300s
+   sarcasm_time: 0.033s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #cbaa2c95-5815-4fc5-a511-656949823218 ANALYSIS REPORT
+REVIEW #38f14a4f-8a1a-4a07-b14f-13f1b8a95218 ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -303,22 +302,24 @@ REVIEW #cbaa2c95-5815-4fc5-a511-656949823218 ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Negative (confidence: 1.000)
+   RuleBasedSentiment (VADER/TextBlob): Neutral (confidence: 0.018)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.538s
+   Total processing time: 0.442s
    preprocessing_time: 0.010s
    rule_based_time: 0.009s
-   transformer_sentiment_time: 0.110s
-   absa_time: 0.189s
-   emotion_time: 0.184s
-   sarcasm_time: 0.036s
+   transformer_sentiment_time: 0.036s
+   absa_time: 0.181s
+   emotion_time: 0.171s
+   sarcasm_time: 0.035s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #b77882a0-b5f6-40d1-8216-62a113bca0ca ANALYSIS REPORT
+REVIEW #cf2cfa76-e7cc-4632-9e74-04346c7c5e67 ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -361,22 +362,24 @@ REVIEW #b77882a0-b5f6-40d1-8216-62a113bca0ca ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Positive (confidence: 1.000)
+   RuleBasedSentiment (VADER/TextBlob): Positive (confidence: 0.062)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.514s
+   Total processing time: 0.442s
    preprocessing_time: 0.009s
    rule_based_time: 0.008s
-   transformer_sentiment_time: 0.174s
-   absa_time: 0.051s
-   emotion_time: 0.193s
-   sarcasm_time: 0.080s
+   transformer_sentiment_time: 0.146s
+   absa_time: 0.050s
+   emotion_time: 0.199s
+   sarcasm_time: 0.030s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #ef608f42-d5a3-4d2c-a0aa-072195d345d1 ANALYSIS REPORT
+REVIEW #0582d7ed-9ccf-49e7-827d-10c0baed3d3f ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -398,7 +401,6 @@ REVIEW #ef608f42-d5a3-4d2c-a0aa-072195d345d1 ANALYSIS REPORT
 │ location        │ negative  │  -0.99 😞 │ Great service terrible locat... │
 │ quality         │ positive  │  +0.99 😊 │ Make an appointment or you '... │
 │ service         │ positive  │  +0.99 😊 │ Great service terrible locat... │
-│ wait            │ negative  │  -0.99 😞 │ always backed up Make an app... │
 └─────────────────┴───────────┴───────────┴─────────────────────────────────┘
 
 📖 Detailed Aspect Context:
@@ -413,10 +415,6 @@ REVIEW #ef608f42-d5a3-4d2c-a0aa-072195d345d1 ANALYSIS REPORT
    3. SERVICE 😊
       Sentiment: positive (score: +0.991, confidence: 0.991)
       Context: "Great service terrible location Parking is impossible and they 're"
-
-   4. WAIT 😞
-      Sentiment: negative (score: -0.990, confidence: 0.990)
-      Context: "always backed up Make an appointment or you 'll wait forever Work quality is good though"
 
 
 😊 Emotion Analysis:
@@ -434,22 +432,24 @@ REVIEW #ef608f42-d5a3-4d2c-a0aa-072195d345d1 ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Neutral (confidence: 0.989)
+   RuleBasedSentiment (VADER/TextBlob): Positive (confidence: 0.081)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.639s
+   Total processing time: 0.574s
    preprocessing_time: 0.007s
-   rule_based_time: 0.008s
-   transformer_sentiment_time: 0.169s
-   absa_time: 0.149s
-   emotion_time: 0.228s
-   sarcasm_time: 0.078s
+   rule_based_time: 0.007s
+   transformer_sentiment_time: 0.147s
+   absa_time: 0.129s
+   emotion_time: 0.251s
+   sarcasm_time: 0.033s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #e270f309-f601-42ba-8469-7ecbb014e030 ANALYSIS REPORT
+REVIEW #591173ff-f943-4f0e-a529-e4042a8df3b9 ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -493,22 +493,24 @@ REVIEW #e270f309-f601-42ba-8469-7ecbb014e030 ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Negative (confidence: 0.999)
+   RuleBasedSentiment (VADER/TextBlob): Negative (confidence: 0.331)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.477s
-   preprocessing_time: 0.008s
+   Total processing time: 0.461s
+   preprocessing_time: 0.009s
    rule_based_time: 0.008s
-   transformer_sentiment_time: 0.066s
-   absa_time: 0.057s
-   emotion_time: 0.300s
-   sarcasm_time: 0.037s
+   transformer_sentiment_time: 0.055s
+   absa_time: 0.055s
+   emotion_time: 0.306s
+   sarcasm_time: 0.030s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #f460e884-d173-40f7-89b5-b1429bc9b083 ANALYSIS REPORT
+REVIEW #432d8051-edb9-4882-974b-032b738f3414 ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -556,22 +558,24 @@ REVIEW #f460e884-d173-40f7-89b5-b1429bc9b083 ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Positive (confidence: 0.999)
+   RuleBasedSentiment (VADER/TextBlob): Positive (confidence: 0.338)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.694s
-   preprocessing_time: 0.008s
-   rule_based_time: 0.008s
-   transformer_sentiment_time: 0.175s
-   absa_time: 0.195s
-   emotion_time: 0.228s
-   sarcasm_time: 0.081s
+   Total processing time: 0.633s
+   preprocessing_time: 0.009s
+   rule_based_time: 0.007s
+   transformer_sentiment_time: 0.155s
+   absa_time: 0.192s
+   emotion_time: 0.235s
+   sarcasm_time: 0.036s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #255b81dd-737b-42ab-9fae-6de4a33a78cb ANALYSIS REPORT
+REVIEW #3cdc5581-2147-4361-ac53-1bd88a8486c3 ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -615,22 +619,24 @@ REVIEW #255b81dd-737b-42ab-9fae-6de4a33a78cb ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Negative (confidence: 0.998)
+   RuleBasedSentiment (VADER/TextBlob): Neutral (confidence: 0.038)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.362s
+   Total processing time: 0.333s
    preprocessing_time: 0.007s
-   rule_based_time: 0.008s
-   transformer_sentiment_time: 0.061s
-   absa_time: 0.050s
-   emotion_time: 0.202s
-   sarcasm_time: 0.034s
+   rule_based_time: 0.007s
+   transformer_sentiment_time: 0.048s
+   absa_time: 0.049s
+   emotion_time: 0.192s
+   sarcasm_time: 0.030s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #303c90d4-0d1f-4538-a02b-1ab939342366 ANALYSIS REPORT
+REVIEW #eacb5edf-8d2d-449b-a1ad-7b02ab6f7bee ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -673,22 +679,24 @@ REVIEW #303c90d4-0d1f-4538-a02b-1ab939342366 ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Positive (confidence: 0.997)
+   RuleBasedSentiment (VADER/TextBlob): Positive (confidence: 0.209)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.321s
-   preprocessing_time: 0.008s
+   Total processing time: 0.240s
+   preprocessing_time: 0.009s
    rule_based_time: 0.008s
-   transformer_sentiment_time: 0.121s
-   absa_time: 0.053s
-   emotion_time: 0.095s
-   sarcasm_time: 0.035s
+   transformer_sentiment_time: 0.049s
+   absa_time: 0.050s
+   emotion_time: 0.094s
+   sarcasm_time: 0.030s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #2b2f4a39-ea4a-4ddf-9c68-2acab2c77344 ANALYSIS REPORT
+REVIEW #76f47c2f-426b-4f12-948f-b3a9c3c09c96 ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -707,16 +715,11 @@ REVIEW #2b2f4a39-ea4a-4ddf-9c68-2acab2c77344 ANALYSIS REPORT
 ┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
 │     Aspect      │ Sentiment │   Score   │           Context Phrase        │
 ├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
-│ charge          │ negative  │  -0.89 😞 │ Filling fell out after two d... │
 │ experience      │ negative  │  -1.00 😞 │ Worst dental experience of m... │
 └─────────────────┴───────────┴───────────┴─────────────────────────────────┘
 
 📖 Detailed Aspect Context:
-   1. CHARGE 😞
-      Sentiment: negative (score: -0.891, confidence: 0.891)
-      Context: "Filling fell out after two days and they wanted to charge me again to fix their mistake Rude receptionist"
-
-   2. EXPERIENCE 😞
+   1. EXPERIENCE 😞
       Sentiment: negative (score: -0.996, confidence: 0.996)
       Context: "Worst dental experience of my life Filling fell out after two days"
 
@@ -737,22 +740,24 @@ REVIEW #2b2f4a39-ea4a-4ddf-9c68-2acab2c77344 ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Negative (confidence: 0.999)
+   RuleBasedSentiment (VADER/TextBlob): Negative (confidence: 0.503)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.393s
+   Total processing time: 0.328s
    preprocessing_time: 0.008s
-   rule_based_time: 0.008s
-   transformer_sentiment_time: 0.069s
-   absa_time: 0.075s
-   emotion_time: 0.199s
-   sarcasm_time: 0.035s
+   rule_based_time: 0.007s
+   transformer_sentiment_time: 0.045s
+   absa_time: 0.046s
+   emotion_time: 0.194s
+   sarcasm_time: 0.030s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #4b713e4c-e0e9-498d-9472-27aa7ce63d8b ANALYSIS REPORT
+REVIEW #5e1a8dbc-e0b1-4af4-84db-6167f1c213b7 ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -795,22 +800,24 @@ REVIEW #4b713e4c-e0e9-498d-9472-27aa7ce63d8b ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Positive (confidence: 1.000)
+   RuleBasedSentiment (VADER/TextBlob): Positive (confidence: 0.316)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.257s
+   Total processing time: 0.244s
    preprocessing_time: 0.007s
-   rule_based_time: 0.008s
-   transformer_sentiment_time: 0.068s
-   absa_time: 0.055s
-   emotion_time: 0.078s
-   sarcasm_time: 0.042s
+   rule_based_time: 0.007s
+   transformer_sentiment_time: 0.049s
+   absa_time: 0.054s
+   emotion_time: 0.091s
+   sarcasm_time: 0.036s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #176588b6-202e-4ed5-9684-31604cf541e0 ANALYSIS REPORT
+REVIEW #f58308f8-f80a-4270-8aa6-f59dd9ac0265 ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -854,22 +861,24 @@ REVIEW #176588b6-202e-4ed5-9684-31604cf541e0 ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Negative (confidence: 1.000)
+   RuleBasedSentiment (VADER/TextBlob): Negative (confidence: 0.218)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.389s
+   Total processing time: 0.369s
    preprocessing_time: 0.009s
-   rule_based_time: 0.008s
-   transformer_sentiment_time: 0.065s
-   absa_time: 0.054s
-   emotion_time: 0.216s
-   sarcasm_time: 0.038s
+   rule_based_time: 0.007s
+   transformer_sentiment_time: 0.035s
+   absa_time: 0.050s
+   emotion_time: 0.228s
+   sarcasm_time: 0.039s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #b2bc25c6-d5d5-43aa-b7da-0162dd41958e ANALYSIS REPORT
+REVIEW #034d692c-9e95-4502-beb5-6dc3b5c56421 ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -912,22 +921,24 @@ REVIEW #b2bc25c6-d5d5-43aa-b7da-0162dd41958e ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Positive (confidence: 1.000)
+   RuleBasedSentiment (VADER/TextBlob): Positive (confidence: 0.302)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.404s
+   Total processing time: 0.316s
    preprocessing_time: 0.008s
    rule_based_time: 0.007s
-   transformer_sentiment_time: 0.185s
+   transformer_sentiment_time: 0.149s
    absa_time: 0.049s
-   emotion_time: 0.066s
-   sarcasm_time: 0.088s
+   emotion_time: 0.073s
+   sarcasm_time: 0.030s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #e795c8b3-42ba-463c-9cfb-c4c4fe4e87a0 ANALYSIS REPORT
+REVIEW #19c63474-8216-4d28-9dc0-efb70bb1d16b ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -976,22 +987,24 @@ REVIEW #e795c8b3-42ba-463c-9cfb-c4c4fe4e87a0 ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Negative (confidence: 0.875)
+   RuleBasedSentiment (VADER/TextBlob): Neutral (confidence: 0.015)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.278s
-   preprocessing_time: 0.009s
-   rule_based_time: 0.007s
-   transformer_sentiment_time: 0.057s
-   absa_time: 0.081s
-   emotion_time: 0.088s
-   sarcasm_time: 0.036s
+   Total processing time: 0.247s
+   preprocessing_time: 0.008s
+   rule_based_time: 0.008s
+   transformer_sentiment_time: 0.036s
+   absa_time: 0.074s
+   emotion_time: 0.091s
+   sarcasm_time: 0.030s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #90408fcc-a4f6-4d3a-8227-a0182df6f9ed ANALYSIS REPORT
+REVIEW #55e0da09-1884-4464-b20d-0df8c6db7449 ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -1035,22 +1048,24 @@ REVIEW #90408fcc-a4f6-4d3a-8227-a0182df6f9ed ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Negative (confidence: 1.000)
+   RuleBasedSentiment (VADER/TextBlob): Positive (confidence: 0.140)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.581s
+   Total processing time: 0.492s
    preprocessing_time: 0.009s
-   rule_based_time: 0.009s
-   transformer_sentiment_time: 0.121s
-   absa_time: 0.185s
+   rule_based_time: 0.008s
+   transformer_sentiment_time: 0.061s
+   absa_time: 0.164s
    emotion_time: 0.220s
-   sarcasm_time: 0.038s
+   sarcasm_time: 0.030s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #27db614b-735a-4547-a78b-e971830410c5 ANALYSIS REPORT
+REVIEW #1a35056a-9a4d-4d42-8aa9-3600600611b5 ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -1103,22 +1118,24 @@ REVIEW #27db614b-735a-4547-a78b-e971830410c5 ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Positive (confidence: 0.994)
+   RuleBasedSentiment (VADER/TextBlob): Positive (confidence: 0.117)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.333s
+   Total processing time: 0.325s
    preprocessing_time: 0.008s
    rule_based_time: 0.008s
-   transformer_sentiment_time: 0.074s
-   absa_time: 0.109s
-   emotion_time: 0.098s
-   sarcasm_time: 0.036s
+   transformer_sentiment_time: 0.055s
+   absa_time: 0.118s
+   emotion_time: 0.106s
+   sarcasm_time: 0.030s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #bb4efccc-d53e-4d45-a34b-b37047fe1154 ANALYSIS REPORT
+REVIEW #42e2fde5-b87d-4764-b61d-b3b3e92739b0 ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -1137,16 +1154,11 @@ REVIEW #bb4efccc-d53e-4d45-a34b-b37047fe1154 ANALYSIS REPORT
 ┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
 │     Aspect      │ Sentiment │   Score   │           Context Phrase        │
 ├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
-│ overall         │ positive  │  +0.96 😊 │ things interesting Locker ro... │
 │ value           │ positive  │  +1.00 😊 │ Locker rooms could use an up... │
 └─────────────────┴───────────┴───────────┴─────────────────────────────────┘
 
 📖 Detailed Aspect Context:
-   1. OVERALL 😊
-      Sentiment: positive (score: +0.962, confidence: 0.962)
-      Context: "things interesting Locker rooms could use an update but overall great value"
-
-   2. VALUE 😊
+   1. VALUE 😊
       Sentiment: positive (score: +0.996, confidence: 0.996)
       Context: "Locker rooms could use an update but overall great value"
 
@@ -1166,22 +1178,24 @@ REVIEW #bb4efccc-d53e-4d45-a34b-b37047fe1154 ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Positive (confidence: 1.000)
+   RuleBasedSentiment (VADER/TextBlob): Positive (confidence: 0.644)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.613s
+   Total processing time: 0.539s
    preprocessing_time: 0.008s
-   rule_based_time: 0.006s
-   transformer_sentiment_time: 0.196s
-   absa_time: 0.223s
-   emotion_time: 0.089s
-   sarcasm_time: 0.090s
+   rule_based_time: 0.007s
+   transformer_sentiment_time: 0.170s
+   absa_time: 0.200s
+   emotion_time: 0.095s
+   sarcasm_time: 0.059s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #498671dd-68b7-47c0-ba06-d3c0279c1323 ANALYSIS REPORT
+REVIEW #03bef6ff-2bf9-491f-822a-3e1f86dc0b9e ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -1200,13 +1214,13 @@ REVIEW #498671dd-68b7-47c0-ba06-d3c0279c1323 ANALYSIS REPORT
 ┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
 │     Aspect      │ Sentiment │   Score   │           Context Phrase        │
 ├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
-│ expensive       │ negative  │  -0.98 😞 │ Dr. Martinez was compassiona... │
+│ overall         │ positive  │  +0.84 😊 │                                 │
 └─────────────────┴───────────┴───────────┴─────────────────────────────────┘
 
 📖 Detailed Aspect Context:
-   1. EXPENSIVE 😞
-      Sentiment: negative (score: -0.979, confidence: 0.979)
-      Context: "Dr. Martinez was compassionate and honest about treatment options Expensive but they saved my buddy 's life Forever grateful"
+   1. OVERALL 😊
+      Sentiment: positive (score: +0.837, confidence: 0.837)
+      Context: ""
 
 
 😊 Emotion Analysis:
@@ -1224,22 +1238,24 @@ REVIEW #498671dd-68b7-47c0-ba06-d3c0279c1323 ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Positive (confidence: 0.999)
+   RuleBasedSentiment (VADER/TextBlob): Positive (confidence: 0.121)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.456s
-   preprocessing_time: 0.007s
-   rule_based_time: 0.008s
-   transformer_sentiment_time: 0.069s
+   Total processing time: 0.436s
+   preprocessing_time: 0.010s
+   rule_based_time: 0.007s
+   transformer_sentiment_time: 0.054s
    absa_time: 0.056s
-   emotion_time: 0.276s
-   sarcasm_time: 0.040s
+   emotion_time: 0.279s
+   sarcasm_time: 0.030s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #8c62ff5c-9352-4e63-861a-df50159668d4 ANALYSIS REPORT
+REVIEW #6cc8f893-31b4-41d1-a679-dc6f0b88e035 ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -1258,16 +1274,11 @@ REVIEW #8c62ff5c-9352-4e63-861a-df50159668d4 ANALYSIS REPORT
 ┌─────────────────┬───────────┬───────────┬─────────────────────────────────┐
 │     Aspect      │ Sentiment │   Score   │           Context Phrase        │
 ├─────────────────┼───────────┼───────────┼─────────────────────────────────┤
-│ cold            │ negative  │  -0.98 😞 │ practically shaved him bald ... │
 │ manager         │ negative  │  -0.91 😞 │ him bald Poor guy is embarra... │
 └─────────────────┴───────────┴───────────┴─────────────────────────────────┘
 
 📖 Detailed Aspect Context:
-   1. COLD 😞
-      Sentiment: negative (score: -0.977, confidence: 0.977)
-      Context: "practically shaved him bald Poor guy is embarrassed and cold Manager offered discount but damage is done"
-
-   2. MANAGER 😞
+   1. MANAGER 😞
       Sentiment: negative (score: -0.909, confidence: 0.909)
       Context: "him bald Poor guy is embarrassed and cold Manager offered discount but damage is done"
 
@@ -1288,22 +1299,24 @@ REVIEW #8c62ff5c-9352-4e63-861a-df50159668d4 ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Negative (confidence: 0.999)
+   RuleBasedSentiment (VADER/TextBlob): Negative (confidence: 0.229)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.303s
+   Total processing time: 0.244s
    preprocessing_time: 0.008s
    rule_based_time: 0.008s
-   transformer_sentiment_time: 0.060s
-   absa_time: 0.085s
-   emotion_time: 0.106s
-   sarcasm_time: 0.035s
+   transformer_sentiment_time: 0.035s
+   absa_time: 0.049s
+   emotion_time: 0.105s
+   sarcasm_time: 0.039s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #1ed7b1a8-42c8-4705-bef4-5a7e1a9bfdc9 ANALYSIS REPORT
+REVIEW #dc8f8993-f7c5-4758-8e7c-317eef802e1d ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -1356,22 +1369,24 @@ REVIEW #1ed7b1a8-42c8-4705-bef4-5a7e1a9bfdc9 ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Positive (confidence: 1.000)
+   RuleBasedSentiment (VADER/TextBlob): Positive (confidence: 0.419)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.372s
-   preprocessing_time: 0.007s
+   Total processing time: 0.351s
+   preprocessing_time: 0.008s
    rule_based_time: 0.007s
-   transformer_sentiment_time: 0.070s
-   absa_time: 0.122s
-   emotion_time: 0.125s
-   sarcasm_time: 0.041s
+   transformer_sentiment_time: 0.056s
+   absa_time: 0.119s
+   emotion_time: 0.126s
+   sarcasm_time: 0.036s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #242589a6-34b9-462d-b734-6ffe958b6f84 ANALYSIS REPORT
+REVIEW #0674d269-8a74-4fa3-a1bf-e2313e867e6e ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -1415,22 +1430,24 @@ REVIEW #242589a6-34b9-462d-b734-6ffe958b6f84 ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Negative (confidence: 0.998)
+   RuleBasedSentiment (VADER/TextBlob): Negative (confidence: 0.233)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.307s
+   Total processing time: 0.286s
    preprocessing_time: 0.008s
    rule_based_time: 0.008s
-   transformer_sentiment_time: 0.073s
-   absa_time: 0.060s
-   emotion_time: 0.119s
-   sarcasm_time: 0.040s
+   transformer_sentiment_time: 0.051s
+   absa_time: 0.056s
+   emotion_time: 0.125s
+   sarcasm_time: 0.038s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #cecb42c6-d904-49d5-bc36-9591342be2ad ANALYSIS REPORT
+REVIEW #5d3724eb-8eef-4f09-9a2b-684e02b8dd73 ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -1478,22 +1495,24 @@ REVIEW #cecb42c6-d904-49d5-bc36-9591342be2ad ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Positive (confidence: 1.000)
+   RuleBasedSentiment (VADER/TextBlob): Positive (confidence: 0.191)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.425s
+   Total processing time: 0.389s
    preprocessing_time: 0.008s
-   rule_based_time: 0.008s
-   transformer_sentiment_time: 0.058s
-   absa_time: 0.081s
-   emotion_time: 0.232s
-   sarcasm_time: 0.038s
+   rule_based_time: 0.007s
+   transformer_sentiment_time: 0.037s
+   absa_time: 0.083s
+   emotion_time: 0.219s
+   sarcasm_time: 0.033s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #70a41a63-5ced-4777-813a-11fec8de6987 ANALYSIS REPORT
+REVIEW #4dce8321-def6-4057-86ad-091c6e41256a ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -1536,22 +1555,24 @@ REVIEW #70a41a63-5ced-4777-813a-11fec8de6987 ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Positive (confidence: 1.000)
+   RuleBasedSentiment (VADER/TextBlob): Positive (confidence: 0.311)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.467s
+   Total processing time: 0.380s
    preprocessing_time: 0.008s
    rule_based_time: 0.007s
-   transformer_sentiment_time: 0.193s
-   absa_time: 0.052s
-   emotion_time: 0.094s
-   sarcasm_time: 0.112s
+   transformer_sentiment_time: 0.189s
+   absa_time: 0.048s
+   emotion_time: 0.096s
+   sarcasm_time: 0.031s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #cd3c5f8d-240e-4705-bbe0-b5f04e3f6c86 ANALYSIS REPORT
+REVIEW #f88d6ece-0f9e-48fd-b2f2-b5762789aef1 ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -1600,22 +1621,24 @@ REVIEW #cd3c5f8d-240e-4705-bbe0-b5f04e3f6c86 ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Neutral (confidence: 0.998)
+   RuleBasedSentiment (VADER/TextBlob): Negative (confidence: 0.312)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.487s
+   Total processing time: 0.380s
    preprocessing_time: 0.008s
    rule_based_time: 0.007s
-   transformer_sentiment_time: 0.209s
-   absa_time: 0.089s
-   emotion_time: 0.079s
-   sarcasm_time: 0.094s
+   transformer_sentiment_time: 0.177s
+   absa_time: 0.090s
+   emotion_time: 0.068s
+   sarcasm_time: 0.030s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #900b4187-5324-42fd-b90c-5e7bd347ee21 ANALYSIS REPORT
+REVIEW #18b0a27e-b338-43e3-9a26-6238e6589971 ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -1658,22 +1681,24 @@ REVIEW #900b4187-5324-42fd-b90c-5e7bd347ee21 ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Positive (confidence: 0.986)
+   RuleBasedSentiment (VADER/TextBlob): Neutral (confidence: 0.035)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.304s
+   Total processing time: 0.313s
    preprocessing_time: 0.009s
    rule_based_time: 0.008s
-   transformer_sentiment_time: 0.067s
-   absa_time: 0.056s
-   emotion_time: 0.128s
-   sarcasm_time: 0.035s
+   transformer_sentiment_time: 0.053s
+   absa_time: 0.055s
+   emotion_time: 0.153s
+   sarcasm_time: 0.037s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #8b3b381f-36f0-4576-8989-ac472069d537 ANALYSIS REPORT
+REVIEW #bf01a2a1-3b5a-45f8-808b-bd450ba1744d ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -1722,22 +1747,24 @@ REVIEW #8b3b381f-36f0-4576-8989-ac472069d537 ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Negative (confidence: 0.999)
+   RuleBasedSentiment (VADER/TextBlob): Neutral (confidence: 0.041)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.305s
-   preprocessing_time: 0.008s
+   Total processing time: 0.289s
+   preprocessing_time: 0.009s
    rule_based_time: 0.008s
-   transformer_sentiment_time: 0.064s
-   absa_time: 0.089s
-   emotion_time: 0.102s
-   sarcasm_time: 0.034s
+   transformer_sentiment_time: 0.042s
+   absa_time: 0.093s
+   emotion_time: 0.107s
+   sarcasm_time: 0.031s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #9f48eb61-db9d-41e0-acf5-ef5b990d2d46 ANALYSIS REPORT
+REVIEW #fda447bd-8e4d-4e38-acc6-59779c166035 ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -1785,22 +1812,24 @@ REVIEW #9f48eb61-db9d-41e0-acf5-ef5b990d2d46 ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Negative (confidence: 0.997)
+   RuleBasedSentiment (VADER/TextBlob): Neutral (confidence: 0.041)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.278s
+   Total processing time: 0.263s
    preprocessing_time: 0.009s
    rule_based_time: 0.008s
-   transformer_sentiment_time: 0.058s
-   absa_time: 0.081s
+   transformer_sentiment_time: 0.039s
+   absa_time: 0.078s
    emotion_time: 0.090s
-   sarcasm_time: 0.032s
+   sarcasm_time: 0.039s
    fusion_time: 0.000s
 
 
 
 
 ==========================================================================================
-REVIEW #c872be92-3503-40f3-90f4-d36ec1b0630d ANALYSIS REPORT
+REVIEW #409723f1-ef48-4425-a2b3-eafdad91652e ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -1848,13 +1877,15 @@ REVIEW #c872be92-3503-40f3-90f4-d36ec1b0630d ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Positive (confidence: 0.999)
+   RuleBasedSentiment (VADER/TextBlob): Positive (confidence: 0.175)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.360s
+   Total processing time: 0.346s
    preprocessing_time: 0.009s
    rule_based_time: 0.008s
-   transformer_sentiment_time: 0.070s
-   absa_time: 0.089s
+   transformer_sentiment_time: 0.053s
+   absa_time: 0.091s
    emotion_time: 0.149s
    sarcasm_time: 0.035s
    fusion_time: 0.000s
@@ -1863,7 +1894,7 @@ Model Signal Analysis:
 
 
 ==========================================================================================
-REVIEW #579f6c5f-f931-45e3-bca4-e53b1ad1d04b ANALYSIS REPORT
+REVIEW #1466cd6e-9928-40fa-b4e4-0aa210037c5a ANALYSIS REPORT
 ==========================================================================================
 
 📝 ORIGINAL REVIEW TEXT
@@ -1906,13 +1937,15 @@ REVIEW #579f6c5f-f931-45e3-bca4-e53b1ad1d04b ANALYSIS REPORT
 ------------------------------
 
 Model Signal Analysis:
+   OverallSentiment (Transformer): Positive (confidence: 0.753)
+   RuleBasedSentiment (VADER/TextBlob): Positive (confidence: 0.251)
 
 ⏱ Pipeline Timing:
-   Total processing time: 0.251s
+   Total processing time: 0.236s
    preprocessing_time: 0.008s
    rule_based_time: 0.007s
-   transformer_sentiment_time: 0.065s
-   absa_time: 0.053s
-   emotion_time: 0.082s
-   sarcasm_time: 0.036s
+   transformer_sentiment_time: 0.050s
+   absa_time: 0.054s
+   emotion_time: 0.089s
+   sarcasm_time: 0.029s
    fusion_time: 0.000s

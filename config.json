@@ -1,10 +1,11 @@
 {
   "models": {
     "fusion": "models/fusion_latest.pkl",
-    "sentiment": "Elron/deberta-v3-large-sentiment",
+    "sentiment": "siebert/sentiment-roberta-large-english",
+
     "absa": "yangheng/deberta-v3-base-absa-v1.1",
     "emotion": "AnkitAI/deberta-v3-small-base-emotions-classifier",
-    "sarcasm": "dnzblgn/Sarcasm-Detection-Customer-Reviews"
+    "sarcasm": "helinivan/english-sarcasm-detector"
   },
   "database": {
     "url_env_var": "DATABASE_URL",

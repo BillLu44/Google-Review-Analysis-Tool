@@ -6,3 +6,4 @@ __pycache__/
 *.jsonl
 models/fusion_latest.pkl
 data/*.csv
+.DS_Store
